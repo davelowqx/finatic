@@ -2,26 +2,39 @@ import React from "react";
 import { Table, Button } from "semantic-ui-react";
 import web3 from "../ethereum/web3";
 import Campaign from "../ethereum/campaigns";
+import { useRouter } from "next/router";
 
-export default function RequestRow(props) {
-  const campaign = Campaign(props.address);
+export default function RequestRow({ id, request, address, investorsCount }) {
+  const router = useRouter();
+  const campaign = Campaign(address);
+  let accounts = [];
+  (async () => {
+    accounts = await web3.eth.getAccounts();
+  })();
 
   const onApprove = async () => {
-    const accounts = await web3.eth.getAccounts();
-    await campaign.methods.approveRequest(props.id).send({
-      from: accounts[0],
-    });
+    try {
+      await campaign.methods.approveRequest(id).send({
+        from: accounts[0],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    router.reload();
   };
 
   const onFinalize = async () => {
-    const accounts = await web3.eth.getAccounts();
-    await campaign.methods.finalizeRequest(props.id).send({
-      from: accounts[0],
-    });
+    try {
+      await campaign.methods.finalizeRequest(id).send({
+        from: accounts[0],
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    router.reload();
   };
 
   const { Row, Cell } = Table;
-  const { id, request, investorsCount } = props;
   const readyToFinalize = request.approvalsCount > investorsCount / 2;
 
   return (
@@ -29,7 +42,7 @@ export default function RequestRow(props) {
       disabled={request.isComplete}
       positive={readyToFinalize && !request.isComplete}
     >
-      <Cell>{id}</Cell>
+      <Cell>{id + 1}</Cell>
       <Cell>{request.description}</Cell>
       <Cell>{web3.utils.fromWei(request.value.toString(), "ether")}</Cell>
       <Cell>{request.recipient}</Cell>

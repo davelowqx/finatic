@@ -9,7 +9,7 @@ const compiledCampaignFactory = JSON.parse(fs.readFileSync(p, "utf-8"));
 const provider = new HDWalletProvider(
   //  "oyster exercise random pledge thrive food mail hover knee cry sure eternal",
   //  "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a"
-  "awesome wide soup stairs check together fine dance mean anger despair lava",
+  "theme salmon chimney wolf random step kick rate carry describe announce soldier",
   "ws://localhost:8545"
 );
 

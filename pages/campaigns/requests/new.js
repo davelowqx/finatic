@@ -10,7 +10,7 @@ export async function getServerSideProps(context) {
   return { props: { address: context.query.address } };
 }
 
-export default function RequestNew(props) {
+export default function RequestNew({ address }) {
   const [values, setValues] = React.useState({
     amount: "",
     description: "",
@@ -24,7 +24,7 @@ export default function RequestNew(props) {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const campaign = Campaign(props.address);
+    const campaign = Campaign(address);
     setValues({ ...values, loading: true, errorMessage: "" });
 
     try {
@@ -37,16 +37,17 @@ export default function RequestNew(props) {
         )
         .send({ from: accounts[0] });
     } catch (err) {
+      console.log(err);
       setValues({ ...values, errorMessage: err.message });
     }
     // reset state back to normal
     setValues({ ...values, loading: false });
-    router.push(`/campaigns/${props.address}/requests`);
+    router.push(`/campaigns/${address}/requests`);
   };
 
   return (
     <Layout>
-      <Link href={`/campaigns/${props.address}/requests`}>
+      <Link href={`/campaigns/${address}/requests`}>
         <a>Back</a>
       </Link>
       <h3>Create a Request</h3>
