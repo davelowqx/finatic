@@ -7,7 +7,8 @@ import { useRouter } from "next/router";
 import Layout from "../../../components/Layout";
 
 export async function getServerSideProps(context) {
-  return { props: { address: context.query.address } };
+  const address = context.query.address;
+  return { props: { address } };
 }
 
 export default function RequestNew({ address }) {

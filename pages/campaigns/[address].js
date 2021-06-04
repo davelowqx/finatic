@@ -9,7 +9,7 @@ import web3 from "../../ethereum/web3";
 import ContributionForm from "../../components/ContributionForm";
 
 export async function getServerSideProps(context) {
-  const address = context.query.address;
+  const address = context.params.address;
   const campaign = Campaign(address);
 
   const summary = await campaign.methods.getSummary().call();
@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function CampaignShow({
+export default function CampaignDetails({
   address,
   target,
   balance,

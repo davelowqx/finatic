@@ -12,7 +12,7 @@ export async function getServerSideProps() {
 
 export default function CampaignIndex({ campaigns }) {
   const items = campaigns
-    //.slice()
+    .slice()
     .reverse()
     .map((address) => {
       return {
