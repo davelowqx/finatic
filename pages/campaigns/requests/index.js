@@ -7,7 +7,6 @@ import RequestRow from "../../../components/RequestRow";
 
 export async function getServerSideProps(context) {
   const address = context.query.address;
-  const temp = JSON.parse(JSON.stringify(context.resolvedUrl));
   const campaign = Campaign(address);
   const investorsCount = await campaign.methods.investorsCount().call();
   const requestsCount = await campaign.methods.requestsCount().call();
@@ -24,16 +23,10 @@ export async function getServerSideProps(context) {
     };
   }
 
-  return { props: { address, requests, investorsCount, temp } };
+  return { props: { address, requests, investorsCount } };
 }
 
-export default function RequestIndex({
-  address,
-  requests,
-  investorsCount,
-  temp,
-}) {
-  console.log(temp);
+export default function RequestIndex({ address, requests, investorsCount }) {
   const renderRows = () => {
     return requests.slice().map((r, index) => {
       // reverse this?
