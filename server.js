@@ -1,5 +1,4 @@
 const { createServer } = require("http");
-const { URL } = require("url");
 const next = require("next");
 
 const app = next({
@@ -11,16 +10,19 @@ const handle = app.getRequestHandler();
 // listen to errors on port 3000
 app.prepare().then(() => {
   createServer((req, res) => {
-    const url = new URL(req);
-    const path = url.pathname;
+    const path = req.url;
+    console.log(path);
     if (path === "/campaigns/new") {
       app.render(req, res, "/campaigns/new");
     } else if (path === "/campaigns/:address") {
       app.render(req, res, "/campaigns/[address]");
     } else if (path === "/campaigns/:address/requests") {
       app.render(req, res, "/campaigns/requests/index");
-    } else if (path === "/campaigns/:address/requests/new")
+    } else if (path === "/campaigns/:address/requests/new") {
       app.render(req, res, "/campaigns/requests/new");
+    } else {
+      handle(req, res, path);
+    }
   }).listen(3000, (err) => {
     if (err) throw err;
     console.log("> Ready on localhost:3000");
