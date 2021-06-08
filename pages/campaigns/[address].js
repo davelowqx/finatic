@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, Grid, Button } from "semantic-ui-react";
 import Layout from "../../components/Layout";
-import Link from "next/link";
 import { truncateAddress } from "../../components/Formatter";
 
 import Campaign from "../../ethereum/campaigns";
@@ -20,9 +19,8 @@ export async function getServerSideProps(context) {
       address,
       target: summary[0],
       balance: summary[1],
-      requestsCount: summary[2],
-      investorsCount: summary[3],
-      creator: summary[4],
+      investorsCount: summary[2],
+      creator: summary[3],
     },
   };
 }
@@ -31,7 +29,6 @@ export default function CampaignDetails({
   address,
   target,
   balance,
-  requestsCount,
   investorsCount,
   creator,
 }) {
@@ -43,22 +40,16 @@ export default function CampaignDetails({
       style: { overflowWrap: "anywhere" },
     },
     {
-      header: target + " ETH",
-      meta: "Target Amount",
-      description: "Target amount to be raised",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
-      header: requestsCount,
-      meta: "Number of Requests",
-      description: "Requests made to withdraw from the funds",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
       header: investorsCount,
       meta: "Number of Investors",
       description:
         "Number of unique addresses that contributed to this project",
+      style: { overflowWrap: "anywhere" },
+    },
+    {
+      header: target + " ETH",
+      meta: "Target Amount",
+      description: "Target amount to be raised",
       style: { overflowWrap: "anywhere" },
     },
     {
@@ -79,15 +70,6 @@ export default function CampaignDetails({
           </Grid.Column>
           <Grid.Column width={6}>
             <ContributionForm address={address} />
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column>
-            <Link href={`/campaigns/${address}/requests`}>
-              <a>
-                <Button primary>View Requests</Button>
-              </a>
-            </Link>
           </Grid.Column>
         </Grid.Row>
       </Grid>

@@ -17,18 +17,6 @@ contract CampaignFactory {
 
 contract Campaign {
 
-    struct Request {
-        string description;
-        uint value;
-        address payable recipient;
-        bool isComplete;
-        uint approvalsCount;
-        mapping(address => bool) approvals; // can we optimize this
-    }
-
-    mapping(uint => Request) public requests;
-    uint public requestsCount;
-
     address public founder;
     uint public targetAmount;
     mapping(address => uint) public investors;  
@@ -51,54 +39,12 @@ contract Campaign {
         investors[msg.sender] += msg.value;
     }
 
-    function createRequest(string calldata description, uint value, address payable recipient) public restricted {
-        Request storage r = requests[requestsCount++];
-        r.description = description;
-        r.value = value;
-        r.recipient = recipient;
-        r.isComplete = false;
-        r.approvalsCount = 0;
-    }
-
-    function getRequest(uint index) public view returns (string memory, uint, address, bool, uint) {
-        Request storage r = requests[index];
-        return (
-            r.description,
-            r.value,
-            r.recipient,
-            r.isComplete,
-            r.approvalsCount
-        ); 
-    }
-
-    function approveRequest(uint index) public {
-        Request storage request = requests[index];
-
-        require(investors[msg.sender] > 0);
-        require(!request.approvals[msg.sender]);
-        require(!request.isComplete);
-
-        request.approvals[msg.sender] = true;
-        request.approvalsCount++;
-    }
-
-    function finalizeRequest(uint index) public restricted {
-        Request storage request = requests[index];
-
-        require(request.approvalsCount > (investorsCount / 2)); // more than 50%
-        require(!request.isComplete);
-
-        request.recipient.transfer(request.value);
-        request.isComplete = true;
-    }
-
     function getSummary() public view returns (
-        uint, uint, uint, uint, address
+        uint, uint, uint, address
     ) {
         return (
             targetAmount,
             address(this).balance,
-            requestsCount,
             investorsCount,
             founder
         );
