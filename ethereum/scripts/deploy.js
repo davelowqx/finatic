@@ -7,9 +7,8 @@ const p = path.resolve(__dirname, "../build/CampaignFactory.json");
 const compiledCampaignFactory = JSON.parse(fs.readFileSync(p, "utf-8"));
 
 const provider = new HDWalletProvider(
-  //  "oyster exercise random pledge thrive food mail hover knee cry sure eternal",
-  //  "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a"
-  "sentence come burst denial heavy float earth tumble lunch describe success tribe",
+  "oyster exercise random pledge thrive food mail hover knee cry sure eternal",
+  // "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a"
   "ws://localhost:8545"
 );
 
