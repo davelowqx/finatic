@@ -8,13 +8,13 @@ export default function Header() {
   return (
     <Menu style={{ marginTop: "20px" }}>
       <Link href="/">
-        <a className="item">finatic</a>
+        <a className="item">fundSME</a>
       </Link>
       <Menu.Menu position="right">
         <Link href="/">
           <a className="item">Companies</a>
         </Link>
-        <Link href="/campaigns/new">
+        <Link href="/companies/new">
           <a className="item">+</a>
         </Link>
       </Menu.Menu>
