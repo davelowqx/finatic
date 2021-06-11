@@ -9,7 +9,7 @@ contract Company {
     address public manager;
     mapping(uint256 => FundingRound) fundingRounds;
     uint256 public fundingRoundsCount;
-    bool public isRaising; 
+    bool public isSeekingFunding; 
 
     struct FundingRound {
         uint256 currentAmount;
@@ -24,7 +24,7 @@ contract Company {
     constructor(string memory name_, string memory symbol, uint256 sharesOustanding, address manager_) {
         name = name_;
         manager = manager_;
-        isRaising = false;
+        isSeekingFunding = false;
         stonk = new Stonk(name, symbol, sharesOustanding, address(this));
     }
 
@@ -38,16 +38,16 @@ contract Company {
     }
 
     function createFundingRound(uint256 targetAmount_, uint256 sharesOffered_) public authorized {
-        require(!isRaising);
+        require(!isSeekingFunding);
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         fr.targetAmount = targetAmount_;
         fr.sharesOffered = sharesOffered_;
-        isRaising = true;
+        isSeekingFunding = true;
     }
 
     function acceptFundingRound() public authorized {
-        require(isRaising);
-        isRaising = false;
+        require(isSeekingFunding);
+        isSeekingFunding = false;
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         require(fr.currentAmount >= fr.targetAmount);
         stonk.conductShareOffering(fr.sharesOffered);
@@ -60,8 +60,8 @@ contract Company {
     }
 
     function rejectFundingRound() public authorized {
-        require(isRaising);
-        isRaising = false;
+        require(isSeekingFunding);
+        isSeekingFunding = false;
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         // reimburse investors
         for (uint256 i = 0; i < fr.investors.length; i++) {
@@ -71,7 +71,7 @@ contract Company {
     }
 
     function invest() public payable {
-        require(isRaising);
+        require(isSeekingFunding);
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         if (fr.balances[msg.sender] == 0) { // new investor
             fr.investors.push(msg.sender);
@@ -81,12 +81,12 @@ contract Company {
     }
 
     function withdraw(uint256 amount, address payable recipient) public authorized {
-        require(!isRaising);
+        require(!isSeekingFunding);
         recipient.transfer(amount);
     }
 
     function getInvestedAmount(address investor) public view returns (uint256) {
-        require(isRaising);
+        require(isSeekingFunding);
         return fundingRounds[fundingRoundsCount].balances[investor];
     }
 
@@ -105,7 +105,7 @@ contract Company {
     }
 
     function getCompanySummary() public view returns (string memory, address, uint256, uint256, bool) {
-        return (name, manager, address(this).balance, fundingRoundsCount, isRaising);
+        return (name, manager, address(this).balance, fundingRoundsCount, isSeekingFunding);
     }
 
 }
