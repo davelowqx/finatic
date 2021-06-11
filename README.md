@@ -1,6 +1,6 @@
-# Finatic
+# FundSME
 
-A web application for startup fundraising, guaranteed trustlessly by the ethereum network.
+A web application for equity financing, guaranteed trustlessly by the ethereum network.
 
 # Installation
 
