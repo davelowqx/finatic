@@ -5,7 +5,7 @@ import { company } from "../ethereum/contracts";
 import web3 from "../ethereum/web3";
 import { useRouter } from "next/router";
 
-export default function ContributeForm(props) {
+export default function ContributeForm({ address, isSeekingFunding }) {
   const [values, setValues] = React.useState({
     amount: "",
     errorMessage: "",
@@ -17,13 +17,13 @@ export default function ContributeForm(props) {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const campaign = Campaign(props.address);
+    const comp = company(address);
 
     setValues({ ...values, loading: true, errorMessage: "" });
 
     try {
       const accounts = await web3.eth.getAccounts();
-      await campaign.methods.invest().send({
+      await comp.methods.invest().send({
         from: accounts[0],
         // convert ether to wei
         value: web3.utils.toWei(values.amount, "ether"),
@@ -52,7 +52,7 @@ export default function ContributeForm(props) {
       </Form.Field>
 
       <Message error header="Oops!" content={values.errorMessage} />
-      <Button primary loading={values.loading}>
+      <Button primary disabled={!isSeekingFunding} loading={values.loading}>
         Invest!
       </Button>
     </Form>

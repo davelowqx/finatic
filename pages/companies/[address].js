@@ -38,15 +38,21 @@ export default function CampaignDetails({
 }) {
   const items = [
     {
+      header: address,
+      meta: "Address of Company",
+      description: "",
+      style: { overflowWrap: "anywhere" },
+    },
+    {
       header: manager,
       meta: "Address of Manager",
-      description: "The manager has control over the funds",
+      description: "",
       style: { overflowWrap: "anywhere" },
     },
     {
       header: web3.utils.fromWei(balance, "ether") + " ETH",
       meta: "Company Balance",
-      description: "Amount in company's account",
+      description: "",
       style: { overflowWrap: "anywhere" },
     },
     {
@@ -59,14 +65,17 @@ export default function CampaignDetails({
 
   return (
     <Layout>
-      <h3>{`${name}, ${truncateAddress(address)}`}</h3>
+      <h3>{`${name} (${symbol})`}</h3>
       <Grid>
         <Grid.Row>
           <Grid.Column width={10}>
             <Card.Group items={items} />
           </Grid.Column>
           <Grid.Column width={6}>
-            <ContributionForm address={address} />
+            <ContributionForm
+              isSeekingFunding={isSeekingFunding}
+              address={address}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>

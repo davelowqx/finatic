@@ -32,7 +32,7 @@ export default function CompanyNew() {
     }
     setValues({ ...values, loading: false });
     console.log(address);
-    //router.push(`/${address}`); //TODO: push to address of new campaign
+    router.push(`/${address}`); //TODO: push to address of new campaign
   };
 
   return (
