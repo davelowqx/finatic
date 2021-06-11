@@ -4,15 +4,15 @@ pragma solidity ^0.8.0;
 import "./Company.sol";
 
 contract CompanyProducer {
-    address[] public companies;
+    address[] public companyAddresses;
 
     function createCompany(string memory name, string memory symbol, uint256 sharesOutstanding) public {
         Company c = new Company(name, symbol, sharesOutstanding, msg.sender);
-        companies.push(address(c));
+        companyAddresses.push(address(c));
     }
 
-    function getCompanies() public view returns (address[] memory) {
-        return companies;
+    function getCompanyAddresses() public view returns (address[] memory) {
+        return companyAddresses;
     }
 
 }

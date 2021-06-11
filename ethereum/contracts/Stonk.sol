@@ -9,7 +9,6 @@ contract Stonk is IERC20 {
     string public symbol;
     uint8 public constant decimals = 0;
     address public company;
-    address public manager; //necessary?????
 
     mapping(address => uint256) private _balances;
     // mapping(address => mapping (address => uint256)) private _allowances;
@@ -25,12 +24,11 @@ contract Stonk is IERC20 {
         _;
     }
 
-    constructor(string memory name_, string memory symbol_, uint256 sharesOutstanding_, address company_, address manager_) {
+    constructor(string memory name_, string memory symbol_, uint256 sharesOutstanding_, address company_) {
         name = name_;
         symbol = symbol_; 
         sharesOutstanding = sharesOutstanding_;
         company = company_;
-        manager = manager_;
         _balances[company] = sharesOutstanding; 
     }
 
@@ -65,7 +63,6 @@ contract Stonk is IERC20 {
     } 
 
     function approve(address delegate, uint256 numTokens) public override returns (bool) {
-        // NOT IMPLEMENTED
         /*
         _allowances[msg.sender][delegate] = numTokens;
         emit Approval(msg.sender, delegate, numTokens);
@@ -75,13 +72,11 @@ contract Stonk is IERC20 {
     }
 
     function allowance(address sender, address delegate) public override view returns (uint256) {
-        // NOT IMPLEMENTED
         // return _allowances[sender][delegate];
         return 0;
     }
 
     function transferFrom(address sender, address recipient, uint256 amount) public override returns (bool) {
-        // NOT IMPLEMENTED
         /*
         require(amount <= _balances[sender], "transfer amount exceeds balance");
         require(amount <= _allowances[sender][msg.sender], "transfer amount exceeds allowance");

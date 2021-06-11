@@ -25,7 +25,7 @@ contract Company {
         name = name_;
         manager = manager_;
         isRaising = false;
-        stonk = new Stonk(name, symbol, sharesOustanding, address(this), manager_);
+        stonk = new Stonk(name, symbol, sharesOustanding, address(this));
     }
 
     error Unauthorized();
@@ -63,7 +63,6 @@ contract Company {
         require(isRaising);
         isRaising = false;
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
-        stonk.conductShareOffering(fr.sharesOffered);
         // reimburse investors
         for (uint256 i = 0; i < fr.investors.length; i++) {
             address investor = fr.investors[i];
@@ -89,6 +88,10 @@ contract Company {
     function getInvestedAmount(address investor) public view returns (uint256) {
         require(isRaising);
         return fundingRounds[fundingRoundsCount].balances[investor];
+    }
+
+    function getStonkAddress() public view returns (address) {
+        return address(stonk);
     }
 
     function getFundingRoundSummary(uint256 index) public view returns (
