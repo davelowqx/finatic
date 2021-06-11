@@ -3,8 +3,8 @@ const { readFileSync } = require("fs");
 const ganache = require("ganache-cli");
 const Web3 = require("web3");
 
-const toWei = (x) => Web3.utils.toWei(x, "ether");
-const fromWei = (x) => Web3.utils.fromWei(x, "ether");
+const toWei = (str) => Web3.utils.toWei(str, "ether");
+const fromWei = (str) => Web3.utils.fromWei(str, "ether");
 
 const web3 = new Web3(
   ganache.provider({
@@ -84,22 +84,32 @@ describe("TESTS", () => {
   });
 
   it("allows manager to reject funding round and refund investors", async () => {
+    await company.methods.invest().send({
+      value: toWei("2"),
+      from: accounts[1],
+      ...gas,
+    });
+
     fundingRoundSummary = await company.methods
       .getFundingRoundSummary(0)
       .call();
     console.log(fundingRoundSummary);
 
-    const begBalance = fromWei(await web3.eth.getBalance(accounts[2]));
-    console.log(begBalance);
+    const mgrBegBalance = fromWei(await web3.eth.getBalance(accounts[1]));
+    const investorBegBalance = fromWei(await web3.eth.getBalance(accounts[2]));
+    console.log(mgrBegBalance);
 
     await company.methods.rejectFundingRound().send({
       from: accounts[1],
       ...gas,
     });
 
-    const endingBalance = fromWei(await web3.eth.getBalance(accounts[2]));
-    console.log(endingBalance);
+    const mgrEndBalance = fromWei(await web3.eth.getBalance(accounts[1]));
+    const investorEndBalance = fromWei(await web3.eth.getBalance(accounts[2]));
+    console.log(mgrEndBalance);
 
-    assert(parseFloat(endingBalance) - parseFloat(begBalance) == 8);
+    assert(
+      parseFloat(investorEndBalance) - parseFloat(investorBegBalance) == 8
+    );
   });
 });
