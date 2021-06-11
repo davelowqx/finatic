@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Input, Message, Button } from "semantic-ui-react";
 // link render anchor tags around react components
-import Campaign from "../ethereum/campaigns";
+import { company } from "../ethereum/contracts";
 import web3 from "../ethereum/web3";
 import { useRouter } from "next/router";
 

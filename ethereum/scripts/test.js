@@ -1,10 +1,16 @@
-const assert = require("assert");
-const { readFileSync } = require("fs");
-const ganache = require("ganache-cli");
+const fs = require("fs");
+const path = require("path");
 const Web3 = require("web3");
+const ganache = require("ganache-cli");
+const assert = require("assert");
 
 const toWei = (str) => Web3.utils.toWei(str, "ether");
 const fromWei = (str) => Web3.utils.fromWei(str, "ether");
+
+const p = path.resolve(__dirname, "../build/contracts.json");
+const { CompanyProducer, Company, Stonk } = JSON.parse(
+  fs.readFileSync(p, "utf-8")
+);
 
 const web3 = new Web3(
   ganache.provider({
@@ -16,11 +22,6 @@ const web3 = new Web3(
     //gasLimit: 6721975,
   })
 );
-const CompanyProducerJSON = JSON.parse(
-  readFileSync("../build/CompanyProducer.json", "utf-8")
-);
-const CompanyJSON = JSON.parse(readFileSync("../build/Company.json", "utf-8"));
-const StonkJSON = JSON.parse(readFileSync("../build/Stonk.json", "utf-8"));
 
 let accounts;
 let companyProducer;
@@ -33,8 +34,8 @@ before(async () => {
   accounts = await web3.eth.getAccounts();
 
   // deploy companyProducer
-  companyProducer = await new web3.eth.Contract(CompanyProducerJSON.abi)
-    .deploy({ data: CompanyProducerJSON.evm.bytecode.object })
+  companyProducer = await new web3.eth.Contract(CompanyProducer.abi)
+    .deploy({ data: CompanyProducer.evm.bytecode.object })
     .send({ from: accounts[0], ...gas });
   console.log("companyProducer deployed");
 
@@ -43,18 +44,15 @@ before(async () => {
     .createCompany("ali mama shop", "ALI", 900) //900 shares outstanding
     .send({ from: accounts[1], ...gas });
 
-  const getCompanyAddresses = await companyProducer.methods
+  const companyAddresses = await companyProducer.methods
     .getCompanyAddresses()
     .call();
-  company = await new web3.eth.Contract(
-    CompanyJSON.abi,
-    getCompanyAddresses[0]
-  );
+  company = await new web3.eth.Contract(Company.abi, companyAddresses[0]);
 
   console.log("company created");
 
   const stonkAddress = await company.methods.getStonkAddress().call();
-  stonk = await new web3.eth.Contract(StonkJSON.abi, stonkAddress);
+  stonk = await new web3.eth.Contract(Stonk.abi, stonkAddress);
 
   console.log("stonk created");
 });
@@ -62,8 +60,7 @@ before(async () => {
 // testing
 
 describe("TESTS", () => {
-  // create specific company at address
-  it("deploys a companyProducer and a company", async () => {
+  it("deploys a companyProducer and creates a company", async () => {
     assert.ok(companyProducer.options.address);
     assert.ok(company.options.address);
     const totalSupply = await stonk.methods.totalSupply().call();

@@ -34,11 +34,14 @@ for (const file of files) {
 const output = JSON.parse(solc.compile(JSON.stringify(input)));
 
 //writing each contract to separate json files
+let json = {};
 for (const file of files) {
-  json = output.contracts[file][file.slice(0, -4)];
+  const name = file.slice(0, -4);
+  json[name] = output.contracts[file][name];
   console.log(json);
-  fs.writeFileSync(
-    path.resolve(__dirname, `../build/${file.slice(0, -4)}.json`),
-    JSON.stringify(json)
-  );
 }
+
+fs.writeFileSync(
+  path.resolve(__dirname, `../build/contracts.json`),
+  JSON.stringify(json)
+);

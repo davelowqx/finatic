@@ -3,23 +3,25 @@ import { Card, Button } from "semantic-ui-react";
 import { truncateAddress } from "../components/Formatter";
 import Link from "next/link";
 import Layout from "../components/Layout";
-import campaignFactory from "../ethereum/campaignFactory";
+import { companyProducer } from "../ethereum/contracts";
 
 export async function getServerSideProps() {
-  const campaigns = await campaignFactory.methods.getCampaigns().call();
-  return { props: { campaigns } };
+  const companyAddresses = await companyProducer.methods
+    .getCompanyAddresses()
+    .call();
+  return { props: { companyAddresses } };
 }
 
-export default function CampaignIndex({ campaigns }) {
-  const items = campaigns
+export default function CampaignIndex({ companyAddresses }) {
+  const items = companyAddresses
     .slice()
     .reverse()
     .map((address) => {
       return {
-        header: `Campaign ${truncateAddress(address)}`,
+        header: `Company ${truncateAddress(address)}`,
         description: (
-          <Link href={`/campaigns/${address}`}>
-            <a>View Campaign</a>
+          <Link href={`/companies/${address}`}>
+            <a>View Details</a>
           </Link>
         ),
         fluid: true,
@@ -29,12 +31,12 @@ export default function CampaignIndex({ campaigns }) {
   return (
     <Layout>
       <div>
-        <h3>Open Campaigns</h3>
-        <Link href="/campaigns/new">
+        <h3>Companies</h3>
+        <Link href="/companies/new">
           <a>
             <Button
               floated="right"
-              content="Create Campaign"
+              content="List Company"
               icon="add circle"
               primary={true}
             />

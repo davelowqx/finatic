@@ -6,6 +6,7 @@ import "./Stonk.sol";
 contract Company {
 
     string public name;
+    string public symbol;
     address public manager;
     mapping(uint256 => FundingRound) fundingRounds;
     uint256 public fundingRoundsCount;
@@ -21,8 +22,9 @@ contract Company {
 
     Stonk stonk;
 
-    constructor(string memory name_, string memory symbol, uint256 sharesOustanding, address manager_) {
+    constructor(string memory name_, string memory symbol_, uint256 sharesOustanding, address manager_) {
         name = name_;
+        symbol = symbol_;
         manager = manager_;
         isSeekingFunding = false;
         stonk = new Stonk(name, symbol, sharesOustanding, address(this));
@@ -104,8 +106,8 @@ contract Company {
         );
     }
 
-    function getCompanySummary() public view returns (string memory, address, uint256, uint256, bool) {
-        return (name, manager, address(this).balance, fundingRoundsCount, isSeekingFunding);
+    function getCompanySummary() public view returns (string memory, string memory, address, uint256, uint256, bool) {
+        return (name, symbol, manager, address(this).balance, fundingRoundsCount, isSeekingFunding);
     }
 
 }

@@ -12,7 +12,7 @@ export default function Header() {
       </Link>
       <Menu.Menu position="right">
         <Link href="/">
-          <a className="item">Campaigns</a>
+          <a className="item">Companies</a>
         </Link>
         <Link href="/campaigns/new">
           <a className="item">+</a>
