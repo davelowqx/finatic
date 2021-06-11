@@ -74,7 +74,7 @@ contract Stonk is IERC20 {
         return false;
     }
 
-    function allowance(address sender, address delegate) public override view returns (uint) {
+    function allowance(address sender, address delegate) public override view returns (uint256) {
         // NOT IMPLEMENTED
         // return _allowances[sender][delegate];
         return 0;
