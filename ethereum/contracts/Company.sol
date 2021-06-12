@@ -11,8 +11,11 @@ contract Company is IERC20 {
     // mapping(address => mapping(address => uint256)) private _allowances;
     uint256 private _sharesOutstanding; //totalSupply
 
+    address[] private _holders; //will contain addresses with 0 balance 
+    mapping(address => bool) private _seen; //ensures _holders contains unique addresses
+
     address public manager;
-    mapping(uint256 => FundingRound) fundingRounds;
+    mapping(uint256 => FundingRound) public fundingRounds;
     uint256 public fundingRoundsCount;
     bool public isSeekingFunding; 
 
@@ -27,17 +30,15 @@ contract Company is IERC20 {
     constructor(string memory name_, string memory symbol_, uint256 sharesOutstanding_, address manager_) {
         _name = name_;
         _symbol = symbol_;
-	_sharesOutstanding = sharesOutstanding_;
         manager = manager_;
-        _balances[address(this)] = _sharesOutstanding; 
+        _sharesOutstanding = sharesOutstanding_;
+        _balances[address(this)] = sharesOutstanding_;
+        _holders.push(address(this));
+        _seen[address(this)] = true;
     }
 
-    error Unauthorized();
-
     modifier authorized() {
-        if (msg.sender != manager) {
-            revert Unauthorized();
-        }
+        require (msg.sender == manager, "UNAUTHORIZED");
         _;
     }
 
@@ -59,7 +60,7 @@ contract Company is IERC20 {
         // distribute tokens
         for (uint256 i = 0; i < fr.investors.length; i++) {
             address investor = fr.investors[i];
-            transfer(investor, fr.sharesOffered * fr.investment[investor] / fr.currentAmount);
+            _transfer(address(this), investor, fr.sharesOffered * fr.investment[investor] / fr.currentAmount);
         }
     }
 
@@ -111,38 +112,61 @@ contract Company is IERC20 {
     }
 
     function transfer(address recipient, uint256 amount) public override returns (bool) {
-        require(amount <= _balances[msg.sender], "transfer amount exceeds balance");
-        _balances[msg.sender] -= amount;
-        _balances[recipient] += amount;
-        emit Transfer(msg.sender, recipient, amount);
+        _transfer(msg.sender, recipient, amount);
         return true;
     }
 
     function allowance(address sender, address delegate) public override pure returns (uint256) {
-        return 0;
+        revert();
     }
 
     function approve(address delegate, uint256 numTokens) public override pure returns (bool) {
-        return false;
+        revert();
     }
 
     function transferFrom(address sender, address recipient, uint256 amount) public override pure returns (bool) {
-        return false;
+        revert();
     }
 
     //Extensions
+    function _transfer(address sender, address recipient, uint256 amount) internal {
+        require(_balances[sender] >= amount, "insufficient balance");
+        if (_balances[recipient] == 0 && !_seen[recipient]) { //new holder
+            _holders.push(recipient);
+            _seen[recipient] = true;
+        }
+        _balances[sender] -= amount;
+        _balances[recipient] += amount;
+        emit Transfer(sender, recipient, amount);
+    }
+
     function _mint(uint256 sharesOffered) internal authorized {
         _sharesOutstanding += sharesOffered;
         _balances[address(this)] += sharesOffered;
         emit Transfer(address(0), address(this), sharesOffered);
     } 
 
-    function conductShareBuyback(uint256 sharesPurchased) public authorized {
-        //TODO
+    /*
+    function _burn(uint256 sharesPurchased) internal authorized {
+        require(_balances[address(this)] >= sharesPurchased, "burn amount exceeds balance");
+        _sharesOutstanding -= sharesPurchased;
+        _balances[address(this)] -= sharesPurchased;
+        emit Transfer(address(this), address(0), sharesPurchased);
     } 
 
+    function createTenderOffer(uint256 sharesToPurchase) public authorized {} 
+    */
+
     function payoutDividends(uint256 amount) public authorized {
-        //TODO
+        require(address(this).balance >= amount, "insufficient balance");
+        require(!isSeekingFunding);
+
+        for (uint256 i = 0; i < _holders.length; i++) {
+            address holder = _holders[i];
+            if (holder != address(this) && _balances[holder] > 0) { 
+                payable(holder).transfer(amount * _balances[holder] / _sharesOutstanding);
+            }
+        }
     } 
 
     //GETTERS
@@ -161,7 +185,11 @@ contract Company is IERC20 {
         );
     }
 
-    function getCompanySummary() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool) {
+    function getCompanySummary() public view returns (string memory, string memory, uint256, bool) {
+        return (_name, _symbol, _sharesOutstanding, isSeekingFunding);
+    }
+
+    function getCompanyDetails() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool) {
         return (_name, _symbol, _sharesOutstanding, address(this).balance, manager, fundingRoundsCount, isSeekingFunding);
     }
 

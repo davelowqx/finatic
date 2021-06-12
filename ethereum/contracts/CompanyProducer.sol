@@ -6,7 +6,7 @@ import "./Company.sol";
 contract CompanyProducer {
     address[] public companyAddresses;
 
-    function createCompany(string memory name, string memory symbol, uint256 sharesOutstanding) public {
+    function createCompany(string calldata name, string calldata symbol, uint256 sharesOutstanding) public {
         Company c = new Company(name, symbol, sharesOutstanding, msg.sender);
         companyAddresses.push(address(c));
     }

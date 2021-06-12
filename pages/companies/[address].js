@@ -1,28 +1,27 @@
 import React from "react";
-import { Card, Grid, Button } from "semantic-ui-react";
+import { Card, Grid } from "semantic-ui-react";
 import Layout from "../../components/Layout";
-import { truncateAddress } from "../../components/Formatter";
 
-import { company } from "../../ethereum/contracts";
+import { Company } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
 import ContributionForm from "../../components/ContributionForm";
 
 export async function getServerSideProps(context) {
   const address = context.params.address;
-  const comp = company(address);
+  const company = Company(address);
 
-  const summary = await comp.methods.getCompanySummary().call();
+  const companyDetails = await company.methods.getCompanyDetails().call();
 
-  // pull address from the prop and details of it from summary
   return {
     props: {
       address,
-      name: summary[0],
-      symbol: summary[1],
-      manager: summary[2],
-      balance: summary[3],
-      fundingRoundsCount: summary[4],
-      isSeekingFunding: summary[5],
+      name: companyDetails[0],
+      symbol: companyDetails[1],
+      sharesOutstanding: companyDetails[2],
+      balance: companyDetails[3],
+      manager: companyDetails[4],
+      fundingRoundsCount: companyDetails[5],
+      isSeekingFunding: companyDetails[6],
     },
   };
 }
@@ -31,15 +30,22 @@ export default function CampaignDetails({
   address,
   name,
   symbol,
-  manager,
+  sharesOutstanding,
   balance,
+  manager,
   fundingRoundsCount,
   isSeekingFunding,
 }) {
   const items = [
     {
-      header: address,
-      meta: "Address of Company",
+      header: "???",
+      meta: "Current Valuation",
+      description: "",
+      style: { overflowWrap: "anywhere" },
+    },
+    {
+      header: sharesOutstanding,
+      meta: "Shares Outstanding",
       description: "",
       style: { overflowWrap: "anywhere" },
     },
