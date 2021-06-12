@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 //formatting json object for input to compiler
-//https://docs.soliditylang.org/en/v0.8.4/using-the-compiler.html
+//https://docs.soliditylang.org/en/v0.8.5/using-the-compiler.html
 //#compiler-input-and-output-json-description
 const input = {
   language: "Solidity",
