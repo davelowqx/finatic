@@ -37,7 +37,7 @@ export default function CampaignIndex({ companySummaries }) {
           />
         </a>
       </Link>
-      <Card.Group centered>
+      <Card.Group itemsPerRow={3}>
         {companySummaries
           .reverse()
           .map(({ address, name, sharesOutstanding, isSeekingFunding }) => (
