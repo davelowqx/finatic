@@ -1,8 +1,12 @@
 import React from "react";
-import { Menu } from "semantic-ui-react";
-// link render anchor tags around react components
+import { Menu, Button } from "semantic-ui-react";
 import Link from "next/link";
-//import { Link } from "../routes";
+import web3 from "../ethereum/web3";
+
+const connectWallet = async () => {
+  const accounts = await web3.eth.getAccounts();
+  console.log(accounts);
+};
 
 export default function Header() {
   return (
@@ -11,9 +15,9 @@ export default function Header() {
         <a className="item">fundSME</a>
       </Link>
       <Menu.Menu position="right">
-        <Link href="/">
-          <a className="item">Companies</a>
-        </Link>
+        <Button onClick={connectWallet}>
+          <a className="item">Connect Wallet</a>
+        </Button>
         <Link href="/companies/new">
           <a className="item">+</a>
         </Link>
