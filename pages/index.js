@@ -6,17 +6,20 @@ import db from "../firebase/db";
 
 export async function getServerSideProps() {
   const companySummaries = [];
+  let i = 0;
+  await db
+    .collection("companies")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        companySummaries[i++] = { address: doc.id, ...doc.data() };
+      });
+    });
   return { props: { companySummaries } };
 }
 
 export default function LandingPage({ companySummaries }) {
-  db.collection("companies")
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
-      });
-    });
+  console.log(companySummaries);
   return (
     <Layout>
       <Grid>

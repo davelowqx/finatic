@@ -4,6 +4,7 @@ import Layout from "../../components/Layout";
 import web3 from "../../ethereum/web3";
 import { useRouter } from "next/router";
 import { CompanyProducer } from "../../ethereum/contracts";
+import db from "../../firebase/db";
 
 export default function CompanyNew() {
   const [values, setValues] = React.useState({
@@ -70,7 +71,7 @@ export default function CompanyNew() {
           onChange={(event) =>
             setValues({
               ...values,
-              name: event.target.description,
+              name: event.target.value,
             })
           }
         />

@@ -5,7 +5,7 @@ import { company } from "../ethereum/contracts";
 import web3 from "../ethereum/web3";
 import { useRouter } from "next/router";
 
-export default function ContributeForm({ address, isSeekingFunding }) {
+export default function ContributeForm({ address, isFinancing }) {
   const [values, setValues] = React.useState({
     amount: "",
     errorMessage: "",
@@ -52,7 +52,7 @@ export default function ContributeForm({ address, isSeekingFunding }) {
       </Form.Field>
 
       <Message error header="Oops!" content={values.errorMessage} />
-      <Button primary disabled={!isSeekingFunding} loading={values.loading}>
+      <Button primary disabled={!isFinancing} loading={values.loading}>
         Invest!
       </Button>
     </Form>

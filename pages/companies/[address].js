@@ -4,7 +4,7 @@ import Layout from "../../components/Layout";
 
 import { Company } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
-import ContributionForm from "../../components/ContributionForm";
+import InvestForm from "../../components/InvestForm";
 
 export async function getServerSideProps(context) {
   const address = context.params.address;
@@ -21,7 +21,7 @@ export async function getServerSideProps(context) {
       balance: companyDetails[3],
       manager: companyDetails[4],
       fundingRoundsCount: companyDetails[5],
-      isSeekingFunding: companyDetails[6],
+      isFinancing: companyDetails[6],
     },
   };
 }
@@ -34,7 +34,7 @@ export default function CampaignDetails({
   balance,
   manager,
   fundingRoundsCount,
-  isSeekingFunding,
+  isFinancing,
 }) {
   const items = [
     {
@@ -78,10 +78,7 @@ export default function CampaignDetails({
             <Card.Group items={items} />
           </Grid.Column>
           <Grid.Column width={6}>
-            <ContributionForm
-              isSeekingFunding={isSeekingFunding}
-              address={address}
-            />
+            <InvestForm isFinancing={isFinancing} address={address} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
