@@ -1,58 +1,98 @@
 import React from "react";
-import { Card, Button } from "semantic-ui-react";
-import Link from "next/link";
+import { Button, Grid } from "semantic-ui-react";
 import Layout from "../components/Layout";
-import { CompanyProducer, Company } from "../ethereum/contracts";
+import CompanyCards from "../components/CompanyCards";
 
 export async function getServerSideProps() {
-  const companyAddresses = await CompanyProducer.methods
-    .getCompanyAddresses()
-    .call();
-  const companySummaries = [];
-  for (let address of companyAddresses) {
-    const company = Company(address);
-    const companySummary = await company.methods.getCompanySummary().call();
-    companySummaries.push({
-      address,
-      name: companySummary[0],
-      symbol: companySummary[1],
-      sharesOutstanding: companySummary[2],
-      isSeekingFunding: companySummary[3],
-    });
-  }
+  const companySummaries = [
+    {
+      address: "",
+      name: "Apple Inc.",
+      symbol: "AAPL",
+      sharesOutstanding: 1000,
+      isFinancing: false,
+    },
+    {
+      address: "",
+      name: "Microsoft Inc.",
+      symbol: "MSFT",
+      sharesOutstanding: 2000,
+      isFinancing: true,
+    },
+    {
+      address: "",
+      name: "Google Inc.",
+      symbol: "GOOG",
+      sharesOutstanding: 3000,
+      isFinancing: true,
+    },
+    {
+      address: "",
+      name: "Facebook",
+      symbol: "FB",
+      sharesOutstanding: 4000,
+      isFinancing: false,
+    },
+  ];
+
   return { props: { companySummaries } };
 }
 
-export default function CampaignIndex({ companySummaries }) {
+export default function LandingPage({ companySummaries }) {
   return (
     <Layout>
-      <h3>Companies</h3>
-      <Link href="/companies/new">
-        <a>
-          <Button
-            floated="right"
-            content="List Company"
-            icon="add circle"
-            primary={true}
-          />
-        </a>
-      </Link>
-      <Card.Group itemsPerRow={3}>
-        {companySummaries
-          .reverse()
-          .map(({ address, name, sharesOutstanding, isSeekingFunding }) => (
-            <Card
-              href={`/companies/${address}`}
-              image="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
-              header={name}
-              meta={`${sharesOutstanding}`}
-              description="Add company description here"
-              extra="extra shit"
-              fluid={true}
-              color={isSeekingFunding ? "green" : "red"}
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={11}>
+            <h2>The web3 stonk market</h2>
+            <p>Join us in democratizing financial markets for all.</p>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={11}>
+            <h2>Raising Now</h2>
+          </Grid.Column>
+          <Grid.Column width={5}>
+            <Button
+              href="/explore?isFinancing=true"
+              floated="right"
+              content="Explore"
+              color="green"
+              labelPosition="right"
+              icon="right arrow"
             />
-          ))}
-      </Card.Group>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={16}>
+            <CompanyCards
+              companySummaries={companySummaries.filter((x) => x.isFinancing)}
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={11}>
+            <h2>Funded</h2>
+          </Grid.Column>
+          <Grid.Column width={5}>
+            <Button
+              href="/explore?isFinancing=false"
+              floated="right"
+              content="View Funded"
+              color="blue"
+              labelPosition="right"
+              icon="right arrow"
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={16}>
+            <CompanyCards
+              companySummaries={companySummaries.filter((x) => !x.isFinancing)}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </Layout>
   );
 }

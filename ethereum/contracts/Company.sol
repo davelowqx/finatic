@@ -17,7 +17,7 @@ contract Company is IERC20 {
     address public manager;
     mapping(uint256 => FundingRound) public fundingRounds;
     uint256 public fundingRoundsCount;
-    bool public isSeekingFunding; 
+    bool public isFinancing; 
 
     struct FundingRound {
         uint256 currentAmount;
@@ -43,17 +43,17 @@ contract Company is IERC20 {
     }
 
     function createFundingRound(uint256 targetAmount_, uint256 sharesOffered_) public authorized {
-        require(!isSeekingFunding);
+        require(!isFinancing);
         fundingRoundsCount++;
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         fr.targetAmount = targetAmount_;
         fr.sharesOffered = sharesOffered_;
-        isSeekingFunding = true;
+        isFinancing = true;
     }
 
     function acceptFundingRound() public authorized {
-        require(isSeekingFunding);
-        isSeekingFunding = false;
+        require(isFinancing);
+        isFinancing = false;
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         require(fr.currentAmount >= fr.targetAmount);
         _mint(fr.sharesOffered);
@@ -65,8 +65,8 @@ contract Company is IERC20 {
     }
 
     function rejectFundingRound() public authorized {
-        require(isSeekingFunding);
-        isSeekingFunding = false;
+        require(isFinancing);
+        isFinancing = false;
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         // reimburse investors
         for (uint256 i = 0; i < fr.investors.length; i++) {
@@ -76,7 +76,7 @@ contract Company is IERC20 {
     }
 
     function invest() public payable {
-        require(isSeekingFunding);
+        require(isFinancing);
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         if (fr.investment[msg.sender] == 0) { // new investor
             fr.investors.push(msg.sender);
@@ -86,7 +86,7 @@ contract Company is IERC20 {
     }
 
     function withdraw(uint256 amount, address payable recipient) public authorized {
-        require(!isSeekingFunding);
+        require(!isFinancing);
         recipient.transfer(amount);
     }
 
@@ -159,7 +159,7 @@ contract Company is IERC20 {
 
     function payoutDividends(uint256 amount) public authorized {
         require(address(this).balance >= amount, "insufficient balance");
-        require(!isSeekingFunding);
+        require(!isFinancing);
 
         for (uint256 i = 0; i < _holders.length; i++) {
             address holder = _holders[i];
@@ -171,7 +171,7 @@ contract Company is IERC20 {
 
     //GETTERS
     function getInvestment(address investor) public view returns (uint256) {
-        require(isSeekingFunding);
+        require(isFinancing);
         return fundingRounds[fundingRoundsCount].investment[investor];
     }
 
@@ -186,11 +186,11 @@ contract Company is IERC20 {
     }
 
     function getCompanySummary() public view returns (string memory, string memory, uint256, bool) {
-        return (_name, _symbol, _sharesOutstanding, isSeekingFunding);
+        return (_name, _symbol, _sharesOutstanding, isFinancing);
     }
 
     function getCompanyDetails() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool) {
-        return (_name, _symbol, _sharesOutstanding, address(this).balance, manager, fundingRoundsCount, isSeekingFunding);
+        return (_name, _symbol, _sharesOutstanding, address(this).balance, manager, fundingRoundsCount, isFinancing);
     }
 
 }

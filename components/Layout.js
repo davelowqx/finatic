@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "semantic-ui-react";
 import Head from "next/head";
-import Header from "./Header";
+import NavBar from "./NavBar";
 
 export default function Layout(props) {
   return (
@@ -12,7 +12,7 @@ export default function Layout(props) {
           href="//cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"
         />
       </Head>
-      <Header />
+      <NavBar />
       {props.children}
       {/* <h1>Footer</h1> */}
     </Container>

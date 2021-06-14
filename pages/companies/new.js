@@ -9,6 +9,7 @@ export default function CompanyNew() {
   const [values, setValues] = React.useState({
     name: "",
     symbol: "",
+    description: "",
     sharesOutstanding: "",
     errorMessage: "",
     loading: false,
@@ -63,8 +64,19 @@ export default function CompanyNew() {
           error={values.symbol.length > 5}
         />
         <Form.Input
+          label="Desciption"
+          placeholder="Describe Your Company!!"
+          value={values.description}
+          onChange={(event) =>
+            setValues({
+              ...values,
+              name: event.target.description,
+            })
+          }
+        />
+        <Form.Input
           label="Shares Outstanding"
-          placeholder="1000000"
+          placeholder="1000"
           value={values.sharesOutstanding}
           onChange={(event) => {
             let value = parseInt(event.target.value.substring(0, 13));

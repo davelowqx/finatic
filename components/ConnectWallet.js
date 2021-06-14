@@ -1,14 +1,19 @@
 import React from "react";
-import { Menu, Button } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import Link from "next/link";
+import { truncateAddress } from "./Formatter";
 
-export default function Header() {
+export default function ConnectWallet() {
+  const [account, setAccount] = React.useState("Connect Account");
   const [connected, setConnected] = React.useState(false);
 
   const connectWallet = () => {
     ethereum
       .request({ method: "eth_requestAccounts" })
-      .then(setConnected(true))
+      .then((accounts) => {
+        setAccount(accounts[0]);
+        setConnected(true);
+      })
       .catch((err) => {
         if (err.code === 4001) {
           // EIP-1193 userRejectedRequest error
@@ -21,18 +26,10 @@ export default function Header() {
   };
 
   return (
-    <Menu style={{ marginTop: "20px" }}>
-      <Link href="/">
-        <a className="item">fundSME</a>
-      </Link>
-      <Menu.Menu position="right">
-        <Button onClick={connectWallet} disabled={connected}>
-          <a className="item">Connect Wallet</a>
-        </Button>
-        <Link href="/companies/new">
-          <a className="item">+</a>
-        </Link>
-      </Menu.Menu>
-    </Menu>
+    <Button onClick={connectWallet} disabled={connected}>
+      <a className="item">
+        {connected ? truncateAddress(account) : "Connect Account"}
+      </a>
+    </Button>
   );
 }
