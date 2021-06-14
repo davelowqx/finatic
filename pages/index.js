@@ -24,16 +24,16 @@ export default function LandingPage({ companySummaries }) {
     <Layout>
       <Grid>
         <Grid.Row>
-          <Grid.Column width={11}>
+          <Grid.Column>
             <h2>The web3 stonk market</h2>
             <p>Join us in democratizing financial markets for all.</p>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={11}>
+          <Grid.Column width={10}>
             <h2>Financing Now</h2>
           </Grid.Column>
-          <Grid.Column width={5}>
+          <Grid.Column width={6}>
             <Button
               href="/explore?isFinancing=true"
               floated="right"
@@ -45,17 +45,18 @@ export default function LandingPage({ companySummaries }) {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={16}>
+          <Grid.Column>
             <CompanyCards
               companySummaries={companySummaries.filter((x) => x.isFinancing)}
+              gridView
             />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={11}>
+          <Grid.Column width={10}>
             <h2>Funded</h2>
           </Grid.Column>
-          <Grid.Column width={5}>
+          <Grid.Column width={6}>
             <Button
               href="/explore?isFinancing=false"
               floated="right"
@@ -70,6 +71,7 @@ export default function LandingPage({ companySummaries }) {
           <Grid.Column width={16}>
             <CompanyCards
               companySummaries={companySummaries.filter((x) => !x.isFinancing)}
+              gridView
             />
           </Grid.Column>
         </Grid.Row>

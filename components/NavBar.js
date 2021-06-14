@@ -9,9 +9,12 @@ export default function Header() {
     setSearch(event.target.value);
   };
   return (
-    <Menu secondary style={{ marginTop: "20px" }}>
+    <Menu fluid secondary style={{ marginTop: "20px" }}>
       <Link href="/">
         <a className="item">fundSME</a>
+      </Link>
+      <Link href="/explore">
+        <a className="item">Explore</a>
       </Link>
       <Menu.Menu position="right">
         <Menu.Item>

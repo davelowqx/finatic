@@ -1,15 +1,24 @@
 import React from "react";
-import { Input, Form, Button, Checkbox, Message } from "semantic-ui-react";
+import {
+  TextArea,
+  Form,
+  Button,
+  Checkbox,
+  Message,
+  Progress,
+} from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import web3 from "../../ethereum/web3";
 import { useRouter } from "next/router";
 import { CompanyProducer } from "../../ethereum/contracts";
+import ProgressBar from "../../components/ProgressBar";
 import db from "../../firebase/db";
 
 export default function CompanyNew() {
   const [values, setValues] = React.useState({
     name: "",
     symbol: "",
+    highlights: "",
     description: "",
     sharesOutstanding: "",
     errorMessage: "",
@@ -65,13 +74,25 @@ export default function CompanyNew() {
           error={values.symbol.length > 5}
         />
         <Form.Input
+          label="Highlights"
+          placeholder="Highlights of your Company"
+          value={values.highlights}
+          onChange={(event) =>
+            setValues({
+              ...values,
+              highlights: event.target.value,
+            })
+          }
+        />
+        <Form.Field
+          control={TextArea}
           label="Desciption"
-          placeholder="Describe Your Company!!"
+          placeholder="Be as specific as you want!!"
           value={values.description}
           onChange={(event) =>
             setValues({
               ...values,
-              name: event.target.value,
+              description: event.target.value,
             })
           }
         />
@@ -86,13 +107,15 @@ export default function CompanyNew() {
               sharesOutstanding: isNaN(value) || value <= 0 ? "" : value,
             });
           }}
-          error={values.sharesOutstanding >= 1000000000000} //<1T
+          error={values.sharesOutstanding > 1000000000000} //<1T
         />
+        <Button label="Upload Image" icon="upload" />
+        <ProgressBar show={true} percent={10} />
         <Form.Field>
           <Checkbox label="I agree to the Terms and Conditions" />
         </Form.Field>
         <Message error header="Oops!" content={values.errorMessage} />
-        <Button loading={values.loading} primary>
+        <Button loading={values.loading} fluid primary>
           List
         </Button>
       </Form>
