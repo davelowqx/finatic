@@ -9,6 +9,7 @@ export default function CompanyCards({ companySummaries }) {
         .reverse()
         .map(({ address, name, sharesOutstanding, isFinancing }) => (
           <Card
+            key={address}
             href={`/companies/${address}`}
             image="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
             header={name}

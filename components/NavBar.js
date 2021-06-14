@@ -1,15 +1,28 @@
 import React from "react";
-import { Menu, Button } from "semantic-ui-react";
+import { Menu, Input, Icon } from "semantic-ui-react";
 import Link from "next/link";
 import ConnectWallet from "./ConnectWallet";
 
 export default function Header() {
+  const [search, setSearch] = React.useState("");
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
   return (
-    <Menu style={{ marginTop: "20px" }}>
+    <Menu secondary style={{ marginTop: "20px" }}>
       <Link href="/">
         <a className="item">fundSME</a>
       </Link>
       <Menu.Menu position="right">
+        <Menu.Item>
+          <Input
+            input={search}
+            placeholder="Search..."
+            icon="search"
+            onChange={handleSearch}
+            loading={!!search}
+          />
+        </Menu.Item>
         <Link href="/companies/new">
           <a className="item">List Your Company</a>
         </Link>
