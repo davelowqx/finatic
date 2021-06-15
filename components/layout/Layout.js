@@ -4,7 +4,17 @@ import Head from "next/head";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 
-export default function Layout(props) {
+export default function Layout({ children }) {
+  const [width, setWidth] = React.useState(
+    typeof window === "undefined" ? 768 : window.innerWidth
+  );
+
+  React.useEffect(() => {
+    window.addEventListener("resize", () => setWidth(window.innerWidth));
+    return () =>
+      window.removeEventListener("resize", () => setWidth(window.innerWidth));
+  }, []);
+
   return (
     <Container>
       <br />
@@ -14,8 +24,8 @@ export default function Layout(props) {
           href="//cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"
         />
       </Head>
-      <NavBar />
-      {props.children}
+      <NavBar width={width} />
+      {children}
       <br />
       <br />
       <br />

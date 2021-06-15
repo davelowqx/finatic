@@ -12,13 +12,14 @@ const data = JSON.parse(
 );
 const serviceAccount = JSON.parse(
   fs.readFileSync(
-    path.resolve(__dirname, "../../firebase/serviceAccount.json"),
+    path.resolve(__dirname, "../../firebase/serviceAccountKey.json"),
     "utf-8"
   )
 );
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
+  //databaseURL: 'https://<DATABASE_NAME>.firebaseio.com'
 });
 const db = admin.firestore();
 
@@ -67,16 +68,14 @@ const web3 = new Web3(
       symbol: company.symbol,
       sharesOutstanding: company.sharesOutstanding,
     });
-    db.collection("compaies").doc(companyAddress).set({
-      company,
-    });
+    db.collection("companies").doc(companyAddress).set(company);
   }
 
   console.log("writing to database...");
   fs.writeFileSync(
     path.resolve(__dirname, "../address.json"),
     JSON.stringify({
-      companyProducerAddress,
+      address: companyProducerAddress,
     })
   );
 

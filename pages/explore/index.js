@@ -19,6 +19,7 @@ export async function getServerSideProps() {
         companySummaries[i++] = { address: doc.id, ...doc.data() };
       });
     });
+  /*
   for (let address of companyAddresses) {
     const company = Company(address);
     const companySummary = await company.methods.getCompanySummary().call();
@@ -30,6 +31,7 @@ export async function getServerSideProps() {
       isFinancing: companySummary[3],
     });
   }
+  */
   return { props: { companySummaries } };
 }
 
@@ -39,17 +41,17 @@ export default function Explore({ companySummaries }) {
     <Layout>
       <Button.Group size="mini">
         <Button
-          color={gridView ? "blue" : ""}
+          toggle
+          icon="list layout"
+          active={gridView}
           onClick={() => setGridView(true)}
-        >
-          Grid
-        </Button>
+        ></Button>
         <Button
-          color={gridView ? "" : "blue"}
+          toggle
+          icon="grid layout"
+          active={!gridView}
           onClick={() => setGridView(false)}
-        >
-          List
-        </Button>
+        ></Button>
       </Button.Group>
 
       <Header as="h5" color="grey" textAlign="center">

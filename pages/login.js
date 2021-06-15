@@ -2,8 +2,9 @@ import React from "react";
 import { Button, Grid, Divider, Message, Form } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import Layout from "../components/layout/Layout";
+import Link from "next/link";
 
-export default function Login({ companySummaries }) {
+export default function Login() {
   const [values, setValues] = React.useState({
     email: "",
     password: "",
@@ -28,12 +29,12 @@ export default function Login({ companySummaries }) {
           <Grid.Column textAlign="center">
             <h3>Welcome Back!</h3>
             <div>
-              New to fundSME? <a href="/signup">Signup</a>
+              New to fundSME? <Link href="/signup">Signup</Link>
             </div>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={10}>
+          <Grid.Column computer={8} mobile={16}>
             <Button fluid color="blue" onClick={handleGoogle}>
               LOGIN WITH GOOGLE
             </Button>
@@ -70,7 +71,7 @@ export default function Login({ companySummaries }) {
         </Grid.Row>
         <Grid.Row>
           <Grid.Column textAlign="center">
-            <a href="/">Forgot Password</a>
+            <Link href="/">Forgot Password</Link>
           </Grid.Column>
         </Grid.Row>
       </Grid>

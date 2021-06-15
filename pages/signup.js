@@ -7,11 +7,12 @@ import {
   Message,
   Form,
 } from "semantic-ui-react";
+import Link from "next/link";
 import Layout from "../components/layout/Layout";
 import { useRouter } from "next/router";
 import ConnectWallet from "../components/ConnectWallet";
 
-export default function SignUp({ companySummaries }) {
+export default function SignUp() {
   const [values, setValues] = React.useState({
     name: "",
     email: "",
@@ -38,14 +39,14 @@ export default function SignUp({ companySummaries }) {
       <Grid centered>
         <Grid.Row>
           <Grid.Column textAlign="center">
-            <h3>Join us in democratizing finance</h3>
+            <h3>Join us in democratizing financial markets</h3>
             <div>
-              Already have an account? <a href="/login">Login</a>
+              Already have an account? <Link href="/login">Login</Link>
             </div>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
-          <Grid.Column width={10}>
+          <Grid.Column computer={8} mobile={16}>
             <Button fluid color="blue" onClick={handleGoogle}>
               SIGN UP WITH GOOGLE
             </Button>

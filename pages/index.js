@@ -24,9 +24,36 @@ export default function LandingPage({ companySummaries }) {
     <Layout>
       <Grid>
         <Grid.Row>
-          <Grid.Column>
+          <Grid.Column width={11}>
             <h2>The web3 stonk market</h2>
-            <p>Join us in democratizing financial markets for all.</p>
+          </Grid.Column>
+          <Grid.Column width={5}>
+            <Button
+              href="/signup"
+              floated="right"
+              content="JOIN US"
+              color="red"
+              labelPosition="right"
+              icon="right arrow"
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column>
+            <div>
+              We're building the decentralised version of the NASDAQ and NYSE,
+              an alternative to a system that's
+              <b>
+                {" "}
+                opaque, tightly controlled, and held together by decades-old
+                infrastructure and processes
+              </b>
+              . At it's core is the Ethereum Network, quietly insuring the
+              integrity of your funds and your assets.
+              <br />
+              <div></div>
+              Welcome to the world of DeFi - we hope you enjoy your stay.
+            </div>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
@@ -37,7 +64,7 @@ export default function LandingPage({ companySummaries }) {
             <Button
               href="/explore?isFinancing=true"
               floated="right"
-              content="Explore"
+              content="EXPLORE"
               color="green"
               labelPosition="right"
               icon="right arrow"
@@ -47,7 +74,9 @@ export default function LandingPage({ companySummaries }) {
         <Grid.Row>
           <Grid.Column>
             <CompanyCards
-              companySummaries={companySummaries.filter((x) => x.isFinancing)}
+              companySummaries={companySummaries
+                .filter((x) => x.isFinancing)
+                .slice(0, 3)}
               gridView
             />
           </Grid.Column>
@@ -60,7 +89,7 @@ export default function LandingPage({ companySummaries }) {
             <Button
               href="/explore?isFinancing=false"
               floated="right"
-              content="View Funded"
+              content="VIEW FUNDED"
               color="blue"
               labelPosition="right"
               icon="right arrow"
@@ -70,7 +99,9 @@ export default function LandingPage({ companySummaries }) {
         <Grid.Row>
           <Grid.Column width={16}>
             <CompanyCards
-              companySummaries={companySummaries.filter((x) => !x.isFinancing)}
+              companySummaries={companySummaries
+                .filter((x) => !x.isFinancing)
+                .slice(0, 3)}
               gridView
             />
           </Grid.Column>
