@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Grid } from "semantic-ui-react";
-import Layout from "../components/Layout";
+import Layout from "../components/layout/Layout";
 import CompanyCards from "../components/CompanyCards";
 import db from "../firebase/db";
 

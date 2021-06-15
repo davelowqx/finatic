@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  TextArea,
-  Form,
-  Button,
-  Checkbox,
-  Message,
-  Progress,
-} from "semantic-ui-react";
-import Layout from "../../components/Layout";
+import { TextArea, Form, Button, Checkbox, Message } from "semantic-ui-react";
+import Layout from "../../components/layout/Layout";
 import web3 from "../../ethereum/web3";
 import { useRouter } from "next/router";
 import { CompanyProducer } from "../../ethereum/contracts";
@@ -18,18 +11,20 @@ export default function CompanyNew() {
   const [values, setValues] = React.useState({
     name: "",
     symbol: "",
-    highlights: "",
     description: "",
     sharesOutstanding: "",
+  });
+
+  const [state, setState] = React.useState({
     errorMessage: "",
     loading: false,
   });
 
   const router = useRouter();
-
-  const onSubmit = async (event) => {
+  const handleUpload = () => {};
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setValues({ ...values, errorMessage: "", loading: true });
+    setState({ errorMessage: "", loading: true });
     let address = "";
     try {
       const accounts = await web3.eth.getAccounts();
@@ -37,18 +32,23 @@ export default function CompanyNew() {
         .createCompany(values.name, values.symbol, values.sharesOutstanding)
         .send({
           from: accounts[0],
-        });
-      setValues({ ...values, loading: false });
+        })
+        .then(
+          db.collection("companies").doc("").set({
+            values,
+          })
+        );
+      setState({ ...state, loading: false });
       router.push(`/${address}`); //TODO: push to address of new campaign
     } catch (err) {
-      setValues({ ...values, errorMessage: err.message });
+      setState({ ...state, errorMessage: err.message });
     }
   };
 
   return (
     <Layout>
       <h1>List your Company!</h1>
-      <Form onSubmit={onSubmit} error={!!values.errorMessage}>
+      <Form error={!!values.errorMessage}>
         <Form.Input
           label="Name"
           placeholder="Apple Inc"
@@ -72,17 +72,6 @@ export default function CompanyNew() {
             })
           }
           error={values.symbol.length > 5}
-        />
-        <Form.Input
-          label="Highlights"
-          placeholder="Highlights of your Company"
-          value={values.highlights}
-          onChange={(event) =>
-            setValues({
-              ...values,
-              highlights: event.target.value,
-            })
-          }
         />
         <Form.Field
           control={TextArea}
@@ -109,15 +98,15 @@ export default function CompanyNew() {
           }}
           error={values.sharesOutstanding > 1000000000000} //<1T
         />
-        <Button label="Upload Image" icon="upload" />
-        <ProgressBar show={true} percent={10} />
+        <Button label="Upload Image" icon="upload" onClick={handleUpload} />
         <Form.Field>
           <Checkbox label="I agree to the Terms and Conditions" />
         </Form.Field>
-        <Message error header="Oops!" content={values.errorMessage} />
-        <Button loading={values.loading} fluid primary>
+        <Button loading={values.loading} fluid primary onClick={handleSubmit}>
           List
         </Button>
+        <ProgressBar show={values.loading} percent={10} />
+        <Message error header="Oops!" content={values.errorMessage} />
       </Form>
     </Layout>
   );

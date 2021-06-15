@@ -2,10 +2,12 @@ import React from "react";
 import { Container } from "semantic-ui-react";
 import Head from "next/head";
 import NavBar from "./NavBar";
+import Footer from "./Footer";
 
 export default function Layout(props) {
   return (
     <Container>
+      <br />
       <Head>
         <link
           rel="stylesheet"
@@ -14,7 +16,10 @@ export default function Layout(props) {
       </Head>
       <NavBar />
       {props.children}
-      {/* <h1>Footer</h1> */}
+      <br />
+      <br />
+      <br />
+      <Footer />
     </Container>
   );
 }

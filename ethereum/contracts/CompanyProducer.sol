@@ -6,9 +6,12 @@ import "./Company.sol";
 contract CompanyProducer {
     address[] public companyAddresses;
 
+    event CreateCompany(address indexed addr);
+
     function createCompany(string calldata name, string calldata symbol, uint256 sharesOutstanding) public {
         Company c = new Company(name, symbol, sharesOutstanding, msg.sender);
         companyAddresses.push(address(c));
+        emit CreateCompany(address(c));
     }
 
     function getCompanyAddresses() public view returns (address[] memory) {

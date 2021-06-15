@@ -9,19 +9,21 @@ export default function CompanyCards({ companySummaries, gridView }) {
           .slice()
           .reverse()
           .map(
-            ({ address, name, sharesOutstanding, isFinancing, highlights }) => (
+            ({
+              address,
+              name,
+              sharesOutstanding,
+              isFinancing,
+              description,
+            }) => (
               <Card
                 key={address}
                 href={`/companies/${address}`}
                 image="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
                 header={name}
                 meta={`${sharesOutstanding}`}
-                description={"- " + highlights}
-                extra={
-                  isFinancing
-                    ? `RAISED ${100} FROM ${100} INVESTORS `
-                    : "FUNDED"
-                }
+                description={`${description.substring(0, 100)}...`}
+                extra={isFinancing ? `${50}% COMPLETE` : "FUNDED"}
                 fluid={true}
                 color={isFinancing ? "green" : "red"}
               />
@@ -35,17 +37,26 @@ export default function CompanyCards({ companySummaries, gridView }) {
         {companySummaries
           .slice()
           .reverse()
-          .map(({ address, name, sharesOutstanding, highlights }) => (
-            <Item
-              key={address}
-              href={`/companies/${address}`}
-              image="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
-              header={name}
-              meta={`${sharesOutstanding}`}
-              description={highlights}
-              fluid={true}
-            />
-          ))}
+          .map(
+            ({
+              address,
+              name,
+              sharesOutstanding,
+              description,
+              isFinancing,
+            }) => (
+              <Item
+                key={address}
+                href={`/companies/${address}`}
+                image="https://react.semantic-ui.com/images/avatar/large/daniel.jpg"
+                header={name}
+                meta={`${sharesOutstanding}`}
+                description={`${description.substring(0, 100)}...`}
+                extra={isFinancing ? `${50}% COMPLETE` : "FUNDED"}
+                fluid={true}
+              />
+            )
+          )}
       </Item.Group>
     );
   }

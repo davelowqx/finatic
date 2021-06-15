@@ -3,8 +3,18 @@ const path = require("path");
 const Web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider"); //deprecated
 
-const p = path.resolve(__dirname, "../build/contracts.json");
-const { CompanyProducer } = JSON.parse(fs.readFileSync(p, "utf-8"));
+const { CompanyProducer } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "../build/contracts.json"), "utf-8")
+);
+const data = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "../build/sampledata.json"), "utf-8")
+);
+const firebaseConfig = JSON.parse(
+  fs.readFileSync(
+    path.resolve(__dirname, "../firebase/firebaseConfig.json"),
+    "utf-8"
+  )
+);
 
 const web3 = new Web3(
   new HDWalletProvider(
@@ -16,20 +26,51 @@ const web3 = new Web3(
 
 (async () => {
   const accounts = await web3.eth.getAccounts();
+  const options = { from: accounts[0], gas: 6721975, gasPrice: "20000000000" }; //default ganache-cli params
 
   console.log("deploy from", accounts[0]);
 
-  const contract = await new web3.eth.Contract(CompanyProducer.abi)
+  const companyProducer = await new web3.eth.Contract(CompanyProducer.abi)
     .deploy({ data: CompanyProducer.evm.bytecode.object })
-    .send({ from: accounts[0], gas: 6721975, gasPrice: "20000000000" });
+    .send(options);
 
-  const address = contract.options.address;
+  const companyProducerAddress = companyProducer.options.address;
+  console.log("deployed at", companyProducerAddress);
+
+  /*
+  companyProducer.events.CreateCompany({}, (err, res) => {
+    if (!err) {
+      console.log(res);
+    }
+  });
+  */
+
+  console.log("creating companies");
+  let i = 0;
+  for (company of data) {
+    await companyProducer.methods
+      .createCompany(company.name, company.symbol, company.sharesOutstanding)
+      .send(options);
+    const companyAddress = await companyProducer.methods
+      .companyAddresses(i++)
+      .call();
+    const companyDetails = {
+      [companyAddress]: {
+        name: company.name,
+        symbol: company.symbol,
+        sharesOutstanding: company.sharesOutstanding,
+      },
+    };
+    console.log(companyDetails);
+  }
+
+  console.log("writing to database...");
   fs.writeFileSync(
     path.resolve(__dirname, "../address.json"),
     JSON.stringify({
-      address,
+      companyProducerAddress,
     })
   );
 
-  console.log("ok");
+  console.log("complete, presss ctrl+c to terminate");
 })();

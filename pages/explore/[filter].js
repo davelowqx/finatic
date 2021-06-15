@@ -1,5 +1,5 @@
 import React from "react";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout/Layout";
 import CompanyCards from "../../components/CompanyCards";
 import { CompanyProducer, Company } from "../../ethereum/contracts";
 

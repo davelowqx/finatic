@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Grid } from "semantic-ui-react";
-import Layout from "../../components/Layout";
+import Layout from "../../components/layout/Layout";
 
 import { Company } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
