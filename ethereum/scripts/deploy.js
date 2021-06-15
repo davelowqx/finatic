@@ -2,6 +2,7 @@ const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider"); //deprecated
+const admin = require("firebase-admin");
 
 const { CompanyProducer } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../build/contracts.json"), "utf-8")
@@ -9,12 +10,17 @@ const { CompanyProducer } = JSON.parse(
 const data = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../build/sampledata.json"), "utf-8")
 );
-const firebaseConfig = JSON.parse(
+const serviceAccount = JSON.parse(
   fs.readFileSync(
-    path.resolve(__dirname, "../firebase/firebaseConfig.json"),
+    path.resolve(__dirname, "../../firebase/serviceAccount.json"),
     "utf-8"
   )
 );
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+const db = admin.firestore();
 
 const web3 = new Web3(
   new HDWalletProvider(
@@ -37,6 +43,7 @@ const web3 = new Web3(
   const companyProducerAddress = companyProducer.options.address;
   console.log("deployed at", companyProducerAddress);
 
+  //@truffle/hd-wallet-provider cannot listen to events?
   /*
   companyProducer.events.CreateCompany({}, (err, res) => {
     if (!err) {
@@ -54,14 +61,15 @@ const web3 = new Web3(
     const companyAddress = await companyProducer.methods
       .companyAddresses(i++)
       .call();
-    const companyDetails = {
-      [companyAddress]: {
-        name: company.name,
-        symbol: company.symbol,
-        sharesOutstanding: company.sharesOutstanding,
-      },
-    };
-    console.log(companyDetails);
+    console.log({
+      companyAddress,
+      name: company.name,
+      symbol: company.symbol,
+      sharesOutstanding: company.sharesOutstanding,
+    });
+    db.collection("compaies").doc(companyAddress).set({
+      company,
+    });
   }
 
   console.log("writing to database...");
