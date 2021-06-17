@@ -1,43 +1,83 @@
-const HDWalletProvider = require("@truffle/hdwallet-provider"); //deprecated
-const Web3 = require("web3");
 const fs = require("fs");
 const path = require("path");
+const Web3 = require("web3");
+const HDWalletProvider = require("@truffle/hdwallet-provider"); //deprecated
+const admin = require("firebase-admin");
 
-const p = path.resolve(__dirname, "../build/CampaignFactory.json");
-const compiledCampaignFactory = JSON.parse(fs.readFileSync(p, "utf-8"));
-
-const provider = new HDWalletProvider(
-  //  "oyster exercise random pledge thrive food mail hover knee cry sure eternal",
-  //  "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a"
-  "sentence come burst denial heavy float earth tumble lunch describe success tribe",
-  "ws://localhost:8545"
+const { CompanyProducer } = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "../build/contracts.json"), "utf-8")
+);
+const data = JSON.parse(
+  fs.readFileSync(path.resolve(__dirname, "../build/sampledata.json"), "utf-8")
+);
+const serviceAccount = JSON.parse(
+  fs.readFileSync(
+    path.resolve(__dirname, "../../firebase/serviceAccountKey.json"),
+    "utf-8"
+  )
 );
 
-const web3 = new Web3(provider);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  //databaseURL: 'https://<DATABASE_NAME>.firebaseio.com'
+});
+const db = admin.firestore();
 
-const deploy = async () => {
+const web3 = new Web3(
+  new HDWalletProvider(
+    "oyster exercise random pledge thrive food mail hover knee cry sure eternal",
+    // "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a"
+    "ws://localhost:8545"
+  )
+);
+
+(async () => {
   const accounts = await web3.eth.getAccounts();
+  const options = { from: accounts[0], gas: 6721975, gasPrice: "20000000000" }; //default ganache-cli params
 
-  console.log("Attempting to deploy from account", accounts[0]);
+  console.log("deploy from", accounts[0]);
 
-  const contract = await new web3.eth.Contract(compiledCampaignFactory.abi)
-    .deploy({ data: compiledCampaignFactory.evm.bytecode.object })
-    .send({ from: accounts[1], gas: 1500000, gasPrice: "30000000000000" });
+  const companyProducer = await new web3.eth.Contract(CompanyProducer.abi)
+    .deploy({ data: CompanyProducer.evm.bytecode.object })
+    .send(options);
 
-  return contract.options.address;
-};
+  const companyProducerAddress = companyProducer.options.address;
+  console.log("deployed at", companyProducerAddress);
 
-deploy().then(
-  (address) => {
-    fs.writeFileSync(
-      path.resolve(__dirname, "../contractAddress.json"),
-      JSON.stringify({
-        address,
-      })
-    );
-    console.log(`ok: ${address}`);
-  },
-  (err) => {
-    console.log(`failed: ${err}`);
+  //@truffle/hd-wallet-provider cannot listen to events?
+  /*
+  companyProducer.events.CreateCompany({}, (err, res) => {
+    if (!err) {
+      console.log(res);
+    }
+  });
+  */
+
+  console.log("creating companies");
+  let i = 0;
+  for (company of data) {
+    await companyProducer.methods
+      .createCompany(company.name, company.symbol, company.sharesOutstanding)
+      .send(options);
+    const companyAddress = await companyProducer.methods
+      .companyAddresses(i++)
+      .call();
+    console.log({
+      companyAddress,
+      name: company.name,
+      symbol: company.symbol,
+      sharesOutstanding: company.sharesOutstanding,
+    });
+    db.collection("companies").doc(companyAddress).set(company);
   }
-);
+
+  console.log("writing to database...");
+  fs.writeFileSync(
+    path.resolve(__dirname, "../address.json"),
+    JSON.stringify({
+      address: companyProducerAddress,
+    })
+  );
+
+  console.log("complete, presss ctrl+c to terminate");
+})();

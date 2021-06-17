@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "next dev",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "next start"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.14.3",
     "@truffle/hdwallet-provider": "1.x",
+    "firebase": "^8.6.7",
+    "firebase-admin": "^9.9.0",
     "ganache-cli": "^6.12.2",
     "mocha": "^8.4.0",
     "next": "^10.2.3",
