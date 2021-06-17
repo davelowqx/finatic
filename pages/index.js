@@ -2,24 +2,14 @@ import React from "react";
 import { Button, Grid } from "semantic-ui-react";
 import Layout from "../components/layout/Layout";
 import CompanyCards from "../components/CompanyCards";
-import db from "../firebase/db";
+import { getCompanySummaries } from "../firebase/db";
 
 export async function getServerSideProps() {
-  const companySummaries = [];
-  let i = 0;
-  await db
-    .collection("companies")
-    .get()
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        companySummaries[i++] = { address: doc.id, ...doc.data() };
-      });
-    });
+  const companySummaries = await getCompanySummaries();
   return { props: { companySummaries } };
 }
 
 export default function LandingPage({ companySummaries }) {
-  console.log(companySummaries);
   return (
     <Layout>
       <Grid>

@@ -71,7 +71,6 @@ const web3 = new Web3(
     db.collection("companies").doc(companyAddress).set(company);
   }
 
-  console.log("writing to database...");
   fs.writeFileSync(
     path.resolve(__dirname, "../address.json"),
     JSON.stringify({
@@ -79,5 +78,5 @@ const web3 = new Web3(
     })
   );
 
-  console.log("complete, presss ctrl+c to terminate");
+  console.log("complete, npm run dev");
 })();
