@@ -5,7 +5,7 @@ A web application for equity financing, guaranteed trustlessly by the ethereum n
 # Installation
 
 1. make sure you have `node.js` and `metamask` installed
-2. download branch `new` from github repo
+2. download branch `master` from github repo
 3. install the dependencies using `npm install`
 4. install ganache-cli globally with `npm install -g ganache-cli`
 
