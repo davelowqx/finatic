@@ -17,10 +17,12 @@ export default function Login() {
     //TODO: authentication logic
     router.push("/explore");
   };
+
   const handleGoogle = () => {
     //TODO: authentication logic
     router.push("/explore");
   };
+
   return (
     <Layout>
       <br />

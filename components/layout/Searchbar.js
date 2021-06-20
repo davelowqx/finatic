@@ -8,6 +8,7 @@ export default function Searchbar() {
     value: "",
     results: [],
   });
+
   const handleSearchChange = async (event) => {
     if (event.target.value) {
       setState({ ...state, loading: true, value: event.target.value });
@@ -43,11 +44,13 @@ export default function Searchbar() {
 
   return (
     <Search
+      className="search-bar"
       loading={state.loading}
       onResultSelect={handleResultSelect}
       onSearchChange={handleSearchChange}
       results={state.results}
       value={state.value}
+      style={{ marginLeft: "1em", marginRight: "1em", paddingRight: "1em" }}
     ></Search>
   );
 }
