@@ -11,9 +11,10 @@ import Link from "next/link";
 import Layout from "../components/layout/Layout";
 import { useRouter } from "next/router";
 import ConnectWallet from "../components/ConnectWallet";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function SignUp() {
-  const [values, setValues] = React.useState({
+  const [vars, setVars] = React.useState({
     name: "",
     email: "",
     password: "",
@@ -23,8 +24,18 @@ export default function SignUp() {
   });
 
   const router = useRouter();
+
   const handleSubmit = () => {
-    //TODO: authentication logic
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(vars.email, vars.password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+      })
+      .catch((error) => {
+        console.log(error.code, error.message);
+      });
+
     router.push("/explore");
   };
 
@@ -51,26 +62,26 @@ export default function SignUp() {
               SIGN UP WITH GOOGLE
             </Button>
             <Divider horizontal>or</Divider>
-            <Form onSubmit={handleSubmit} error={!!values.errorMessage}>
+            <Form onSubmit={handleSubmit} error={!!vars.errorMessage}>
               <Form.Input
                 label="Name"
                 placeholder="John Doe"
-                value={values.name}
+                value={vars.name}
                 onChange={(event) =>
-                  setValues({
-                    ...values,
+                  setVars({
+                    ...vars,
                     name: event.target.value.substring(0, 31),
                   })
                 }
-                error={values.name.length > 30}
+                error={vars.name.length > 30}
               />
               <Form.Input
                 label="Email"
                 placeholder="john@doe.com"
-                value={values.email}
+                value={vars.email}
                 onChange={(event) =>
-                  setValues({
-                    ...values,
+                  setVars({
+                    ...vars,
                     email: event.target.value.substring(0, 31),
                   })
                 }
@@ -78,23 +89,23 @@ export default function SignUp() {
               <Form.Input
                 label="Password"
                 placeholder="shhhh..."
-                value={values.password}
+                value={vars.password}
                 onChange={(event) =>
-                  setValues({
-                    ...values,
+                  setVars({
+                    ...vars,
                     password: event.target.value,
                   })
                 }
-                error={values.password.length < 8}
+                error={vars.password.length < 8}
               />
               <Form.Input
                 label="Ethereum Wallet Address"
                 placeholder="0x..."
-                value={values.address}
+                value={vars.address}
                 action="Connect"
                 onChange={(event) =>
-                  setValues({
-                    ...values,
+                  setVars({
+                    ...vars,
                     address: event.target.value,
                   })
                 }
@@ -102,7 +113,7 @@ export default function SignUp() {
               <Form.Field>
                 <Checkbox label="I agree to the Terms and Conditions" />
               </Form.Field>
-              <Message error header="Oops!" content={values.errorMessage} />
+              <Message error header="Oops!" content={vars.errorMessage} />
               <Button fluid color="red">
                 SIGN UP
               </Button>
