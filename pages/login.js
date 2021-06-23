@@ -61,59 +61,6 @@ export default function Login() {
   return (
     <Layout>
       <br />
-<<<<<<< HEAD
-      <Grid centered columns={1}>
-        <Grid.Row>
-          <Grid.Column textAlign="center">
-            <h3>Welcome Back!</h3>
-            <div>
-              New to fundSME? <Link href="/signup">Signup</Link>
-            </div>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column computer={8} mobile={16}>
-            <Button fluid color="blue" onClick={handleGoogle}>
-              LOGIN WITH GOOGLE
-            </Button>
-            <Divider horizontal>Or</Divider>
-            <Form onSubmit={handleSubmit} error={!!vars.errorMessage}>
-              <Form.Input
-                label="Email"
-                placeholder="john@doe.com"
-                value={vars.email}
-                onChange={(event) =>
-                  setVars({
-                    ...vars,
-                    email: event.target.value.substring(0, 31),
-                  })
-                }
-              />
-              <Form.Input
-                label="Password"
-                placeholder="shhhh..."
-                value={vars.password}
-                onChange={(event) =>
-                  setVars({
-                    ...vars,
-                    password: event.target.value,
-                  })
-                }
-              />
-              <Message error header="Oops!" content={vars.errorMessage} />
-              <Button fluid color="red">
-                LOGIN
-              </Button>
-            </Form>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column textAlign="center">
-            <Link href="/">Forgot Password</Link>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-=======
       <div className="login-container cardborder">
         <Grid centered columns={1}>
           <Grid.Row>
@@ -190,7 +137,6 @@ export default function Login() {
           </Grid.Row>
         </Grid>
       </div>
->>>>>>> 47c79548982e5d92955a445a4da2c6050f526f7b
     </Layout>
   );
 }
