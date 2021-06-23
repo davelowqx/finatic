@@ -192,21 +192,6 @@ export default function LandingPage({ companySummaries }) {
             />
           </Grid.Column>
         </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <Divider section />
-            <div className="centercontainer2">
-              <Icon
-                style={{ marginTop: "1em", marginBottom: "1em" }}
-                size="big"
-                name="money bill alternate outline"
-              />
-              <Header as="h2" style={{ marginBottom: "1em" }}>
-                <a>Refer a startup, get $1,000</a>
-              </Header>
-            </div>
-          </Grid.Column>
-        </Grid.Row>
       </Grid>
     </Layout>
   );
