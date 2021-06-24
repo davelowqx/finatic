@@ -9,8 +9,10 @@ import {
   Form,
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
-import Layout from "../components/layout/Layout";
+import Layout from "../components/layout";
 import Link from "next/link";
+import GoogleAuth from "../firebase/GoogleAuth";
+import { auth } from "../firebase";
 
 export default function Login() {
   const [vars, setVars] = React.useState({
@@ -23,43 +25,22 @@ export default function Login() {
   const router = useRouter();
 
   const handleSubmit = () => {
-    firebase
-      .auth()
+    auth
       .signInWithEmailAndPassword(vars.email, vars.password)
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        // ...
+        console.log(user);
+        //router.push("/explore");
       })
       .catch((error) => {
-        vars.errorMessage = error.message;
-        console.log(error.code, error.message);
+        setVars({ ...vars, errorMessage: error.message });
+        console.log(error);
       });
-
-    router.push("/explore");
-  };
-
-  const handleGoogle = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth().signInWithRedirect(provider);
-
-    firebase
-      .auth()
-      .getRedirectResult()
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access Google APIs.
-        const credential = result.credential;
-        const user = result.user;
-        console.log(credential, user);
-      })
-      .catch((error) => {
-        console.log(error.code, error.message);
-      });
-    router.push("/explore");
   };
 
   return (
-    <Layout>
+    <>
       <br />
       <div className="login-container cardborder">
         <Grid centered columns={1}>
@@ -80,18 +61,14 @@ export default function Login() {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column computer={12} mobile={16}>
-              <Form
-                size="big"
-                onSubmit={handleSubmit}
-                error={!!values.errorMessage}
-              >
+              <Form size="big" error={!!vars.errorMessage}>
                 <Form.Input
                   label="Email"
                   placeholder="john@doe.com"
-                  value={values.email}
+                  value={vars.email}
                   onChange={(event) =>
-                    setValues({
-                      ...values,
+                    setVars({
+                      ...vars,
                       email: event.target.value.substring(0, 31),
                     })
                   }
@@ -100,10 +77,10 @@ export default function Login() {
                 <Form.Input
                   label="Password"
                   placeholder="shhhh..."
-                  value={values.password}
+                  value={vars.password}
                   onChange={(event) =>
-                    setValues({
-                      ...values,
+                    setVars({
+                      ...vars,
                       password: event.target.value,
                     })
                   }
@@ -111,12 +88,12 @@ export default function Login() {
                 <div style={{ marginTop: "-10px" }}>
                   <Link href="/">Forgot Password?</Link>
                 </div>
-                <Message error header="Oops!" content={values.errorMessage} />
+                <Message error content={vars.errorMessage} />
                 <br />
                 <br />
                 <div className="login-button-container">
                   <div className="login-buttons">
-                    <Button size="big" fluid color="red">
+                    <Button size="big" fluid color="red" onClick={handleSubmit}>
                       LOGIN
                     </Button>
                   </div>
@@ -129,7 +106,7 @@ export default function Login() {
                 <br />
                 <Divider horizontal>Or</Divider>
                 <br />
-                <Button fluid size="big" color="green" onClick={handleGoogle}>
+                <Button fluid size="big" color="green" onClick={GoogleAuth}>
                   LOGIN WITH GOOGLE
                 </Button>
               </Form>
@@ -137,6 +114,6 @@ export default function Login() {
           </Grid.Row>
         </Grid>
       </div>
-    </Layout>
+    </>
   );
 }

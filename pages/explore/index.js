@@ -1,8 +1,7 @@
 import React from "react";
-import Layout from "../../components/layout/Layout";
 import CompanyCards from "../../components/CompanyCards";
 import { Header, Button } from "semantic-ui-react";
-import { getCompanySummaries, getPayload } from "../../firebase/db";
+import { getCompanySummaries } from "../../components/Getters";
 
 export async function getServerSideProps() {
   const companySummaries = await getCompanySummaries();
@@ -12,7 +11,7 @@ export async function getServerSideProps() {
 export default function Explore({ companySummaries }) {
   const [gridView, setGridView] = React.useState(true);
   return (
-    <Layout>
+    <>
       <Button.Group size="mini">
         <Button
           toggle
@@ -32,6 +31,6 @@ export default function Explore({ companySummaries }) {
         {companySummaries.length} Companies Raising Capital
       </Header>
       <CompanyCards companySummaries={companySummaries} gridView={gridView} />
-    </Layout>
+    </>
   );
 }

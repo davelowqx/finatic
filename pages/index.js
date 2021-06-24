@@ -2,16 +2,14 @@ import React from "react";
 import {
   Image,
   Icon,
-  Divider,
   Container,
   Header,
   Button,
   Grid,
   Card,
 } from "semantic-ui-react";
-import Layout from "../components/layout/Layout";
 import CompanyCards from "../components/CompanyCards";
-import { getCompanySummaries } from "../firebase/db";
+import { getCompanySummaries } from "../components/Getters";
 
 export async function getServerSideProps() {
   const companySummaries = await getCompanySummaries();
@@ -20,7 +18,7 @@ export async function getServerSideProps() {
 
 export default function LandingPage({ companySummaries }) {
   return (
-    <Layout>
+    <>
       <Grid>
         <Grid.Row
           style={{
@@ -144,6 +142,10 @@ export default function LandingPage({ companySummaries }) {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
+          <br></br>
+          <br></br>
+        </Grid.Row>
+        <Grid.Row>
           <Grid.Column width={10}>
             <Header
               as="h1"
@@ -151,11 +153,19 @@ export default function LandingPage({ companySummaries }) {
               style={{
                 fontSize: "3em",
                 fontWeight: "bold",
-                marginTop: "1.5em",
               }}
             />
           </Grid.Column>
-          <Grid.Column width={6}></Grid.Column>
+          <Grid.Column width={6}>
+            <Button
+              href="/explore?isFinancing=false"
+              floated="right"
+              content="SEE THEM"
+              color="green"
+              labelPosition="right"
+              icon="right arrow"
+            />
+          </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
@@ -168,8 +178,18 @@ export default function LandingPage({ companySummaries }) {
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
+          <br />
+        </Grid.Row>
+        <Grid.Row>
           <Grid.Column width={10}>
-            <h2>Funded</h2>
+            <Header
+              as="h1"
+              content="Funded"
+              style={{
+                fontSize: "3em",
+                fontWeight: "bold",
+              }}
+            />
           </Grid.Column>
           <Grid.Column width={6}>
             <Button
@@ -193,6 +213,6 @@ export default function LandingPage({ companySummaries }) {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </Layout>
+    </>
   );
 }

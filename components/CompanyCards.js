@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Item } from "semantic-ui-react";
 
-export default function CompanyCards({ companySummaries, gridView }) {
+export default function CompanyCards({ companySummaries = [], gridView }) {
   if (gridView) {
     return (
       <Card.Group itemsPerRow={3}>
@@ -24,7 +24,7 @@ export default function CompanyCards({ companySummaries, gridView }) {
                 meta={`${sharesOutstanding}`}
                 description={`${description.substring(0, 100)}...`}
                 extra={isFinancing ? `${50}% COMPLETE` : "FUNDED"}
-                fluid={true}
+                fluid
                 color={isFinancing ? "green" : "red"}
               />
             )
@@ -53,7 +53,7 @@ export default function CompanyCards({ companySummaries, gridView }) {
                 meta={`${sharesOutstanding}`}
                 description={`${description.substring(0, 100)}...`}
                 extra={isFinancing ? `${50}% COMPLETE` : "FUNDED"}
-                fluid={true}
+                fluid
               />
             )
           )}

@@ -86,14 +86,14 @@ describe("TESTS", () => {
 
   it("allows manager to reject funding round and refund investors", async () => {
     await company.methods.invest().send({
-      value: toWei("2"),
+      value: toWei("1"),
       from: accounts[1],
       ...gas,
     });
 
     const begBalance = fromWei(await web3.eth.getBalance(accounts[2]));
 
-    await company.methods.rejectFundingRound().send({
+    await company.methods.concludeFundingRound().send({
       from: accounts[1],
       ...gas,
     });
@@ -125,7 +125,7 @@ describe("TESTS", () => {
       .call();
     console.log(fundingRoundSummary);
 
-    await company.methods.acceptFundingRound().send({
+    await company.methods.concludeFundingRound().send({
       from: accounts[1],
       ...gas,
     });

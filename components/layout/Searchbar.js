@@ -1,6 +1,6 @@
 import React from "react";
 import { Search } from "semantic-ui-react";
-import db from "../../firebase/db";
+import { db } from "../../firebase";
 
 export default function Searchbar() {
   const [state, setState] = React.useState({

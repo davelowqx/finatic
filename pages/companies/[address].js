@@ -1,6 +1,5 @@
 import React from "react";
 import { Card, Grid } from "semantic-ui-react";
-import Layout from "../../components/layout/Layout";
 
 import { Company } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
@@ -70,7 +69,7 @@ export default function CampaignDetails({
   ];
 
   return (
-    <Layout>
+    <>
       <h3>{`${name} (${symbol})`}</h3>
       <Grid>
         <Grid.Row>
@@ -82,6 +81,6 @@ export default function CampaignDetails({
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </Layout>
+    </>
   );
 }

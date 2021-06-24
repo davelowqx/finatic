@@ -9,7 +9,6 @@ import {
   Message,
   Grid,
 } from "semantic-ui-react";
-import Layout from "../../components/layout/Layout";
 import web3 from "../../ethereum/web3";
 import { useRouter } from "next/router";
 import { CompanyProducer } from "../../ethereum/contracts";
@@ -55,7 +54,7 @@ export default function CompanyNew() {
   };
 
   return (
-    <Layout>
+    <>
       <br />
       <div className="login-container cardborder">
         <Grid centered>
@@ -162,6 +161,6 @@ export default function CompanyNew() {
           </Grid.Row>
         </Grid>
       </div>
-    </Layout>
+    </>
   );
 }
