@@ -127,11 +127,10 @@ export default function CompanyNew() {
                   <div className="signup-buttons">
                     <Button
                       size="big"
-                      fluid
+                      fluid="true"
                       color="blue"
                       href="/signup"
                       loading={states.loading}
-                      fluid
                       primary
                       onClick={handleSubmit}
                     >

@@ -11,7 +11,7 @@ export async function getServerSideProps() {
 export default function Explore({ companySummaries }) {
   const [gridView, setGridView] = React.useState(true);
   return (
-    <>
+    <div>
       <Button.Group size="mini">
         <Button
           toggle
@@ -31,6 +31,6 @@ export default function Explore({ companySummaries }) {
         {companySummaries.length} Companies Raising Capital
       </Header>
       <CompanyCards companySummaries={companySummaries} gridView={gridView} />
-    </>
+    </div>
   );
 }

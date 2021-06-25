@@ -40,17 +40,13 @@ export default function Login() {
   };
 
   return (
-    <>
+    <div>
       <br />
       <div className="login-container cardborder">
         <Grid centered columns={1}>
           <Grid.Row>
             <Grid.Column textAlign="center">
-              <Image
-                src="https://previews.dropbox.com/p/orig/ABOFglUnB0co3MIZAsQjxdb-UXaxiGNCkfbnYiLHsfTO5tFnl9z79ILZQgLc7gnIAqenGQhMJs0AeqQTJvFNcmAQByHbp_3msax_QA1V16x0kqYQTfdMIucEivw43tZDAQOmeCfmoBzhkvMWf6tOpDQbLYSMDcv2DuAn2Rlfw3zFkrmLjjZo9ISTCfRCFRXu8xaURtqGeC_R5s0XQOxo38OxpeE_6B863zyryZtuoKj0E2XuGvbp0pl_vVTaRHx7c4-pg7ZDTGp2KuA1GDezIU2vxXrSv0m-P0sCCflMUX8hWbLL6VuIARInYr3tJmZBmYiYhMmNdPheG-ydVpHbKkJx/p.svg"
-                size="mini"
-                centered
-              />
+              <Image src="/static/logo.svg" size="mini" centered />
               <Header as="h3">
                 Welcome to fundSME!
                 <br />
@@ -114,6 +110,6 @@ export default function Login() {
           </Grid.Row>
         </Grid>
       </div>
-    </>
+    </div>
   );
 }
