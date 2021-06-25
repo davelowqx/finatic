@@ -1,5 +1,6 @@
 import { db } from "../firebase";
 import { CompanyProducer, Company } from "../ethereum/contracts";
+import web3 from "../ethereum/web3";
 
 function timeStampToDate(timeStamp) {
   const MONTH = [
@@ -20,6 +21,12 @@ function timeStampToDate(timeStamp) {
   return `${MONTH[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`;
 }
 
+const fromWei = (str) => web3.utils.fromWei(str, "ether");
+
+/**
+ * optimizing for speed, retrieved from database
+ * @returns [{company}, ...]
+ */
 export async function getCompanySummaries() {
   const companyAddresses = await CompanyProducer.methods
     .getCompanyAddresses()
@@ -31,26 +38,47 @@ export async function getCompanySummaries() {
       .doc(address)
       .get()
       .then((doc) => {
-        return { address, ...doc.data() };
+        const {
+          description,
+          sharesOffered,
+          sharesOutstanding,
+          name,
+          isFinancing,
+          targetAmount = 0,
+          currentAmount = 0,
+        } = doc.data();
+        return {
+          name,
+          address,
+          description,
+          valuation:
+            (fromWei(targetAmount) / sharesOffered) * sharesOutstanding,
+          isFinancing,
+          progress: (100 * currentAmount) / targetAmount,
+        };
       });
   });
   const companySummaries = await Promise.all(promises);
   return companySummaries;
 }
 
+/**
+ * optimizing for data integrity, retrieved from ethereum network
+ * @param address - smart contract address of company
+ * @returns object representing company details *
+ * {name, symbol, sharesOutstanding, balance, manager,
+ * fundingRoundsCount, isFinancing, listingDate, description, valuation}
+ */
 export async function getCompanyDetails(address) {
   const company = Company(address);
-  let companyDetailsETH = await company.methods.getCompanyDetails().call();
-
-  const companyDetailsDB = await db
+  const companyDetailsETH = await company.methods.getCompanyDetails().call();
+  const { description } = await db
     .collection("companies")
     .doc(address)
     .get()
-    .then((doc) => {
-      return { address, ...doc.data() };
-    });
+    .then((doc) => doc.data());
 
-  companyDetailsETH = {
+  const companyDetails = {
     name: companyDetailsETH[0],
     symbol: companyDetailsETH[1],
     sharesOutstanding: companyDetailsETH[2],
@@ -58,22 +86,22 @@ export async function getCompanyDetails(address) {
     manager: companyDetailsETH[4],
     fundingRoundsCount: companyDetailsETH[5],
     isFinancing: companyDetailsETH[6],
-    listingTimestamp: companyDetailsETH[7],
-    sharePrice: companyDetailsETH[8],
+    listingDate: timeStampToDate(companyDetailsETH[7]),
+    sharePrice: fromWei(companyDetailsETH[8]),
   };
 
   return {
-    ...companyDetailsDB,
-    balance: companyDetailsETH.balance,
-    isFinancing: companyDetailsETH.isFinancing,
-    date: timeStampToDate(companyDetailsETH.listingTimestamp),
-    manager: companyDetailsETH.manager,
-    fundingRoundsCount: companyDetailsETH.fundingRoundsCount,
+    ...companyDetails,
+    address,
+    description,
     valuation:
-      companyDetailsETH.valuation > 0 ? companyDetailsETH.valuation : "???",
+      companyDetails.sharePrice > 0
+        ? fromWei(companyDetails.sharePrice) * companyDetails.sharesOutstanding
+        : "???",
   };
 }
 
+//retrieve from ethereum?
 export async function getFundingRoundSummary(address, i) {
   const company = Company(address);
   const fundingRoundSummary = await company.methods
@@ -82,22 +110,25 @@ export async function getFundingRoundSummary(address, i) {
 
   return {
     creationTimestamp: fundingRoundSummary[0],
-    valuation: fundingRoundSummary[1],
+    valuation: fromWei(fundingRoundSummary[1]),
   };
 }
 
+//retrieve from ethereum?
 export async function getFundingRoundDetails(address) {
   const company = Company(address);
   const fundingRoundDetails = await company.methods
     .getFundingRoundDetails()
     .call();
 
+  const currentTime = await web3.eth.getBlock("latest");
+
   return {
-    currentAmount: fundingRoundDetails[0],
-    targetAmount: fundingRoundDetails[1],
+    currentAmount: fromWei(fundingRoundDetails[0]),
+    targetAmount: fromWei(fundingRoundDetails[1]),
     sharesOffered: fundingRoundDetails[2],
-    sharePrice: fundingRoundDetails[3],
-    creationTimestamp: fundingRoundDetails[4],
+    sharePrice: fromWei(fundingRoundDetails[3]),
+    daysLeft: (fundingRoundDetails[4] + 60 * 86400 - currentTime) / 86400,
     investorsCount: fundingRoundDetails[5],
   };
 }

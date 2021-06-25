@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { Progress } from "semantic-ui-react";
-import web3 from "../ethereum/web3";
 // link render anchor tags around react components
 import { getFundingRoundDetails, getFundingRoundSummary } from "./Getters";
-import InvestForm from "./InvestForm";
-import ManageFundingRound from "./ManageFundingRound";
+import InvestForm from "./InvestorForm";
+import ManageFundingRound from "./ManagerForm";
 
 export default function FundingStatus({
   address,
@@ -13,7 +12,6 @@ export default function FundingStatus({
 }) {
   const [fundingRoundSummaries, setFundingRoundSummaries] = React.useState([]);
   const [fundingRoundDetails, setFundingRoundDetails] = React.useState({});
-  const [currentTime, setCurrentTime] = React.useState(0);
 
   useEffect(async () => {
     const fundingRoundSummariesPromises = Array(fundingRoundsCount)
@@ -23,20 +21,29 @@ export default function FundingStatus({
       });
     setFundingRoundSummaries(await Promise.all(fundingRoundSummariesPromises));
     setFundingRoundDetails(await getFundingRoundDetails(address));
-    setCurrentTime(await web3.eth.getBlock("latest"));
   }, []);
+
+  const {
+    currentAmount,
+    targetAmount,
+    sharesOffered,
+    sharePrice,
+    daysLeft,
+    investorsCount,
+  } = fundingRoundDetails;
 
   return (
     <>
       <InvestForm address={address} isFinancing={isFinancing} />
       <br />
       <ManageFundingRound address={address} isFinancing={isFinancing} />
-      <div>Current Amount {fundingRoundDetails.currentAmount}</div>
-      <div>Target Amount {fundingRoundDetails.targetAmount}</div>
-      <div>Shares Offered {fundingRoundDetails.sharesOffered}</div>
-      <div>Minimum Investment {fundingRoundDetails.currentAmount}</div>
-      <div>Time Left {fundingRoundDetails.creationTimestamp}</div>
-      <div>Investors {fundingRoundDetails.investorsCount}</div>
+      <div>Current Amount {currentAmount}</div>
+      <div>Target Amount {targetAmount}</div>
+      <div>Shares Offered {sharesOffered}</div>
+      <div>Minimum Investment {sharePrice}</div>
+      <div>Days Left {daysLeft}</div>
+      <div>Investors {investorsCount}</div>
+      <Progress percent={(100 * currentAmount) / targetAmount} indicating />
       <h2>Funding History</h2>
       {fundingRoundSummaries.map((fr) => {
         return <div>{(fr.creationTimestamp, fr.valuation)}</div>;
@@ -44,5 +51,3 @@ export default function FundingStatus({
     </>
   );
 }
-
-//<Progress percent={percent} indicating />;

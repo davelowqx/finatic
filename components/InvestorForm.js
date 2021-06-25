@@ -3,8 +3,9 @@ import { Form, Input, Message, Button } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import web3 from "../ethereum/web3";
 import { Company } from "../ethereum/contracts";
+import { db } from "../firebase";
 
-export default function InvestForm({ address, isFinancing }) {
+export default function InvestorForm({ address, isFinancing }) {
   const [values, setValues] = React.useState({
     amount: "",
     errorMessage: "",
@@ -27,6 +28,13 @@ export default function InvestForm({ address, isFinancing }) {
         // convert ether to wei
         value: web3.utils.toWei(values.amount, "ether"),
       });
+
+      await db
+        .collection("companies")
+        .doc(address)
+        .update({
+          currentAmount: firebase.firestore.FieldValue.increment(values.amount),
+        });
     } catch (err) {
       setValues({ ...values, errorMessage: err.message });
     }

@@ -21,11 +21,12 @@ export default function CompanyDetails({
   fundingRoundsCount,
   isFinancing,
   sharePrice,
-  date,
+  listingDate,
 }) {
   const items = [
     {
-      header: sharePrice > 0 ? sharePrice * sharesOutstanding : "Unknown",
+      header:
+        sharePrice > 0 ? `${sharePrice * sharesOutstanding} ETH` : "Unknown",
       meta: "Current Valuation",
       style: { overflowWrap: "anywhere" },
     },
@@ -45,7 +46,7 @@ export default function CompanyDetails({
       style: { overflowWrap: "anywhere" },
     },
     {
-      header: date,
+      header: listingDate,
       meta: "Date Listed",
       style: { overflowWrap: "anywhere" },
     },

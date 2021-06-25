@@ -4,7 +4,9 @@ const Web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider"); //deprecated
 const admin = require("firebase-admin");
 
-const { CompanyProducer } = JSON.parse(
+const toWei = (str) => Web3.utils.toWei(str, "ether");
+
+const { CompanyProducer, Company } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../build/contracts.json"), "utf-8")
 );
 const data = JSON.parse(
@@ -33,13 +35,11 @@ const web3 = new Web3(
 
 (async () => {
   const accounts = await web3.eth.getAccounts();
-  const options = { from: accounts[0], gas: 6721975, gasPrice: "20000000000" }; //default ganache-cli params
-
-  console.log("deploy from", accounts[0]);
+  const gas = { gas: 6721975, gasPrice: "20000000000" }; //default ganache-cli params
 
   const companyProducer = await new web3.eth.Contract(CompanyProducer.abi)
     .deploy({ data: CompanyProducer.evm.bytecode.object })
-    .send(options);
+    .send({ from: accounts[0], ...gas });
 
   const companyProducerAddress = companyProducer.options.address;
   console.log("deployed at", companyProducerAddress);
@@ -55,20 +55,64 @@ const web3 = new Web3(
 
   console.log("creating companies");
   let i = 0;
-  for (company of data) {
+  for (obj of data) {
+    const { name, symbol, sharesOutstanding, description } = obj;
     await companyProducer.methods
-      .createCompany(company.name, company.symbol, company.sharesOutstanding)
-      .send(options);
+      .createCompany(name, symbol, sharesOutstanding)
+      .send({ from: accounts[i % 5], ...gas }); //different managers
     const companyAddress = await companyProducer.methods
-      .companyAddresses(i++)
+      .companyAddresses(i)
       .call();
-    console.log({
+
+    const company = new web3.eth.Contract(Company.abi, companyAddress);
+    const sharesOffered = 0;
+
+    if (Math.random() > 0.5) {
+      //create funding round
+      console.log("creating funding round");
+      await company.methods
+        .createFundingRound(toWei("10"), 10)
+        .send({ from: accounts[i % 5], ...gas });
+      sharesOffered = 10;
+      for (let n = 0; n < 3; n++) {
+        console.log("investing in funding round");
+        await company.methods.invest().send({
+          value: toWei(`${parseInt(1 + Math.random() * 5)}`), //random amount
+          from: accounts[parseInt(Math.random() * 10)], //random investor
+          ...gas,
+        });
+      }
+
+      if (Math.random() > 0.5) {
+        console.log("concluding funding round");
+        //conclude funding round
+        await company.methods
+          .concludeFundingRound()
+          .send({ from: accounts[i % 5], ...gas });
+      }
+    }
+
+    const isFinancing = await company.methods.isFinancing().call();
+    const fundingRoundDetails = await company.methods
+      .getFundingRoundDetails()
+      .call();
+    const currentAmount = fundingRoundDetails[0];
+    const targetAmount = fundingRoundDetails[1];
+
+    const companyDetails = {
       companyAddress,
-      name: company.name,
-      symbol: company.symbol,
-      sharesOutstanding: company.sharesOutstanding,
-    });
-    db.collection("companies").doc(companyAddress).set(company);
+      name,
+      symbol,
+      sharesOutstanding,
+      sharesOffered,
+      description,
+      isFinancing,
+      targetAmount,
+      currentAmount,
+    };
+    console.log(companyDetails);
+    db.collection("companies").doc(companyAddress).set(companyDetails);
+    i++;
   }
 
   fs.writeFileSync(
