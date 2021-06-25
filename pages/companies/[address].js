@@ -22,14 +22,20 @@ export default function CompanyDetails({
   manager,
   fundingRoundsCount,
   isFinancing,
-  sharePrice,
   listingDate,
+  preMoneyValuation,
+  postMoneyValuation,
 }) {
   const items = [
     {
       header:
-        sharePrice > 0 ? `${sharePrice * sharesOutstanding} ETH` : "Unknown",
-      meta: "Current Valuation",
+        preMoneyValuation === "0" ? "UNKNOWN" : `${preMoneyValuation} ETH`,
+      meta: "Pre-Money Valuation",
+      style: { overflowWrap: "anywhere" },
+    },
+    {
+      header: postMoneyValuation === "0" ? "NA" : `${postMoneyValuation} ETH`,
+      meta: "Post-Money Valuation",
       style: { overflowWrap: "anywhere" },
     },
     {

@@ -25,43 +25,18 @@ export default function FundingStatus({
 
   return (
     <>
-      <InvestForm address={address} isFinancing={isFinancing} />
-      <br />
-      <ManageFundingRound address={address} isFinancing={isFinancing} />
-      <ActiveFundingRound
+      <InvestForm
+        address={address}
         isFinancing={isFinancing}
         fundingRoundDetails={fundingRoundDetails}
       />
+      <br />
+      <ManageFundingRound address={address} isFinancing={isFinancing} />
+      <br />
       <h2>Funding History</h2>
       <FundingHistory fundingRoundSummaries={fundingRoundSummaries} />
     </>
   );
-}
-
-function ActiveFundingRound({ isFinancing, fundingRoundDetails }) {
-  const {
-    currentAmount,
-    targetAmount,
-    sharesOffered,
-    sharePrice,
-    daysLeft,
-    investorsCount,
-  } = fundingRoundDetails;
-  if (isFinancing) {
-    return (
-      <>
-        <div>Current Amount {currentAmount}</div>
-        <div>Target Amount {targetAmount}</div>
-        <div>Shares Offered {sharesOffered}</div>
-        <div>Minimum Investment {sharePrice}</div>
-        <div>Days Left {daysLeft}</div>
-        <div>Investors {investorsCount}</div>
-        <Progress percent={(100 * currentAmount) / targetAmount} indicating />
-      </>
-    );
-  } else {
-    return <></>;
-  }
 }
 
 function FundingHistory({ fundingRoundSummaries }) {

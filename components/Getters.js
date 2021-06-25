@@ -21,7 +21,7 @@ function timeStampToDate(timeStamp) {
   return `${MONTH[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`;
 }
 
-const fromWei = (str) => web3.utils.fromWei(str, "ether");
+const fromWei = (str = "0") => web3.utils.fromWei(str, "ether");
 
 /**
  * optimizing for speed, retrieved from database
@@ -87,17 +87,14 @@ export async function getCompanyDetails({ address }) {
     fundingRoundsCount: companyDetailsETH[5],
     isFinancing: companyDetailsETH[6],
     listingDate: timeStampToDate(companyDetailsETH[7]),
-    sharePrice: fromWei(companyDetailsETH[8]),
+    preMoneyValuation: fromWei(companyDetailsETH[8]),
+    postMoneyValuation: fromWei(companyDetailsETH[9]),
   };
 
   return {
     ...companyDetails,
     address,
     description,
-    valuation:
-      companyDetails.sharePrice > 0
-        ? companyDetails.sharePrice * companyDetails.sharesOutstanding
-        : "???",
   };
 }
 

@@ -65,15 +65,15 @@ const web3 = new Web3(
       .call();
 
     const company = new web3.eth.Contract(Company.abi, companyAddress);
-    const sharesOffered = 0;
+    let sharesOffered = 0;
 
     if (Math.random() > 0.5) {
       //create funding round
       console.log("creating funding round");
+      sharesOffered = parseInt(Math.random() * 50);
       await company.methods
-        .createFundingRound(toWei("10"), 10)
+        .createFundingRound(toWei(sharesOffered.toString()), sharesOffered)
         .send({ from: accounts[i % 5], ...gas });
-      sharesOffered = 10;
       for (let n = 0; n < 3; n++) {
         console.log("investing in funding round");
         await company.methods.invest().send({

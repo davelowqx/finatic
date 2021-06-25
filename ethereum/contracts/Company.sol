@@ -218,12 +218,30 @@ contract Company is IERC20 {
         return (_name, _symbol, _sharesOutstanding, isFinancing);
     }
 
-    function getCompanyDetails() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool, uint256, uint256) {
-        uint256 sharePrice = 0;
-        if (fundingRoundsCount > 0) {
-            sharePrice = fundingRounds[fundingRoundsCount].sharePrice;
+    function getCompanyDetails() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool, uint256, uint256, uint256) {
+        uint256 preMoneyValuation;
+        uint256 postMoneyValuation;
+        if (isFinancing) {
+            FundingRound storage fr = fundingRounds[fundingRoundsCount];
+            postMoneyValuation = fr.sharesOutstanding * fr.sharePrice;
         }
-        return (_name, _symbol, _sharesOutstanding, address(this).balance, manager, fundingRoundsCount, isFinancing, listingTimestamp, sharePrice);
+        if (fundingRoundsCount > 1 && isFinancing) {
+            FundingRound storage fr = fundingRounds[fundingRoundsCount - 1];
+            preMoneyValuation = fr.sharesOutstanding * fr.sharePrice;
+        } 
+
+        return (
+            _name, 
+            _symbol, 
+            _sharesOutstanding, 
+            address(this).balance, 
+            manager, 
+            fundingRoundsCount, 
+            isFinancing, 
+            listingTimestamp, 
+            preMoneyValuation,
+            postMoneyValuation
+        );
     }
 
 }
