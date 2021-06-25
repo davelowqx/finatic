@@ -69,7 +69,7 @@ export async function getCompanySummaries() {
  * {name, symbol, sharesOutstanding, balance, manager,
  * fundingRoundsCount, isFinancing, listingDate, description, valuation}
  */
-export async function getCompanyDetails(address) {
+export async function getCompanyDetails({ address }) {
   const company = Company(address);
   const companyDetailsETH = await company.methods.getCompanyDetails().call();
   const { description } = await db
@@ -96,16 +96,16 @@ export async function getCompanyDetails(address) {
     description,
     valuation:
       companyDetails.sharePrice > 0
-        ? fromWei(companyDetails.sharePrice) * companyDetails.sharesOutstanding
+        ? companyDetails.sharePrice * companyDetails.sharesOutstanding
         : "???",
   };
 }
 
 //retrieve from ethereum?
-export async function getFundingRoundSummary(address, i) {
+export async function getFundingRoundSummary({ address, index }) {
   const company = Company(address);
   const fundingRoundSummary = await company.methods
-    .getFundingRoundSummary(i)
+    .getFundingRoundSummary(index)
     .call();
 
   return {
@@ -115,7 +115,7 @@ export async function getFundingRoundSummary(address, i) {
 }
 
 //retrieve from ethereum?
-export async function getFundingRoundDetails(address) {
+export async function getFundingRoundDetails({ address }) {
   const company = Company(address);
   const fundingRoundDetails = await company.methods
     .getFundingRoundDetails()

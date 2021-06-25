@@ -4,9 +4,12 @@ import { useRouter } from "next/router";
 import { concludeFundingRound, createFundingRound } from "./Setters";
 
 export default function ManagerForm({ address, isFinancing }) {
-  const [values, setValues] = React.useState({
+  const [fields, setFields] = React.useState({
     targetAmount: "",
     sharesOffered: "",
+  });
+
+  const [states, setStates] = React.useState({
     errorMessage: "",
     loading: false,
   });
@@ -15,53 +18,42 @@ export default function ManagerForm({ address, isFinancing }) {
 
   const handleCreate = async (event) => {
     event.preventDefault();
-    setValues({ ...values, loading: true, errorMessage: "" });
+    setStates({ loading: true, errorMessage: "" });
     try {
-      await createFundingRound(
+      await createFundingRound({
         address,
-        values.targetAmount,
-        values.sharesOffered
-      );
+        targetAmount: fields.targetAmount,
+        sharesOffered: fields.sharesOffered,
+      });
+      //router.reload();
     } catch (err) {
       console.log(err);
-      setValues({ ...values, errorMessage: err.message });
+      setStates({ loading: false, errorMessage: err.message });
+      setFields({ targetAmount: "", sharesOffered: "" });
     }
-    setValues({
-      ...values,
-      loading: false,
-      sharesOffered: "",
-      targetAmount: "",
-    });
-    //router.reload();
   };
 
   const handleConclude = async (event) => {
     event.preventDefault();
-    setValues({ ...values, loading: true, errorMessage: "" });
+    setStates({ loading: true, errorMessage: "" });
     try {
-      concludeFundingRound(address);
+      await concludeFundingRound({ address });
+      //router.reload();
     } catch (err) {
       console.log(err);
-      setValues({ ...values, errorMessage: err.message });
+      setStates({ loading: false, errorMessage: err.message });
     }
-    setValues({
-      ...values,
-      loading: false,
-      sharesOffered: "",
-      targetAmount: "",
-    });
-    //router.reload();
   };
 
   return (
     <>
-      <Form onSubmit={handleCreate} error={!!values.errorMessage}>
+      <Form onSubmit={handleCreate} error={!!fields.errorMessage}>
         <Form.Field>
           <label>Target Amount</label>
           <Input
-            value={values.targetAmount}
+            value={fields.targetAmount}
             onChange={(event) =>
-              setValues({ ...values, targetAmount: event.target.value })
+              setFields({ ...fields, targetAmount: event.target.value })
             }
             label="ETH"
             labelPosition="right"
@@ -70,26 +62,28 @@ export default function ManagerForm({ address, isFinancing }) {
         <Form.Field>
           <label>Shares Offered</label>
           <Input
-            value={values.sharesOffered}
+            value={fields.sharesOffered}
             onChange={(event) =>
-              setValues({ ...values, sharesOffered: event.target.value })
+              setFields({ ...fields, sharesOffered: event.target.value })
             }
           />
         </Form.Field>
 
-        <Message error header="Oops!" content={values.errorMessage} />
-        <Button color="red" disabled={isFinancing} loading={values.loading}>
-          Create Funding Round
-        </Button>
+        <Message error header="Oops!" content={fields.errorMessage} />
+        <Button
+          color="red"
+          disabled={isFinancing}
+          loading={fields.loading}
+          content="Create Funding Round"
+        />
       </Form>
       <Button
         color="green"
         disabled={!isFinancing}
-        loading={values.loading}
+        loading={fields.loading}
         onClick={handleConclude}
-      >
-        Conclude Funding Round
-      </Button>
+        content="Conclude Funding Round"
+      />{" "}
     </>
   );
 }

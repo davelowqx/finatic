@@ -6,7 +6,9 @@ import FundingStatus from "../../components/FundingStatus";
 import { getCompanyDetails } from "../../components/Getters";
 
 export async function getServerSideProps(context) {
-  const companyDetails = await getCompanyDetails(context.params.address);
+  const companyDetails = await getCompanyDetails({
+    address: context.params.address,
+  });
   return { props: companyDetails };
 }
 

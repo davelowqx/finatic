@@ -19,7 +19,7 @@ export default function InvestorForm({ address, isFinancing }) {
     event.preventDefault();
     setValues({ ...values, loading: true, errorMessage: "" });
     try {
-      await invest(address, values.amount);
+      await invest({ address, amount: values.amount });
     } catch (err) {
       setValues({ ...values, errorMessage: err.message });
     }

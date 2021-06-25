@@ -17,12 +17,28 @@ export default function FundingStatus({
     const fundingRoundSummariesPromises = Array(fundingRoundsCount)
       .fill()
       .map((_, i) => {
-        return getFundingRoundSummary(address, i);
+        return getFundingRoundSummary({ address, index: i + 1 });
       });
     setFundingRoundSummaries(await Promise.all(fundingRoundSummariesPromises));
-    setFundingRoundDetails(await getFundingRoundDetails(address));
+    setFundingRoundDetails(await getFundingRoundDetails({ address }));
   }, []);
 
+  return (
+    <>
+      <InvestForm address={address} isFinancing={isFinancing} />
+      <br />
+      <ManageFundingRound address={address} isFinancing={isFinancing} />
+      <ActiveFundingRound
+        isFinancing={isFinancing}
+        fundingRoundDetails={fundingRoundDetails}
+      />
+      <h2>Funding History</h2>
+      <FundingHistory fundingRoundSummaries={fundingRoundSummaries} />
+    </>
+  );
+}
+
+function ActiveFundingRound({ isFinancing, fundingRoundDetails }) {
   const {
     currentAmount,
     targetAmount,
@@ -31,23 +47,37 @@ export default function FundingStatus({
     daysLeft,
     investorsCount,
   } = fundingRoundDetails;
+  if (isFinancing) {
+    return (
+      <>
+        <div>Current Amount {currentAmount}</div>
+        <div>Target Amount {targetAmount}</div>
+        <div>Shares Offered {sharesOffered}</div>
+        <div>Minimum Investment {sharePrice}</div>
+        <div>Days Left {daysLeft}</div>
+        <div>Investors {investorsCount}</div>
+        <Progress percent={(100 * currentAmount) / targetAmount} indicating />
+      </>
+    );
+  } else {
+    return <></>;
+  }
+}
 
-  return (
-    <>
-      <InvestForm address={address} isFinancing={isFinancing} />
-      <br />
-      <ManageFundingRound address={address} isFinancing={isFinancing} />
-      <div>Current Amount {currentAmount}</div>
-      <div>Target Amount {targetAmount}</div>
-      <div>Shares Offered {sharesOffered}</div>
-      <div>Minimum Investment {sharePrice}</div>
-      <div>Days Left {daysLeft}</div>
-      <div>Investors {investorsCount}</div>
-      <Progress percent={(100 * currentAmount) / targetAmount} indicating />
-      <h2>Funding History</h2>
-      {fundingRoundSummaries.map((fr) => {
-        return <div>{(fr.creationTimestamp, fr.valuation)}</div>;
-      })}
-    </>
-  );
+function FundingHistory({ fundingRoundSummaries }) {
+  if (fundingRoundSummaries.length > 0) {
+    return (
+      <>
+        {fundingRoundSummaries
+          .reverse()
+          .map(({ creationTimestamp, valuation }, index) => (
+            <div
+              key={index}
+            >{`${creationTimestamp} UNIX : ${valuation} ETH`}</div>
+          ))}
+      </>
+    );
+  } else {
+    return <div>Nothing to See Here!</div>;
+  }
 }
