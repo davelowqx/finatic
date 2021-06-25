@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import web3 from "../ethereum/web3";
 import { Company } from "../ethereum/contracts";
 import { db } from "../firebase";
+import { invest } from "./Setters";
 
 export default function InvestorForm({ address, isFinancing }) {
   const [values, setValues] = React.useState({
@@ -16,25 +17,9 @@ export default function InvestorForm({ address, isFinancing }) {
 
   const onSubmit = async (event) => {
     event.preventDefault();
-
-    const company = Company(address);
-
     setValues({ ...values, loading: true, errorMessage: "" });
-
     try {
-      const accounts = await web3.eth.getAccounts();
-      await company.methods.invest().send({
-        from: accounts[0],
-        // convert ether to wei
-        value: web3.utils.toWei(values.amount, "ether"),
-      });
-
-      await db
-        .collection("companies")
-        .doc(address)
-        .update({
-          currentAmount: firebase.firestore.FieldValue.increment(values.amount),
-        });
+      await invest(address, values.amount);
     } catch (err) {
       setValues({ ...values, errorMessage: err.message });
     }

@@ -9,21 +9,18 @@ import {
   Message,
   Grid,
 } from "semantic-ui-react";
-import web3 from "../../ethereum/web3";
 import { useRouter } from "next/router";
-import { CompanyProducer } from "../../ethereum/contracts";
-import ProgressBar from "../../components/ProgressBar";
-import db from "../../firebase/db";
+import { createCompany } from "../../components/Setters";
 
 export default function CompanyNew() {
-  const [values, setValues] = React.useState({
+  const [fields, setFields] = React.useState({
     name: "",
     symbol: "",
     description: "",
     sharesOutstanding: "",
   });
 
-  const [state, setState] = React.useState({
+  const [states, setStates] = React.useState({
     errorMessage: "",
     loading: false,
   });
@@ -32,24 +29,13 @@ export default function CompanyNew() {
   const handleUpload = () => {};
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setState({ errorMessage: "", loading: true });
-    let address = "";
+    setStates({ errorMessage: "", loading: true });
     try {
-      const accounts = await web3.eth.getAccounts();
-      await CompanyProducer.methods
-        .createCompany(values.name, values.symbol, values.sharesOutstanding)
-        .send({
-          from: accounts[0],
-        })
-        .then(
-          db.collection("companies").doc("").set({
-            values,
-          })
-        );
-      setState({ ...state, loading: false });
+      const address = await createCompany(fields);
+      setStates({ ...states, loading: false });
       router.push(`/${address}`); //TODO: push to address of new campaign
     } catch (err) {
-      setState({ ...state, errorMessage: err.message });
+      setStates({ ...states, errorMessage: err.message });
     }
   };
 
@@ -70,41 +56,41 @@ export default function CompanyNew() {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={12}>
-              <Form size="big" error={!!values.errorMessage}>
+              <Form size="big" error={!!states.errorMessage}>
                 <Form.Input
                   label="Name"
                   placeholder="Apple Inc"
-                  value={values.name}
+                  value={fields.name}
                   onChange={(event) =>
-                    setValues({
-                      ...values,
+                    setFields({
+                      ...fields,
                       name: event.target.value.substring(0, 31),
                     })
                   }
-                  error={values.name.length > 30}
+                  error={fields.name.length > 30}
                 />
                 <br />
                 <Form.Input
                   label="Symbol"
                   placeholder="AAPL"
-                  value={values.symbol}
+                  value={fields.symbol}
                   onChange={(event) =>
-                    setValues({
-                      ...values,
+                    setFields({
+                      ...fields,
                       symbol: event.target.value.substring(0, 6).toUpperCase(),
                     })
                   }
-                  error={values.symbol.length > 5}
+                  error={fields.symbol.length > 5}
                 />
                 <br />
                 <Form.Field
                   control={TextArea}
                   label="Desciption"
                   placeholder="Be as specific as you want!!"
-                  value={values.description}
+                  value={fields.description}
                   onChange={(event) =>
-                    setValues({
-                      ...values,
+                    setFields({
+                      ...fields,
                       description: event.target.value,
                     })
                   }
@@ -113,16 +99,16 @@ export default function CompanyNew() {
                 <Form.Input
                   label="Shares Outstanding"
                   placeholder="1000"
-                  value={values.sharesOutstanding}
+                  value={fields.sharesOutstanding}
                   onChange={(event) => {
                     let value = parseInt(event.target.value.substring(0, 13));
-                    setValues({
-                      ...values,
+                    setFields({
+                      ...fields,
                       sharesOutstanding:
                         isNaN(value) || value <= 0 ? "" : value,
                     });
                   }}
-                  error={values.sharesOutstanding > 1000000000000} //<1T
+                  error={fields.sharesOutstanding > 1000000000000} //<1T
                 />
                 <br />
                 <Button
@@ -144,7 +130,7 @@ export default function CompanyNew() {
                       fluid
                       color="blue"
                       href="/signup"
-                      loading={values.loading}
+                      loading={states.loading}
                       fluid
                       primary
                       onClick={handleSubmit}
@@ -154,8 +140,7 @@ export default function CompanyNew() {
                     </Button>
                   </div>
                 </div>
-                <ProgressBar show={values.loading} percent={10} />
-                <Message error header="Oops!" content={values.errorMessage} />
+                <Message error header="Oops!" content={states.errorMessage} />
               </Form>
             </Grid.Column>
           </Grid.Row>

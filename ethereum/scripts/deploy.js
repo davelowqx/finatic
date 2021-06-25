@@ -104,11 +104,11 @@ const web3 = new Web3(
       name,
       symbol,
       sharesOutstanding,
-      sharesOffered,
       description,
       isFinancing,
-      targetAmount,
       currentAmount,
+      targetAmount,
+      sharesOffered,
     };
     console.log(companyDetails);
     db.collection("companies").doc(companyAddress).set(companyDetails);

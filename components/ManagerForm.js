@@ -1,9 +1,7 @@
 import React from "react";
 import { Form, Input, Message, Button } from "semantic-ui-react";
 import { useRouter } from "next/router";
-import web3 from "../ethereum/web3";
-import { Company } from "../ethereum/contracts";
-import { db } from "../firebase";
+import { concludeFundingRound, createFundingRound } from "./Setters";
 
 export default function ManagerForm({ address, isFinancing }) {
   const [values, setValues] = React.useState({
@@ -19,33 +17,21 @@ export default function ManagerForm({ address, isFinancing }) {
     event.preventDefault();
     setValues({ ...values, loading: true, errorMessage: "" });
     try {
-      const company = Company(address);
-      const accounts = await web3.eth.getAccounts();
-      await company.methods
-        .createFundingRound(
-          web3.utils.toWei(values.targetAmount, "ether"),
-          values.sharesOffered
-        )
-        .send({
-          from: accounts[0],
-        });
-
-      await db.collection("companies").doc(address).set(
-        {
-          isFinancing: true,
-          currentAmount: 0,
-          targetAmount: values.targetAmount,
-          sharesOffered: values.sharesOffered,
-        },
-        { merge: true }
+      await createFundingRound(
+        address,
+        values.targetAmount,
+        values.sharesOffered
       );
     } catch (err) {
       console.log(err);
       setValues({ ...values, errorMessage: err.message });
     }
-
-    // reset state back to normal
-    setValues({ ...values, loading: false, targetAmount: "" });
+    setValues({
+      ...values,
+      loading: false,
+      sharesOffered: "",
+      targetAmount: "",
+    });
     //router.reload();
   };
 
@@ -53,18 +39,17 @@ export default function ManagerForm({ address, isFinancing }) {
     event.preventDefault();
     setValues({ ...values, loading: true, errorMessage: "" });
     try {
-      const company = Company(address);
-      const accounts = await web3.eth.getAccounts();
-      await company.methods.concludeFundingRound().send({
-        from: accounts[0],
-      });
+      concludeFundingRound(address);
     } catch (err) {
       console.log(err);
       setValues({ ...values, errorMessage: err.message });
     }
-
-    // reset state back to normal
-    setValues({ ...values, loading: false, targetAmount: "" });
+    setValues({
+      ...values,
+      loading: false,
+      sharesOffered: "",
+      targetAmount: "",
+    });
     //router.reload();
   };
 
