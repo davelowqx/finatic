@@ -19,7 +19,7 @@ contract Company is IERC20 {
     uint256 public fundingRoundsCount;
     bool public isFinancing; 
 
-    uint256 public _listingDate;
+    uint256 public listingTimestamp;
 
     struct FundingRound {
         uint256 currentAmount;
@@ -27,7 +27,7 @@ contract Company is IERC20 {
         uint256 sharesOffered;
         uint256 sharePrice;
         uint256 sharesOutstanding;
-        uint256 creationDate;
+        uint256 creationTimestamp;
         mapping(address => uint256) investment;  
         address[] investors; //array of unique investors
     }
@@ -40,7 +40,7 @@ contract Company is IERC20 {
         _balances[address(this)] = sharesOutstanding_;
         _shareholders.push(address(this));
         _seen[address(this)] = true;
-        _listingDate = block.timestamp;
+        listingTimestamp = block.timestamp;
     }
 
     modifier authorized() {
@@ -56,7 +56,7 @@ contract Company is IERC20 {
         fr.sharesOffered = sharesOffered_;
         fr.sharePrice = targetAmount_/sharesOffered_; 
         fr.sharesOutstanding = _sharesOutstanding + sharesOffered_;
-        fr.creationDate = block.timestamp; 
+        fr.creationTimestamp = block.timestamp; 
         isFinancing = true;
     }
 
@@ -64,7 +64,7 @@ contract Company is IERC20 {
         require(isFinancing, "company is not currently financing");
         isFinancing = false;
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
-        if ((fr.creationDate + 86400 * 60 >= block.timestamp) && (fr.currentAmount >= fr.targetAmount)) {
+        if ((fr.creationTimestamp + 86400 * 60 >= block.timestamp) && (fr.currentAmount >= fr.targetAmount)) {
             _distribute();
         } else {
             _refund();
@@ -195,13 +195,13 @@ contract Company is IERC20 {
     ) {
         FundingRound storage fr = fundingRounds[index];
         return (
-            fr.creationDate,
+            fr.creationTimestamp,
             fr.sharesOutstanding * fr.sharePrice
         );
     }
 
     function getFundingRoundDetails() public view returns (
-        uint256, uint256, uint256, uint256, uint256
+        uint256, uint256, uint256, uint256, uint256, uint256
     ) {
         FundingRound storage fr = fundingRounds[fundingRoundsCount];
         return (
@@ -209,7 +209,8 @@ contract Company is IERC20 {
             fr.targetAmount,
             fr.sharesOffered,
             fr.sharePrice,
-            fr.creationDate
+            fr.creationTimestamp,
+            fr.investors.length
         );
     }
 
@@ -217,8 +218,12 @@ contract Company is IERC20 {
         return (_name, _symbol, _sharesOutstanding, isFinancing);
     }
 
-    function getCompanyDetails() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool) {
-        return (_name, _symbol, _sharesOutstanding, address(this).balance, manager, fundingRoundsCount, isFinancing);
+    function getCompanyDetails() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool, uint256, uint256) {
+        uint256 sharePrice = 0;
+        if (fundingRoundsCount > 0) {
+            sharePrice = fundingRounds[fundingRoundsCount].sharePrice;
+        }
+        return (_name, _symbol, _sharesOutstanding, address(this).balance, manager, fundingRoundsCount, isFinancing, listingTimestamp, sharePrice);
     }
 
 }

@@ -1,83 +1,82 @@
 import React from "react";
 import { Card, Grid } from "semantic-ui-react";
 
-import { Company } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
-import InvestForm from "../../components/InvestForm";
+import FundingStatus from "../../components/FundingStatus";
+import { getCompanyDetails } from "../../components/Getters";
 
 export async function getServerSideProps(context) {
-  const address = context.params.address;
-  const company = Company(address);
-
-  const companyDetails = await company.methods.getCompanyDetails().call();
-
-  return {
-    props: {
-      address,
-      name: companyDetails[0],
-      symbol: companyDetails[1],
-      sharesOutstanding: companyDetails[2],
-      balance: companyDetails[3],
-      manager: companyDetails[4],
-      fundingRoundsCount: companyDetails[5],
-      isFinancing: companyDetails[6],
-    },
-  };
+  const companyDetails = await getCompanyDetails(context.params.address);
+  return { props: companyDetails };
 }
 
-export default function CampaignDetails({
+export default function CompanyDetails({
   address,
   name,
   symbol,
   sharesOutstanding,
+  description,
   balance,
   manager,
   fundingRoundsCount,
   isFinancing,
+  sharePrice,
+  date,
 }) {
   const items = [
     {
-      header: "???",
+      header: sharePrice > 0 ? sharePrice * sharesOutstanding : "Unknown",
       meta: "Current Valuation",
-      description: "",
       style: { overflowWrap: "anywhere" },
     },
     {
       header: sharesOutstanding,
       meta: "Shares Outstanding",
-      description: "",
+      style: { overflowWrap: "anywhere" },
+    },
+    {
+      header: address,
+      meta: "Address of Smart Contract",
       style: { overflowWrap: "anywhere" },
     },
     {
       header: manager,
       meta: "Address of Manager",
-      description: "",
+      style: { overflowWrap: "anywhere" },
+    },
+    {
+      header: date,
+      meta: "Date Listed",
       style: { overflowWrap: "anywhere" },
     },
     {
       header: web3.utils.fromWei(balance, "ether") + " ETH",
       meta: "Company Balance",
-      description: "",
       style: { overflowWrap: "anywhere" },
     },
     {
       header: fundingRoundsCount,
       meta: "Number of Funding Rounds",
-      description: "",
       style: { overflowWrap: "anywhere" },
     },
   ];
 
   return (
     <>
-      <h3>{`${name} (${symbol})`}</h3>
       <Grid>
         <Grid.Row>
           <Grid.Column width={10}>
+            <h3>{`${name} (${symbol})`}</h3>
+            <div>{description}</div>
+            <br />
             <Card.Group items={items} />
           </Grid.Column>
           <Grid.Column width={6}>
-            <InvestForm isFinancing={isFinancing} address={address} />
+            <FundingStatus
+              fundingRoundsCount={fundingRoundsCount}
+              isFinancing={isFinancing}
+              address={address}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>

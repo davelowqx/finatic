@@ -1,12 +1,15 @@
 // import App from 'next/app'
 import Layout from "../components/layout";
 import "../styles.css";
+import { AuthProvider } from "../components/context/AuthContext";
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
-      <Component {...pageProps} />;
-    </Layout>
+    <AuthProvider>
+      <Layout>
+        <Component {...pageProps} />;
+      </Layout>
+    </AuthProvider>
   );
 }
 

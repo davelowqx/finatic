@@ -1,11 +1,10 @@
 import React from "react";
 import { Form, Input, Message, Button } from "semantic-ui-react";
-// link render anchor tags around react components
-import { company } from "../ethereum/contracts";
-import web3 from "../ethereum/web3";
 import { useRouter } from "next/router";
+import web3 from "../ethereum/web3";
+import { Company } from "../ethereum/contracts";
 
-export default function ContributeForm({ address, isFinancing }) {
+export default function InvestForm({ address, isFinancing }) {
   const [values, setValues] = React.useState({
     amount: "",
     errorMessage: "",
@@ -17,13 +16,13 @@ export default function ContributeForm({ address, isFinancing }) {
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    const comp = company(address);
+    const company = Company(address);
 
     setValues({ ...values, loading: true, errorMessage: "" });
 
     try {
       const accounts = await web3.eth.getAccounts();
-      await comp.methods.invest().send({
+      await company.methods.invest().send({
         from: accounts[0],
         // convert ether to wei
         value: web3.utils.toWei(values.amount, "ether"),

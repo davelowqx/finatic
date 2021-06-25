@@ -44,7 +44,7 @@ const getPage = async (ticker) => {
               name: quoteType.shortName,
               description: assetProfile.longBusinessSummary,
               sharesOutstanding: defaultKeyStatistics.sharesOutstanding.raw,
-              isFinancing: Math.random() > 0.3,
+              isFinancing: false,
             };
           } catch (error) {
             console.log(error);

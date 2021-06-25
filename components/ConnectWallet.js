@@ -3,6 +3,13 @@ import { Button } from "semantic-ui-react";
 import Link from "next/link";
 import { truncateAddress } from "./Formatter";
 
+const truncateAddress = (str) => {
+  if (str.length == 42) {
+    const s = str.toUpperCase();
+    return `0x${s.substring(2, 6)}...${s.substring(38)}`;
+  }
+};
+
 export default function ConnectWallet() {
   const [account, setAccount] = React.useState("Connect Account");
   const [connected, setConnected] = React.useState(false);
