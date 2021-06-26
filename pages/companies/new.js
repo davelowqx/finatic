@@ -46,11 +46,7 @@ export default function CompanyNew() {
         <Grid centered>
           <Grid.Row>
             <Grid.Column textAlign="center">
-              <Image
-                src="https://previews.dropbox.com/p/orig/ABOFglUnB0co3MIZAsQjxdb-UXaxiGNCkfbnYiLHsfTO5tFnl9z79ILZQgLc7gnIAqenGQhMJs0AeqQTJvFNcmAQByHbp_3msax_QA1V16x0kqYQTfdMIucEivw43tZDAQOmeCfmoBzhkvMWf6tOpDQbLYSMDcv2DuAn2Rlfw3zFkrmLjjZo9ISTCfRCFRXu8xaURtqGeC_R5s0XQOxo38OxpeE_6B863zyryZtuoKj0E2XuGvbp0pl_vVTaRHx7c4-pg7ZDTGp2KuA1GDezIU2vxXrSv0m-P0sCCflMUX8hWbLL6VuIARInYr3tJmZBmYiYhMmNdPheG-ydVpHbKkJx/p.svg"
-                size="mini"
-                centered
-              />
+              <Image src="/static/logo.svg" size="mini" centered />
               <Header as="h2">List your Company!</Header>
             </Grid.Column>
           </Grid.Row>
@@ -120,11 +116,11 @@ export default function CompanyNew() {
                 <br />
                 <br />
                 <Form.Field>
-                  <Checkbox label="I agree to the Terms and Conditions" />
+                  <Checkbox label="I agree to the <a>Terms and Conditions</a>" />
                 </Form.Field>
                 <br />
                 <div className="login-button-container">
-                  <div className="signup-buttons">
+                  <div className="login-button-container">
                     <Button
                       size="big"
                       fluid
@@ -139,7 +135,7 @@ export default function CompanyNew() {
                     </Button>
                   </div>
                 </div>
-                <Message error header="Oops!" content={states.errorMessage} />
+                <Message error header="Error!" content={states.errorMessage} />
               </Form>
             </Grid.Column>
           </Grid.Row>

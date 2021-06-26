@@ -125,16 +125,16 @@ export default function LandingPage({ companySummaries }) {
           <div className="container50">
             <div fluid="true" className="eq-card cardborder">
               <div className="container25">
-                <div className="centeredtext">text</div>
+                <div className="centeredtext">Company A Stats</div>
               </div>
               <div className="container25">
-                <div className="centeredtext">text</div>
+                <div className="centeredtext">Company B Stats</div>
               </div>
               <div className="container25">
-                <div className="centeredtext">text</div>
+                <div className="centeredtext">Company C Stats</div>
               </div>
               <div className="container25">
-                <div className="centeredtext">text</div>
+                <div className="centeredtext">Company D Stats</div>
               </div>
             </div>
           </div>
