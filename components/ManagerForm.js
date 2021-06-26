@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, Input, Message, Button } from "semantic-ui-react";
+import { Header, Form, Input, Message, Button } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { concludeFundingRound, createFundingRound } from "./Setters";
 
@@ -46,8 +46,9 @@ export default function ManagerForm({ address, isFinancing }) {
   };
 
   return (
-    <>
-      <Form onSubmit={handleCreate} error={!!fields.errorMessage}>
+    <div className="companies-container cardborder">
+      <Header as="h3">Raise Funds</Header>
+      <Form size="big" onSubmit={handleCreate} error={!!fields.errorMessage}>
         <Form.Field>
           <label>Target Amount</label>
           <Input
@@ -70,20 +71,26 @@ export default function ManagerForm({ address, isFinancing }) {
         </Form.Field>
 
         <Message error header="Oops!" content={fields.errorMessage} />
-        <Button
-          color="red"
-          disabled={isFinancing}
-          loading={fields.loading}
-          content="Create Funding Round"
-        />
+        <div className="companies-manager-button">
+          <Button
+            color="red"
+            fluid
+            disabled={isFinancing}
+            loading={fields.loading}
+            content="RAISE FUND"
+          />
+        </div>
+        <div className="companies-manager-button">
+          <Button
+            fluid
+            color="green"
+            disabled={!isFinancing}
+            loading={fields.loading}
+            onClick={handleConclude}
+            content="CLOSE ROUND"
+          />
+        </div>
       </Form>
-      <Button
-        color="green"
-        disabled={!isFinancing}
-        loading={fields.loading}
-        onClick={handleConclude}
-        content="Conclude Funding Round"
-      />{" "}
-    </>
+    </div>
   );
 }

@@ -32,7 +32,7 @@ export default function ConnectWallet() {
   };
 
   return (
-    <Button onClick={connectWallet} disabled={connected}>
+    <Button fluid size="medium" onClick={connectWallet} disabled={connected}>
       {connected ? truncateAddress(account) : "Connect Account"}
     </Button>
   );

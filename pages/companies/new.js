@@ -127,7 +127,7 @@ export default function CompanyNew() {
                   <div className="signup-buttons">
                     <Button
                       size="big"
-                      fluid="true"
+                      fluid
                       color="blue"
                       href="/signup"
                       loading={states.loading}

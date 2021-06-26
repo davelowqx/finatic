@@ -3,6 +3,7 @@ import { Image, Container, Button, Menu, Grid } from "semantic-ui-react";
 import Searchbar from "./Searchbar";
 
 export default function Header({ width }) {
+  const [loggedIn, setGridView] = React.useState(true);
   return (
     <Menu fluid>
       <Menu.Item className="header container12" href="/">
@@ -17,7 +18,7 @@ export default function Header({ width }) {
       <Menu.Item className="container20">
         <div className="centercontainer">
           <Button as="a" inverted secondary href="/login">
-            Log in
+            Log In
           </Button>
           <Button
             as="a"

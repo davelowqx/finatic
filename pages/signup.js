@@ -107,7 +107,6 @@ export default function SignUp() {
                 <br />
                 <Form.Field>
                   <Checkbox
-                    inline
                     label="I agree to the Terms and Conditions"
                     required
                   />

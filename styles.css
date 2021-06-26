@@ -108,3 +108,58 @@
   margin-bottom: 4%;
   padding: 5%;
 }
+
+.signup-buttons {
+  display: inline-block;
+  width: 40%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.companies-container {
+  padding: 5%;
+}
+
+.companies-image {
+  margin-top: 5%;
+}
+
+.companies-pre-description {
+  display: inline-block;
+}
+
+.companies-description {
+  text-align: justify;
+}
+
+.companies-download-container {
+  margin: auto;
+  width: 100%;
+}
+
+.companies-details .ui .card {
+  height: 100%;
+}
+
+.companies-funding-history-logo {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+
+.companies-funding-history-details {
+  display: inline-block;
+  width: auto;
+  font-size: large;
+  font-weight: 700;
+  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  line-height: 1.5em;
+  margin-left: 15px;
+}
+
+.companies-manager-button {
+  display: inline-block;
+  width: 40%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
