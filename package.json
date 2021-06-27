@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "SET NODE_ENV=development&& node ./ethereum/scripts/deploy.js && next dev",
-    "build": "SET NODE_ENV=production&& node ./ethereum/scripts/deploy.js && next build"
+    "dev": "set NODE_ENV=development&& node ./ethereum/scripts/deploy.js && next dev",
+    "build": "set NODE_ENV=production&& node ./ethereum/scripts/deploy.js && next build"
   },
   "author": "",
   "license": "ISC",
