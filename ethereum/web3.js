@@ -9,8 +9,9 @@ if (typeof window !== "undefined" && typeof window.ethereum !== "undefined") {
   // We are on the server *OR* the user is not running metamask
   //const provider = new Web3.providers.HttpProvider();
   web3 = new Web3(
-    "ws://localhost:8545"
-    //"https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a"
+    process.env.NODE_ENV === "production"
+      ? "ws://localhost:8545"
+      : "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a"
   );
 }
 
