@@ -2,17 +2,7 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-let tickers = [
-  "AAPL",
-  "FB",
-  "GOOG",
-  "MSFT",
-  "NFLX",
-  "BABA",
-  "AMZN",
-  "TSM",
-  "AMD",
-];
+let tickers = ["AAPL", "FB", "GOOG", "MSFT", "NFLX", "BABA", "AMZN", ,];
 
 const getPage = async (ticker) => {
   let url = `https://query2.finance.yahoo.com/v11/finance/quoteSummary/${ticker}?modules=assetProfile,defaultKeyStatistics,quotetype`;
