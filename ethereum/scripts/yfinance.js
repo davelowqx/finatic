@@ -2,7 +2,7 @@ const https = require("https");
 const fs = require("fs");
 const path = require("path");
 
-let tickers = ["AAPL", "FB", "GOOG", "MSFT", "NFLX", "BABA", "AMZN", ,];
+let tickers = ["AAPL", "FB", "GOOG", "MSFT", "NFLX", "BABA", "AMZN"];
 
 const getPage = async (ticker) => {
   let url = `https://query2.finance.yahoo.com/v11/finance/quoteSummary/${ticker}?modules=assetProfile,defaultKeyStatistics,quotetype`;
@@ -27,9 +27,8 @@ const getPage = async (ticker) => {
               symbol: ticker,
               name: quoteType.shortName,
               description: assetProfile.longBusinessSummary,
-              sharesOutstanding: Math.round(Math.random() * 1000),
+              sharesOutstanding: Math.round(Math.random() * 1000), //defaultKeyStatistics.sharesOutstanding.raw
             };
-            //sharesOutstanding: defaultKeyStatistics.sharesOutstanding.raw
           } catch (error) {
             console.log(error);
           }
