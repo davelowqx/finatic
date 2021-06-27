@@ -68,7 +68,7 @@ const web3 = new Web3(provider);
     const company = new web3.eth.Contract(Company.abi, companyAddress);
     let sharesOffered = 0;
 
-    if (Math.random() > 0.5) {
+    if (process.env.NODE_ENV === "development" && Math.random() > 0.5) {
       //create funding round
       console.log("creating funding round");
       sharesOffered = parseInt(Math.random() * 50);

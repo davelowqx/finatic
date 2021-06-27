@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "SET NODE_ENV=development&& node ./ethereum/scripts/deploy.js && next dev",
-    "build": "next build",
+    "build": "node ./ethereum/scripts/deploy.js && next build",
     "start": "node ./ethereum/scripts/deploy.js && next start"
   },
   "author": "",
