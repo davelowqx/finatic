@@ -51,10 +51,12 @@ export async function getCompanySummaries() {
           name,
           address,
           description,
+          currentAmount: fromWei(currentAmount),
+          targetAmount: fromWei(targetAmount),
           valuation:
             (fromWei(targetAmount) / sharesOffered) * sharesOutstanding,
           isFinancing,
-          progress: (100 * currentAmount) / targetAmount,
+          progress: Math.round((100 * currentAmount) / targetAmount),
         };
       });
   });

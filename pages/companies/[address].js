@@ -79,20 +79,16 @@ export default function CompanyDetails({
   ];
 
   return (
-    <div>
-      <br />
+    <>
       <br />
       <Grid>
-        <Grid.Column width={10}>
-          <Grid.Row>
+        <Grid.Row>
+          <Grid.Column width={10}>
             <div className="companies-container cardborder">
               <CopyButton floated="right" text={address} />
-              <Header as="h3">
-                Invest in{" "}
-                <span
-                  style={{ fontSize: "1.5em", marginLeft: "10px" }}
-                >{`${name} (${symbol})`}</span>
-              </Header>
+              <div style={{ fontSize: "1.25rem" }}>
+                INVEST IN <b>{`${name} (${symbol})`}</b>
+              </div>
               <Image
                 className="companies-image"
                 bordered
@@ -156,19 +152,18 @@ export default function CompanyDetails({
                 </div>
               </div>
             </div>
-          </Grid.Row>
-        </Grid.Column>
-
-        <Grid.Column width={6}>
-          <Grid.Row>
-            <FundingStatus
-              fundingRoundsCount={fundingRoundsCount}
-              isFinancing={isFinancing}
-              address={address}
-            />
-          </Grid.Row>
-        </Grid.Column>
+          </Grid.Column>
+          <Grid.Column width={6}>
+            <Grid.Row>
+              <FundingStatus
+                fundingRoundsCount={fundingRoundsCount}
+                isFinancing={isFinancing}
+                address={address}
+              />
+            </Grid.Row>
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
-    </div>
+    </>
   );
 }

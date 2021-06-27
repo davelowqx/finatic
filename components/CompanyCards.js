@@ -2,17 +2,7 @@ import React, { useEffect } from "react";
 import { Header, Button, Icon, Card, Item } from "semantic-ui-react";
 import { getFundingRoundDetails } from "./Getters";
 
-export default function CompanyCards({
-  companySummaries = [],
-  gridView,
-  // getFundingRoundDetails,
-}) {
-  // const [fundingRoundDetails, setFundingRoundDetails] = React.useState({});
-
-  // useEffect(async () => {
-  //   setFundingRoundDetails(await getFundingRoundDetails({ address }));
-  // }, []);
-
+export default function CompanyCards({ companySummaries = [], gridView }) {
   if (gridView) {
     return (
       <Card.Group itemsPerRow={3}>
@@ -25,6 +15,8 @@ export default function CompanyCards({
               name,
               valuation,
               isFinancing,
+              currentAmount,
+              targetAmount,
               progress,
               description,
             }) => (
@@ -33,11 +25,6 @@ export default function CompanyCards({
                 href={`/companies/${address}`}
                 fluid
                 color={isFinancing ? "green" : "red"}
-                // extra={
-                //   isFinancing
-                //     ? roundToTwo(`${progress}`) + "% FUNDED"
-                //     : "FUNDED"
-                // }
               >
                 <Card.Content
                   className="companycard"
@@ -51,29 +38,24 @@ export default function CompanyCards({
                     backgroundSize: "cover",
                   }}
                 >
-                  <Button size="mini" color="green" floated="right">
-                    COUNTDOWN
-                  </Button>
+                  <Countdown isFinancing={isFinancing} daysLeft={0} />
                 </Card.Content>
                 <Card.Content>
                   <Card.Description style={{ color: "black" }}>
                     {`${description.substring(0, 120)}...`}
-                    {/* {`${valuation}`} */}
                   </Card.Description>
                 </Card.Content>
                 <Card.Content>
-                  <Card.Meta style={{ color: "black" }}>
-                    {/* {`${valuation}`} */}
-                    <Header>[Amount Raised]</Header>
-                    [Percentage] raised of [Goal]
-                  </Card.Meta>
+                  <CardMeta
+                    valuation={valuation}
+                    progress={progress}
+                    isFinancing={isFinancing}
+                  />
                 </Card.Content>
                 <Card.Content extra>
                   <Button color="red" floated="right">
                     VIEW
                   </Button>
-                  Minimum Investment <br />
-                  [input number here]
                 </Card.Content>
               </Card>
             )
@@ -103,6 +85,31 @@ export default function CompanyCards({
   }
 }
 
-function roundToTwo(num) {
-  return +(Math.round(num + "e+2") + "e-2");
-}
+const CardMeta = ({ valuation, progress, isFinancing }) => {
+  if (isFinancing) {
+    return (
+      <Card.Meta style={{ color: "black" }}>
+        <Header>{valuation} ETH</Header>
+        {progress}% funded
+      </Card.Meta>
+    );
+  } else {
+    return (
+      <Card.Meta style={{ color: "black" }}>
+        <Header>Funded</Header>
+      </Card.Meta>
+    );
+  }
+};
+
+const Countdown = ({ isFinancing, daysLeft }) => {
+  if (isFinancing) {
+    return (
+      <Button size="mini" color="green" floated="right">
+        {daysLeft} Days Left
+      </Button>
+    );
+  } else {
+    return <></>;
+  }
+};
