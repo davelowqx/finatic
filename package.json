@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node ./ethereum/scripts/deploy.js && next dev",
+    "dev": "SET NODE_ENV=development&& node ./ethereum/scripts/deploy.js && next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "node ./ethereum/scripts/deploy.js && next start"
   },
   "author": "",
   "license": "ISC",

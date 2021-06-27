@@ -29,9 +29,10 @@ const db = admin.firestore();
 const provider = new HDWalletProvider({
   mnemonic:
     "oyster exercise random pledge thrive food mail hover knee cry sure eternal",
-  providerOrUrl: true
-    ? "ws://localhost:8545"
-    : "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a",
+  providerOrUrl:
+    `${process.env.NODE_ENV}` === "development"
+      ? "ws://localhost:8545"
+      : "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a",
   numberOfAddresses: 5,
 });
 
@@ -47,15 +48,6 @@ const web3 = new Web3(provider);
 
   const companyProducerAddress = companyProducer.options.address;
   console.log("deployed at", companyProducerAddress);
-
-  /*
-  //@truffle/hd-wallet-provider cannot listen to events
-  companyProducer.events.ListCompany({}, (err, res) => {
-    if (!err) {
-      console.log(res);
-    }
-  });
-  */
 
   console.log("creating companies");
   let i = 0;
@@ -77,14 +69,14 @@ const web3 = new Web3(provider);
       sharesOffered = parseInt(Math.random() * 50);
       await company.methods
         .createFundingRound(
-          toWei((sharesOffered / 2).toString()),
+          toWei((sharesOffered / 4).toString()),
           sharesOffered
         )
         .send({ from: accounts[i % 5], ...gas });
       for (let n = 0; n < randInt(5); n++) {
         console.log("investing in funding round");
         await company.methods.invest().send({
-          value: toWei(`${1 + randInt(3)}`), //random amount
+          value: toWei(`${0.25 + randInt(1)}`), //random amount
           from: accounts[randInt(5)], //random investor
           ...gas,
         });
