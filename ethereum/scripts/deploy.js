@@ -27,7 +27,6 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
-console.log(process.env.FIREBASE_API_KEY);
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -45,6 +44,7 @@ const web3 = new Web3(provider);
 
 (async () => {
   const accounts = await web3.eth.getAccounts();
+  console.log(accounts);
   const gas = { gas: 6721975, gasPrice: "20000000000" }; //default ganache-cli params
 
   const companyProducer = await new web3.eth.Contract(CompanyProducer.abi)
@@ -56,7 +56,7 @@ const web3 = new Web3(provider);
 
   console.log("creating companies");
   let i = 0;
-  for (obj of data.slice(0, 3)) {
+  for (obj of data.slice(0, process.env.NODE_ENV === "development" ? 8 : 0)) {
     const { name, symbol, sharesOutstanding, description } = obj;
     await companyProducer.methods
       .listCompany(name, symbol, sharesOutstanding)
