@@ -1,5 +1,5 @@
 import { db } from "../firebase";
-import { CompanyProducer, Company } from "../ethereum/contracts";
+import { companyProducer, Company } from "../ethereum/contracts";
 import web3 from "../ethereum/web3";
 
 function timeStampToDate(timeStamp) {
@@ -28,7 +28,7 @@ const fromWei = (str = "0") => web3.utils.fromWei(str, "ether");
  * @returns [{company}, ...]
  */
 export async function getCompanySummaries() {
-  const companyAddresses = await CompanyProducer.methods
+  const companyAddresses = await companyProducer.methods
     .getCompanyAddresses()
     .call();
 

@@ -75,11 +75,7 @@ export default function InvestorForm({
                 </div>
               </div>
               <br />
-              <Form
-                size="medium"
-                onSubmit={onSubmit}
-                error={!!values.errorMessage}
-              >
+              <Form onSubmit={onSubmit} error={!!values.errorMessage}>
                 <br />
                 <Form.Field>
                   <label style={{ fontSize: "1.28571429rem" }}>Invest</label>

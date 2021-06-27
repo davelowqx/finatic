@@ -1,5 +1,5 @@
 import { db } from "../firebase";
-import { CompanyProducer, Company } from "../ethereum/contracts";
+import { companyProducer, Company } from "../ethereum/contracts";
 import web3 from "../ethereum/web3";
 
 const toWei = (str) => web3.utils.toWei(str, "ether");
@@ -53,27 +53,33 @@ export async function concludeFundingRound({ address }) {
   });
 }
 
-export async function listCompany({
-  name,
-  symbol,
-  sharesOutstanding,
-  description,
-}) {
+export async function listCompany(
+  { name, symbol, sharesOutstanding, description },
+  func = console.log
+) {
   const accounts = await web3.eth.getAccounts();
-  await CompanyProducer.methods
+
+  companyProducer.once("ListCompany", (err, res) => {
+    if (!err) {
+      console.log(res);
+      const address = res.returnValues.addr;
+      db.collection("companies").doc(address).set({
+        address,
+        name,
+        symbol,
+        sharesOutstanding,
+        description,
+        isFinancing: false,
+      });
+      func(address);
+    } else {
+      console.log(err);
+    }
+  });
+
+  await companyProducer.methods
     .listCompany(name, symbol, sharesOutstanding)
     .send({
       from: accounts[0],
     });
-
-  const address = await CompanyProducer.methods.addresses(i).call();
-  db.collection("companies").doc(address).set({
-    address,
-    name,
-    symbol,
-    sharesOutstanding,
-    description,
-    isFinancing: false,
-  });
-  return "";
 }

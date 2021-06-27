@@ -10,7 +10,7 @@ import {
   Grid,
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
-import { createCompany } from "../../components/Setters";
+import { listCompany } from "../../components/Setters";
 
 export default function CompanyNew() {
   const [fields, setFields] = React.useState({
@@ -31,9 +31,8 @@ export default function CompanyNew() {
     event.preventDefault();
     setStates({ errorMessage: "", loading: true });
     try {
-      const address = await createCompany(fields);
+      await listCompany(fields, (address) => router.push(`${address}`));
       setStates({ ...states, loading: false });
-      router.push(`/${address}`); //TODO: push to address of new campaign
     } catch (err) {
       setStates({ ...states, errorMessage: err.message });
     }
@@ -116,7 +115,7 @@ export default function CompanyNew() {
                 <br />
                 <br />
                 <Form.Field>
-                  <Checkbox label="I agree to the <a>Terms and Conditions</a>" />
+                  <Checkbox label="I agree to the Terms and Conditions" />
                 </Form.Field>
                 <br />
                 <div className="login-button-container">

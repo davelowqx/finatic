@@ -6,7 +6,7 @@ const admin = require("firebase-admin");
 
 const toWei = (str) => Web3.utils.toWei(str, "ether");
 
-const randInt = (i) => Math.round(Math.random() * i);
+const randInt = (i) => Math.floor(Math.random() * i);
 
 const { CompanyProducer, Company } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../build/contracts.json"), "utf-8")
@@ -50,7 +50,7 @@ const web3 = new Web3(provider);
 
   /*
   //@truffle/hd-wallet-provider cannot listen to events
-  companyProducer.events.CreateCompany({}, (err, res) => {
+  companyProducer.events.ListCompany({}, (err, res) => {
     if (!err) {
       console.log(res);
     }
@@ -62,7 +62,7 @@ const web3 = new Web3(provider);
   for (obj of data) {
     const { name, symbol, sharesOutstanding, description } = obj;
     await companyProducer.methods
-      .createCompany(name, symbol, sharesOutstanding)
+      .listCompany(name, symbol, sharesOutstanding)
       .send({ from: accounts[i % 5], ...gas }); //different managers
     const companyAddress = await companyProducer.methods
       .companyAddresses(i)
