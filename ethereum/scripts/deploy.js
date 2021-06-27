@@ -6,6 +6,8 @@ const admin = require("firebase-admin");
 
 const toWei = (str) => Web3.utils.toWei(str, "ether");
 
+const randInt = (i) => Math.round(Math.random() * i);
+
 const { CompanyProducer, Company } = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../build/contracts.json"), "utf-8")
 );
@@ -79,11 +81,11 @@ const web3 = new Web3(provider);
           sharesOffered
         )
         .send({ from: accounts[i % 5], ...gas });
-      for (let n = 0; n < Math.round(Math.random() * 5); n++) {
+      for (let n = 0; n < randInt(5); n++) {
         console.log("investing in funding round");
         await company.methods.invest().send({
-          value: toWei(`${Math.round(1 + Math.random() * 5)}`), //random amount
-          from: accounts[Math.round(Math.random() * 4)], //random investor
+          value: toWei(`${1 + randInt(3)}`), //random amount
+          from: accounts[randInt(5)], //random investor
           ...gas,
         });
       }
