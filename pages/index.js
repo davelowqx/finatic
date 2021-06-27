@@ -81,10 +81,7 @@ export default function LandingPage({ companySummaries }) {
           </Container>
         </Grid.Column>
         <Grid.Column width={7}>
-          <Image
-            className="posterboy"
-            src="https://previews.dropbox.com/p/thumb/ABNKx3djUmsMCys_DsjnZOi54AY0okqR1AIIzeQl7YSkivO49OuZ-6nKLlocJ41PDwLXICyn_fIZtlBd_CO3knvgjmEYeiJIThq3G3vzk5Ihv2KW6495CzpulqIyhQOcFcbdx2_AxrjIWeEX3SPqTTyEii94nEVoMuVqKZMJRvEDZ5o9R45m_pnRNxq1F4XoRTgl_oZc-gPIbuv-KMn5wlRdTvkF65BvK8-LiFHoJm1ztxBcaLyDFtmXj-VkMIiCaG-6PxtWq_DOYV2SqaGmsbKS3mwPcwn6DATz9qN9bACxfLL725tmoLqGY-cFWU2heo6zSzfAEWmNjE8c9hk3t-r3IsvbXlMQQOyIt4_dufimRHn2fJxIs08Q4H8wuYw6UiN2pRcFEPtFytxYsX7JGugvSR6RvsHtxYnYDCAEdh2zVRjCd_nGR-iaWiPSAuSJKcyJMqPZoBUpOtrcPfTmM0iK0NuE9ju-ubuVLNtSTHc_rA/p.png"
-          />
+          <Image className="posterboy" src="/static/posterboy.png" />
         </Grid.Column>
       </Grid.Row>
       <Grid.Row>
