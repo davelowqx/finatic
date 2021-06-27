@@ -12,7 +12,8 @@ import CompanyCards from "../components/CompanyCards";
 import { getCompanySummaries } from "../components/Getters";
 
 export async function getServerSideProps() {
-  const companySummaries = await getCompanySummaries();
+  //const companySummaries = await getCompanySummaries();
+  const companySummaries = [];
   return { props: { companySummaries } };
 }
 
