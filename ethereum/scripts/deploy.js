@@ -35,7 +35,7 @@ const provider = new HDWalletProvider({
   mnemonic:
     "oyster exercise random pledge thrive food mail hover knee cry sure eternal",
   providerOrUrl:
-    `${process.env.NODE_ENV}` === "development"
+    process.env.NODE_ENV === "development"
       ? "ws://localhost:8545"
       : "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a",
   numberOfAddresses: 5,
