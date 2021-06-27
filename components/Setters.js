@@ -55,15 +55,14 @@ export async function concludeFundingRound({ address }) {
 
 export async function listCompany(
   { name, symbol, sharesOutstanding, description },
-  func = console.log
+  func
 ) {
   const accounts = await web3.eth.getAccounts();
 
-  companyProducer.once("ListCompany", (err, res) => {
+  companyProducer.once("ListCompany", async (err, res) => {
     if (!err) {
-      console.log(res);
       const address = res.returnValues.addr;
-      db.collection("companies").doc(address).set({
+      await db.collection("companies").doc(address).set({
         address,
         name,
         symbol,
@@ -71,6 +70,7 @@ export async function listCompany(
         description,
         isFinancing: false,
       });
+      console.log(address);
       func(address);
     } else {
       console.log(err);

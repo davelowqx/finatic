@@ -12,8 +12,7 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
-console.log("hello");
-console.log(typeof process.env.FIREBASE_API_KEY);
+console.log("firebase initialized");
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);

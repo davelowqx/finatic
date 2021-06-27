@@ -2,7 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-const admin = require("firebase-admin");
+const firebase = require("firebase/app");
+require("firebase/firestore");
+require("dotenv").config();
 
 const toWei = (str) => Web3.utils.toWei(str, "ether");
 
@@ -14,17 +16,20 @@ const { CompanyProducer, Company } = JSON.parse(
 const data = JSON.parse(
   fs.readFileSync(path.resolve(__dirname, "../build/sampledata.json"), "utf-8")
 );
-const serviceAccount = JSON.parse(
-  fs.readFileSync(
-    path.resolve(__dirname, "../../firebase/serviceAccountKey.json"),
-    "utf-8"
-  )
-);
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
-const db = admin.firestore();
+const firebaseConfig = {
+  apiKey: `${process.env.FIREBASE_API_KEY}`,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
+};
+
+console.log(process.env.FIREBASE_API_KEY);
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 const provider = new HDWalletProvider({
   mnemonic:
