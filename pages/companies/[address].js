@@ -4,6 +4,7 @@ import { Button, Image, Header, Card, Grid, Feed } from "semantic-ui-react";
 import web3 from "../../ethereum/web3";
 import FundingStatus from "../../components/FundingStatus";
 import { getCompanyDetails } from "../../components/Getters";
+import CopyButton from "../../components/CopyButton";
 
 export async function getServerSideProps(context) {
   const companyDetails = await getCompanyDetails({
@@ -85,6 +86,7 @@ export default function CompanyDetails({
         <Grid.Column width={10}>
           <Grid.Row>
             <div className="companies-container cardborder">
+              <CopyButton floated="right" text={address} />
               <Header as="h3">
                 Invest in{" "}
                 <span

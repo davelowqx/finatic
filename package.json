@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node ./ethereum/scripts/deploy.js && next dev",
     "build": "next build",
     "start": "next start"
   },

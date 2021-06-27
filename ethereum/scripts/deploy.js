@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
-const HDWalletProvider = require("@truffle/hdwallet-provider"); //deprecated
+const HDWalletProvider = require("@truffle/hdwallet-provider");
 const admin = require("firebase-admin");
 
 const toWei = (str) => Web3.utils.toWei(str, "ether");
@@ -21,17 +21,19 @@ const serviceAccount = JSON.parse(
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  //databaseURL: 'https://<DATABASE_NAME>.firebaseio.com'
 });
 const db = admin.firestore();
 
-const web3 = new Web3(
-  new HDWalletProvider(
+const provider = new HDWalletProvider({
+  mnemonic:
     "oyster exercise random pledge thrive food mail hover knee cry sure eternal",
-    // "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a"
-    "ws://localhost:8545"
-  )
-);
+  providerOrUrl: true
+    ? "ws://localhost:8545"
+    : "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a",
+  numberOfAddresses: 5,
+});
+
+const web3 = new Web3(provider);
 
 (async () => {
   const accounts = await web3.eth.getAccounts();
@@ -44,8 +46,8 @@ const web3 = new Web3(
   const companyProducerAddress = companyProducer.options.address;
   console.log("deployed at", companyProducerAddress);
 
-  //@truffle/hd-wallet-provider cannot listen to events?
   /*
+  //@truffle/hd-wallet-provider cannot listen to events
   companyProducer.events.CreateCompany({}, (err, res) => {
     if (!err) {
       console.log(res);
@@ -72,13 +74,16 @@ const web3 = new Web3(
       console.log("creating funding round");
       sharesOffered = parseInt(Math.random() * 50);
       await company.methods
-        .createFundingRound(toWei(sharesOffered.toString()), sharesOffered)
+        .createFundingRound(
+          toWei((sharesOffered / 2).toString()),
+          sharesOffered
+        )
         .send({ from: accounts[i % 5], ...gas });
-      for (let n = 0; n < 3; n++) {
+      for (let n = 0; n < Math.round(Math.random() * 5); n++) {
         console.log("investing in funding round");
         await company.methods.invest().send({
-          value: toWei(`${parseInt(1 + Math.random() * 5)}`), //random amount
-          from: accounts[parseInt(Math.random() * 10)], //random investor
+          value: toWei(`${Math.round(1 + Math.random() * 5)}`), //random amount
+          from: accounts[Math.round(Math.random() * 4)], //random investor
           ...gas,
         });
       }
@@ -111,7 +116,7 @@ const web3 = new Web3(
       sharesOffered,
     };
     console.log(companyDetails);
-    db.collection("companies").doc(companyAddress).set(companyDetails);
+    await db.collection("companies").doc(companyAddress).set(companyDetails);
     i++;
   }
 
@@ -122,5 +127,8 @@ const web3 = new Web3(
     })
   );
 
-  console.log("complete, npm run dev");
+  provider.engine.stop();
+
+  console.log("complete, next dev");
+  process.exit();
 })();

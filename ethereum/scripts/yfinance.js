@@ -12,12 +12,6 @@ let tickers = [
   "AMZN",
   "TSM",
   "AMD",
-  "WMT",
-  "TWTR",
-  "ABNB",
-  "SPOT",
-  "SONY",
-  "SAVE",
 ];
 
 const getPage = async (ticker) => {
@@ -43,8 +37,9 @@ const getPage = async (ticker) => {
               symbol: ticker,
               name: quoteType.shortName,
               description: assetProfile.longBusinessSummary,
-              sharesOutstanding: defaultKeyStatistics.sharesOutstanding.raw,
+              sharesOutstanding: Math.round(Math.random() * 1000),
             };
+            //sharesOutstanding: defaultKeyStatistics.sharesOutstanding.raw
           } catch (error) {
             console.log(error);
           }
@@ -55,7 +50,7 @@ const getPage = async (ticker) => {
   });
 };
 
-(async (_) => {
+(async () => {
   const promises = tickers.map((ticker) => getPage(ticker));
 
   const data = await Promise.all(promises);

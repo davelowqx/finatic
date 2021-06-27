@@ -94,6 +94,10 @@
   width: 100%;
 }
 
+.button-uppercase {
+  text-transform: uppercase;
+}
+
 .login-buttons {
   display: inline-block;
   width: 40%;

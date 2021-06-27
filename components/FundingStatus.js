@@ -3,7 +3,7 @@ import { Image, Feed, Progress } from "semantic-ui-react";
 // link render anchor tags around react components
 import { getFundingRoundDetails, getFundingRoundSummary } from "./Getters";
 import InvestForm from "./InvestorForm";
-import ManageFundingRound from "./ManagerForm";
+import ManagerForm from "./ManagerForm";
 
 export default function FundingStatus({
   address,
@@ -32,7 +32,7 @@ export default function FundingStatus({
       />
       <br />
       <br />
-      <ManageFundingRound address={address} isFinancing={isFinancing} />
+      <ManagerForm address={address} isFinancing={isFinancing} />
       <br />
       <br />
       <div className="companies-container cardborder">
@@ -46,8 +46,6 @@ export default function FundingStatus({
 }
 
 function FundingHistory({ fundingRoundSummaries }) {
-  const image = "../public/static/logo.png";
-
   if (fundingRoundSummaries.length > 0) {
     return (
       <>
