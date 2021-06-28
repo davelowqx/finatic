@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Image, Feed, Progress } from "semantic-ui-react";
-// link render anchor tags around react components
+import { Image, Feed } from "semantic-ui-react";
 import { getFundingRoundDetails, getFundingRoundSummary } from "./Getters";
 import InvestForm from "./InvestorForm";
 import ManagerForm from "./ManagerForm";
@@ -13,15 +12,27 @@ export default function FundingStatus({
   const [fundingRoundSummaries, setFundingRoundSummaries] = React.useState([]);
   const [fundingRoundDetails, setFundingRoundDetails] = React.useState({});
 
+  /*
   useEffect(async () => {
-    const fundingRoundSummariesPromises = Array(fundingRoundsCount)
-      .fill()
-      .map((_, i) => {
-        return getFundingRoundSummary({ address, index: i + 1 });
-      });
-    setFundingRoundSummaries(await Promise.all(fundingRoundSummariesPromises));
-    setFundingRoundDetails(await getFundingRoundDetails({ address }));
-  }, []);
+    if (fundingRoundsCount > 0) {
+      const fundingRoundSummariesPromises = Array(fundingRoundsCount)
+        .fill()
+        .map((_, i) => {
+          return getFundingRoundSummary({ address, index: i + 1 });
+        });
+      setFundingRoundSummaries(
+        await Promise.all(fundingRoundSummariesPromises)
+      );
+    }
+  }, [fundingRoundsCount]);
+  */
+
+  useEffect(async () => {
+    if (isFinancing) {
+      console.log(isFinancing);
+      setFundingRoundDetails(await getFundingRoundDetails({ address }));
+    }
+  }, [isFinancing]);
 
   return (
     <div>
@@ -37,9 +48,7 @@ export default function FundingStatus({
       <br />
       <div className="companies-container cardborder">
         <h2>Funding History</h2>
-        <Feed>
-          <FundingHistory fundingRoundSummaries={fundingRoundSummaries} />
-        </Feed>
+        <FundingHistory fundingRoundSummaries={fundingRoundSummaries} />
       </div>
     </div>
   );
@@ -48,7 +57,7 @@ export default function FundingStatus({
 function FundingHistory({ fundingRoundSummaries }) {
   if (fundingRoundSummaries.length > 0) {
     return (
-      <>
+      <Feed>
         {fundingRoundSummaries
           .reverse()
           .map(({ creationTimestamp, valuation }, index) => (
@@ -68,13 +77,15 @@ function FundingHistory({ fundingRoundSummaries }) {
               </Feed.Event>
             </div>
           ))}
-      </>
+      </Feed>
     );
   } else {
     return (
-      <Feed.Event>
-        <Feed.Label>No Funding History</Feed.Label>
-      </Feed.Event>
+      <Feed>
+        <Feed.Event>
+          <Feed.Label>No Funding History</Feed.Label>
+        </Feed.Event>
+      </Feed>
     );
   }
 }

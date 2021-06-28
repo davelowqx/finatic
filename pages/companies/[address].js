@@ -1,82 +1,37 @@
 import React from "react";
 import { Button, Image, Header, Card, Grid, Feed } from "semantic-ui-react";
 
-import web3 from "../../ethereum/web3";
 import FundingStatus from "../../components/FundingStatus";
-import { getCompanyDetails } from "../../components/Getters";
 import CopyButton from "../../components/CopyButton";
 
 export async function getServerSideProps(context) {
-  const companyDetails = await getCompanyDetails({
-    address: context.params.address,
-  });
-  return { props: companyDetails };
+  return { props: { address: context.params.address } };
 }
 
-export default function CompanyDetails({
-  address,
-  name,
-  symbol,
-  sharesOutstanding,
-  description,
-  balance,
-  manager,
-  fundingRoundsCount,
-  isFinancing,
-  listingDate,
-  preMoneyValuation,
-  postMoneyValuation,
-}) {
-  const truncateAddress = (str) => {
-    if (str.length == 42) {
-      const s = str.toUpperCase();
-      return `0x${s.substring(2, 6)}...${s.substring(38)}`;
-    }
-  };
+export default function Company({ address }) {
+  const [companyDetails, setCompanyDetails] = React.useState({
+    address,
+    name: "",
+    symbol: "",
+    sharesOutstanding: 0,
+    description: "",
+    balance: 0,
+    manager: "",
+    fundingRoundsCount: 0,
+    isFinancing: false,
+    listingDate: "",
+    preMoneyValuation: "",
+    postMoneyValuation: "",
+  });
+  React.useEffect(async () => {
+    const companyDetails = await fetch(
+      `http://localhost:3000/api/companies/${address}`
+    ).then((res) => res.json());
+    setCompanyDetails(companyDetails);
+  }, []);
 
-  const items = [
-    {
-      header: truncateAddress(address),
-      meta: "Address of Smart Contract",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
-      header: truncateAddress(manager),
-      meta: "Address of Manager",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
-      header:
-        preMoneyValuation === "0" ? "UNKNOWN" : `${preMoneyValuation} ETH`,
-      meta: "Pre-Money Valuation",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
-      header: postMoneyValuation === "0" ? "NA" : `${postMoneyValuation} ETH`,
-      meta: "Post-Money Valuation",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
-      header: sharesOutstanding,
-      meta: "Shares Outstanding",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
-      header: web3.utils.fromWei(balance, "ether") + " ETH",
-      meta: "Company Balance",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
-      header: fundingRoundsCount,
-      meta: "Number of Funding Rounds",
-      style: { overflowWrap: "anywhere" },
-    },
-    {
-      header: listingDate,
-      meta: "Date Listed",
-      style: { overflowWrap: "anywhere" },
-    },
-  ];
+  const { name, symbol, description, fundingRoundsCount, isFinancing } =
+    companyDetails;
 
   return (
     <>
@@ -125,32 +80,10 @@ export default function CompanyDetails({
               <br />
               <Header as="h3">Company Details:</Header>
               <div className="companies-details">
-                <Card.Group items={items} />
+                <Details companyDetails={{ ...companyDetails, address }} />
               </div>
+              <Downloads address={address} />
               <br />
-              <Header as="h3">Downloads:</Header>
-              <div className="companies-download-container">
-                <div style={{ display: "inline-block" }}>
-                  <Button secondary style={{ margin: "1em" }}>
-                    Financial Details
-                  </Button>
-                  <Button secondary style={{ margin: "1em" }}>
-                    Disclosures
-                  </Button>
-                  <Button secondary style={{ margin: "1em" }}>
-                    Contract Details
-                  </Button>
-                  <Button secondary style={{ margin: "1em" }}>
-                    Company Roadmap
-                  </Button>
-                  <Button secondary style={{ margin: "1em" }}>
-                    Pitchdeck
-                  </Button>
-                  <Button secondary style={{ margin: "1em" }}>
-                    Founders
-                  </Button>
-                </div>
-              </div>
             </div>
           </Grid.Column>
           <Grid.Column width={6}>
@@ -167,3 +100,101 @@ export default function CompanyDetails({
     </>
   );
 }
+
+const Details = ({ companyDetails }) => {
+  const truncateAddress = (str) => {
+    if (`${str}`.length == 42) {
+      const s = str.toUpperCase();
+      return `0x${s.substring(2, 6)}...${s.substring(38)}`;
+    }
+  };
+
+  const [items, setItems] = React.useState([]);
+  React.useEffect(() => {
+    const {
+      address,
+      sharesOutstanding,
+      balance,
+      manager,
+      fundingRoundsCount,
+      listingDate,
+      preMoneyValuation,
+      postMoneyValuation,
+    } = companyDetails;
+    setItems([
+      {
+        key: 0,
+        header: truncateAddress(address),
+        meta: "Address of Smart Contract",
+      },
+      {
+        key: 1,
+        header: truncateAddress(manager),
+        meta: "Address of Manager",
+      },
+      {
+        key: 2,
+        header:
+          preMoneyValuation === "0" ? "UNKNOWN" : `${preMoneyValuation} ETH`,
+        meta: "Pre-Money Valuation",
+      },
+      {
+        key: 3,
+        header: postMoneyValuation === "0" ? "NA" : `${postMoneyValuation} ETH`,
+        meta: "Post-Money Valuation",
+      },
+      {
+        key: 4,
+        header: sharesOutstanding,
+        meta: "Shares Outstanding",
+      },
+      {
+        key: 5,
+        header: balance + " ETH",
+        meta: "Company Balance",
+      },
+      {
+        key: 6,
+        header: fundingRoundsCount,
+        meta: "Number of Funding Rounds",
+      },
+      {
+        key: 7,
+        header: listingDate,
+        meta: "Date Listed",
+      },
+    ]);
+  }, [companyDetails]);
+
+  return <Card.Group items={items} />;
+};
+
+const Downloads = ({ address }) => {
+  return (
+    <>
+      <Header as="h3">Downloads:</Header>
+      <div className="companies-download-container">
+        <div style={{ display: "inline-block" }}>
+          <Button secondary style={{ margin: "1em" }}>
+            Financial Details
+          </Button>
+          <Button secondary style={{ margin: "1em" }}>
+            Disclosures
+          </Button>
+          <Button secondary style={{ margin: "1em" }}>
+            Contract Details
+          </Button>
+          <Button secondary style={{ margin: "1em" }}>
+            Company Roadmap
+          </Button>
+          <Button secondary style={{ margin: "1em" }}>
+            Pitchdeck
+          </Button>
+          <Button secondary style={{ margin: "1em" }}>
+            Founders
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+};

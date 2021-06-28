@@ -9,15 +9,16 @@ import {
   Card,
 } from "semantic-ui-react";
 import CompanyCards from "../components/CompanyCards";
-import { getCompanySummaries } from "../components/Getters";
 
-export async function getServerSideProps() {
-  //const companySummaries = await getCompanySummaries();
-  const companySummaries = [];
-  return { props: { companySummaries } };
-}
+export default function LandingPage() {
+  const [companySummaries, setCompanySummaries] = React.useState([]);
+  React.useEffect(async () => {
+    const companySummaries = await fetch(
+      "http://localhost:3000/api/companies"
+    ).then((res) => res.json());
+    setCompanySummaries(companySummaries);
+  }, []);
 
-export default function LandingPage({ companySummaries }) {
   return (
     <Grid>
       <Grid.Row

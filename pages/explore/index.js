@@ -1,14 +1,16 @@
 import React from "react";
 import CompanyCards from "../../components/CompanyCards";
 import { Header, Button } from "semantic-ui-react";
-import { getCompanySummaries } from "../../components/Getters";
 
-export async function getServerSideProps() {
-  const companySummaries = await getCompanySummaries();
-  return { props: { companySummaries } };
-}
+export default function Explore() {
+  const [companySummaries, setCompanySummaries] = React.useState([]);
+  React.useEffect(async () => {
+    const companySummaries = await fetch(
+      "http://localhost:3000/api/companies"
+    ).then((res) => res.json());
+    setCompanySummaries(companySummaries);
+  }, []);
 
-export default function Explore({ companySummaries }) {
   const [gridView, setGridView] = React.useState(true);
   return (
     <div>
