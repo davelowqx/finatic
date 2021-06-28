@@ -21,7 +21,7 @@ function timeStampToDate(timeStamp) {
   return `${MONTH[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`;
 }
 
-const fromWei = (str = "0") => web3.utils.fromWei(str, "ether");
+const fromWei = (str) => web3.utils.fromWei(str, "ether");
 
 export default async (req, res) => {
   const address = req.query.address;
