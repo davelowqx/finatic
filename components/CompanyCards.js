@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { Header, Button, Icon, Card, Item } from "semantic-ui-react";
-import { getFundingRoundDetails } from "./Getters";
+import { Header, Button, Card, Item } from "semantic-ui-react";
 
 export default function CompanyCards({ companySummaries = [], gridView }) {
   if (gridView) {

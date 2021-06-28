@@ -51,8 +51,47 @@ export default async (req, res) => {
         postMoneyValuation: fromWei(companyDetailsETH[9]),
       };
 
+      const currentFundingRoundDetailsETH = await company.methods
+        .getFundingRoundDetails()
+        .call();
+
+      const currentTime = await web3.eth.getBlock("latest");
+
+      const currentFundingRoundDetails = {
+        currentAmount: fromWei(currentFundingRoundDetailsETH[0]),
+        targetAmount: fromWei(currentFundingRoundDetailsETH[1]),
+        sharesOffered: currentFundingRoundDetailsETH[2],
+        sharePrice: fromWei(currentFundingRoundDetailsETH[3]),
+        daysLeft:
+          (currentFundingRoundDetailsETH[4] + 60 * 86400 - currentTime) / 86400,
+        investorsCount: currentFundingRoundDetailsETH[5],
+      };
+
+      // TODO: get from db instead
+      const fundingRoundSummariesPromises = Array(
+        companyDetails.fundingRoundsCount
+      )
+        .fill()
+        .map(async (_, i) => {
+          company.methods
+            .getFundingRoundSummary(i + 1)
+            .call()
+            .then((arr) => {
+              return {
+                creationTimestamp: arr[0],
+                valuation: fromWei(arr[1]),
+              };
+            });
+        });
+
+      const fundingRoundSummaries = await Promise.all(
+        fundingRoundSummariesPromises
+      );
+
       const data = {
         ...companyDetails,
+        currentFundingRoundDetails,
+        fundingRoundSummaries,
         address,
         description,
       };

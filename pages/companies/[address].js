@@ -22,6 +22,8 @@ export default function Company({ address }) {
     listingDate: "",
     preMoneyValuation: "",
     postMoneyValuation: "",
+    currentFundingRoundDetails: {},
+    fundingRoundSummaries: [],
   });
   React.useEffect(async () => {
     const companyDetails = await fetch(
@@ -31,11 +33,18 @@ export default function Company({ address }) {
           : "https://fundsme.vercel.app"
       }/api/companies/${address}`
     ).then((res) => res.json());
+    console.log(companyDetails);
     setCompanyDetails(companyDetails);
   }, []);
 
-  const { name, symbol, description, fundingRoundsCount, isFinancing } =
-    companyDetails;
+  const {
+    name,
+    symbol,
+    description,
+    fundingRoundSummaries,
+    currentFundingRoundDetails,
+    isFinancing,
+  } = companyDetails;
 
   return (
     <>
@@ -93,9 +102,10 @@ export default function Company({ address }) {
           <Grid.Column width={6}>
             <Grid.Row>
               <FundingStatus
-                fundingRoundsCount={fundingRoundsCount}
-                isFinancing={isFinancing}
+                fundingRoundSummaries={fundingRoundSummaries}
+                currentFundingRoundDetails={currentFundingRoundDetails}
                 address={address}
+                isFinancing={isFinancing}
               />
             </Grid.Row>
           </Grid.Column>

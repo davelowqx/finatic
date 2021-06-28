@@ -92,9 +92,8 @@ export default function InvestorForm({
                 <Message error header="Oops!" content={values.errorMessage} />
                 <Button
                   fluid
-                  size="medium"
                   primary
-                  disabled={!isFinancing}
+                  disabled={values.loading}
                   loading={values.loading}
                 >
                   INVEST

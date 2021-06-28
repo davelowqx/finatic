@@ -1,43 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Image, Feed } from "semantic-ui-react";
-import { getFundingRoundDetails, getFundingRoundSummary } from "./Getters";
 import InvestForm from "./InvestorForm";
 import ManagerForm from "./ManagerForm";
 
 export default function FundingStatus({
-  address,
+  fundingRoundSummaries,
+  currentFundingRoundDetails,
   isFinancing,
-  fundingRoundsCount,
+  address,
 }) {
-  const [fundingRoundSummaries, setFundingRoundSummaries] = React.useState([]);
-  const [fundingRoundDetails, setFundingRoundDetails] = React.useState({});
-
-  useEffect(async () => {
-    if (fundingRoundsCount > 0) {
-      const fundingRoundSummariesPromises = Array(fundingRoundsCount)
-        .fill()
-        .map((_, i) => {
-          return getFundingRoundSummary({ address, index: i + 1 });
-        });
-      setFundingRoundSummaries(
-        await Promise.all(fundingRoundSummariesPromises)
-      );
-    }
-  }, [fundingRoundsCount]);
-
-  useEffect(async () => {
-    if (isFinancing) {
-      console.log(isFinancing);
-      setFundingRoundDetails(await getFundingRoundDetails({ address }));
-    }
-  }, [isFinancing]);
-
   return (
     <div>
       <InvestForm
         address={address}
         isFinancing={isFinancing}
-        fundingRoundDetails={fundingRoundDetails}
+        fundingRoundDetails={currentFundingRoundDetails}
       />
       <br />
       <br />
@@ -53,6 +30,7 @@ export default function FundingStatus({
 }
 
 function FundingHistory({ fundingRoundSummaries }) {
+  fundingRoundSummaries = fundingRoundSummaries.filter((x) => x !== null);
   if (fundingRoundSummaries.length > 0) {
     return (
       <Feed>

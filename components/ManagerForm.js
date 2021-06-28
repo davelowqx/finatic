@@ -22,7 +22,7 @@ export default function ManagerForm({ address, isFinancing }) {
     if (isFinancing) {
       try {
         await concludeFundingRound({ address });
-        //router.reload();
+        router.reload();
       } catch (err) {
         console.log(err);
         setStates({ loading: false, errorMessage: err.message });
@@ -34,7 +34,7 @@ export default function ManagerForm({ address, isFinancing }) {
           targetAmount: fields.targetAmount,
           sharesOffered: fields.sharesOffered,
         });
-        //router.reload();
+        router.reload();
       } catch (err) {
         console.log(err);
         setStates({ loading: false, errorMessage: err.message });
@@ -74,6 +74,7 @@ export default function ManagerForm({ address, isFinancing }) {
         fluid
         color={!isFinancing ? "green" : "red"}
         loading={fields.loading}
+        disabled={fields.loading}
         onClick={handleClick}
         content={isFinancing ? "CLOSE ROUND" : "RAISE FUNDS"}
       />
