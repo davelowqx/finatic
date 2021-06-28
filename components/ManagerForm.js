@@ -73,8 +73,8 @@ export default function ManagerForm({ address, isFinancing }) {
       <Button
         fluid
         color={!isFinancing ? "green" : "red"}
-        loading={fields.loading}
-        disabled={fields.loading}
+        loading={states.loading}
+        disabled={states.loading}
         onClick={handleClick}
         content={isFinancing ? "CLOSE ROUND" : "RAISE FUNDS"}
       />
