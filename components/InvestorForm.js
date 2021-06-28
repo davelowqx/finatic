@@ -11,7 +11,6 @@ import {
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { invest } from "./Setters";
-import ConnectWallet from "./ConnectWallet";
 
 export default function InvestorForm({
   address,
@@ -102,7 +101,6 @@ export default function InvestorForm({
                 </Button>
                 <br />
               </Form>
-              <ConnectWallet />
             </Grid.Column>
           </Grid.Row>
         </Grid>
