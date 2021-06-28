@@ -56,7 +56,7 @@ const web3 = new Web3(provider);
 
   console.log("creating companies");
   let i = 0;
-  for (obj of data.slice(0, process.env.NODE_ENV === "development" ? 8 : 0)) {
+  for (obj of data.slice(0, process.env.NODE_ENV === "development" ? 8 : 2)) {
     const { name, symbol, sharesOutstanding, description } = obj;
     await companyProducer.methods
       .listCompany(name, symbol, sharesOutstanding)
