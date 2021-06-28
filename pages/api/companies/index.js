@@ -2,7 +2,12 @@ import { companyProducer } from "../../../ethereum/contracts";
 import { db } from "../../../firebase";
 import web3 from "../../../ethereum/web3";
 
-const fromWei = (str = "0") => web3.utils.fromWei(str, "ether");
+const fromWei = (str) => {
+  if (typeof str !== "string") {
+    str = String(str);
+  }
+  web3.utils.fromWei(str, "ether");
+};
 
 /**
  * optimizing for speed, retrieved from database
