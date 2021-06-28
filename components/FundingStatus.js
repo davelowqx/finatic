@@ -12,7 +12,6 @@ export default function FundingStatus({
   const [fundingRoundSummaries, setFundingRoundSummaries] = React.useState([]);
   const [fundingRoundDetails, setFundingRoundDetails] = React.useState({});
 
-  /*
   useEffect(async () => {
     if (fundingRoundsCount > 0) {
       const fundingRoundSummariesPromises = Array(fundingRoundsCount)
@@ -25,7 +24,6 @@ export default function FundingStatus({
       );
     }
   }, [fundingRoundsCount]);
-  */
 
   useEffect(async () => {
     if (isFinancing) {

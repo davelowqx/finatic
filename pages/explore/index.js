@@ -13,7 +13,6 @@ export default function Explore() {
       }/api/companies`
     ).then((res) => res.json());
 
-    const companyDetails = await fetch().then((res) => res.json());
     setCompanySummaries(companySummaries);
   }, []);
 

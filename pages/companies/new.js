@@ -10,7 +10,8 @@ import {
   Grid,
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
-import { listCompany } from "../../components/Setters";
+import { companyProducer } from "../../ethereum/contracts";
+import web3 from "../../ethereum/web3";
 
 export default function CompanyNew() {
   const [fields, setFields] = React.useState({
@@ -25,14 +26,41 @@ export default function CompanyNew() {
     loading: false,
   });
 
-  const router = useRouter();
   const handleUpload = () => {};
+
+  const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
     setStates({ errorMessage: "", loading: true });
     try {
-      await listCompany(fields, (address) => router.push(`${address}`));
-      setStates({ ...states, loading: false });
+      companyProducer.once("ListCompany", async (err, res) => {
+        if (!err) {
+          const address = res.returnValues.addr;
+          await fetch(
+            `${
+              process.env.NODE_ENV === "development"
+                ? "http://localhost:3000"
+                : "https://fundsme.vercel.app"
+            }/api/companies/new`,
+            {
+              headers: { "Content-Type": "application/json" },
+              method: "POST",
+              body: JSON.stringify({ ...fields, address }),
+            }
+          );
+          router.push(address);
+        } else {
+          throw err;
+        }
+      });
+
+      const accounts = await web3.eth.getAccounts();
+
+      await companyProducer.methods
+        .listCompany(fields.name, fields.symbol, fields.sharesOutstanding)
+        .send({
+          from: accounts[0],
+        });
     } catch (err) {
       setStates({ ...states, errorMessage: err.message });
     }
