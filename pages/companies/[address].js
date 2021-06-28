@@ -25,7 +25,11 @@ export default function Company({ address }) {
   });
   React.useEffect(async () => {
     const companyDetails = await fetch(
-      `http://localhost:3000/api/companies/${address}`
+      `${
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://fundsme.vercel.app"
+      }/api/companies/${address}`
     ).then((res) => res.json());
     setCompanyDetails(companyDetails);
   }, []);

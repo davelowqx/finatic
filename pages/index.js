@@ -14,7 +14,11 @@ export default function LandingPage() {
   const [companySummaries, setCompanySummaries] = React.useState([]);
   React.useEffect(async () => {
     const companySummaries = await fetch(
-      "http://localhost:3000/api/companies"
+      `${
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://fundsme.vercel.app"
+      }/api/companies`
     ).then((res) => res.json());
     setCompanySummaries(companySummaries);
   }, []);

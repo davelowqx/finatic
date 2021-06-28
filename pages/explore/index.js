@@ -6,8 +6,14 @@ export default function Explore() {
   const [companySummaries, setCompanySummaries] = React.useState([]);
   React.useEffect(async () => {
     const companySummaries = await fetch(
-      "http://localhost:3000/api/companies"
+      `${
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://fundsme.vercel.app"
+      }/api/companies`
     ).then((res) => res.json());
+
+    const companyDetails = await fetch().then((res) => res.json());
     setCompanySummaries(companySummaries);
   }, []);
 
