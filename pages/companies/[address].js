@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Image, Header, Card, Grid, Feed } from "semantic-ui-react";
-
 import FundingStatus from "../../components/FundingStatus";
 import CopyButton from "../../components/CopyButton";
 
@@ -47,7 +46,7 @@ export default function Company({ address }) {
   } = companyDetails;
 
   return (
-    <>
+    <div>
       <br />
       <Grid>
         <Grid.Row>
@@ -111,9 +110,10 @@ export default function Company({ address }) {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </>
+    </div>
   );
 }
+
 
 const Details = ({ companyDetails }) => {
   const truncateAddress = (str) => {
@@ -185,7 +185,7 @@ const Details = ({ companyDetails }) => {
 
 const Downloads = ({ address }) => {
   return (
-    <>
+    <div>
       <Header as="h3">Downloads:</Header>
       <div className="companies-download-container">
         <div style={{ display: "inline-block" }}>
@@ -209,6 +209,6 @@ const Downloads = ({ address }) => {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 };

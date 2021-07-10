@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  Icon,
+  Modal,
   Header,
   Form,
   Input,
@@ -11,6 +13,7 @@ import {
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { invest } from "./Setters";
+import ConnectWallet from "../components/ConnectWallet"
 
 export default function InvestorForm({
   address,
@@ -21,11 +24,46 @@ export default function InvestorForm({
     amount: "",
     errorMessage: "",
     loading: false,
+    isWalletConnected: false,
   });
 
-  const router = useRouter();
+  const ConnectWalletModal = (getServerSideProps) => {
+    const [open, setOpen] = React.useState(getServerSideProps)
+  
+    return (
+      <Modal
+        closeIcon
+        open={open}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+      >
+        <Header icon='exclamation' content='Are you connected?' />
+        <Modal.Content>
+          <ConnectWallet />
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color='red' onClick={() => {
+            setOpen(false)
+            setValues({ ...values, isWalletConnected: false })
+          }}>
+            <Icon name='remove' /> No
+          </Button>
+          <Button color='green' onClick={() => {
+            setOpen(false)
+            setValues({ ...values, isWalletConnected: true })
+          }}>
+            <Icon name='checkmark' /> Yes
+          </Button>
+        </Modal.Actions>
+      </Modal>
+    )
+  }
 
+  const router = useRouter();
+  
   const onSubmit = async (event) => {
+    <ConnectWalletModal open='true'/>
+    if (values.isWalletConnected) {
     event.preventDefault();
     setValues({ ...values, loading: true, errorMessage: "" });
     try {
@@ -37,6 +75,11 @@ export default function InvestorForm({
     // reset state back to normal
     setValues({ ...values, loading: false, amount: "" });
     router.reload();
+  } else {
+    // reset state back to normal
+    setValues({ ...values, loading: false, amount: "" });
+    router.reload();
+  }
   };
 
   const {
@@ -99,6 +142,7 @@ export default function InvestorForm({
                   INVEST
                 </Button>
                 <br />
+                <ConnectWallet/>
               </Form>
             </Grid.Column>
           </Grid.Row>

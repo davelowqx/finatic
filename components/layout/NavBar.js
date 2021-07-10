@@ -1,7 +1,6 @@
 import React from "react";
 import { Image, Container, Button, Menu, Grid } from "semantic-ui-react";
 import Searchbar from "./Searchbar";
-import ConnectWallet from "../ConnectWallet";
 
 export default function Header({ width }) {
   const [loggedIn, setGridView] = React.useState(true);
@@ -30,7 +29,6 @@ export default function Header({ width }) {
           >
             Sign Up
           </Button>
-          <ConnectWallet />
         </div>
       </Menu.Item>
     </Menu>
