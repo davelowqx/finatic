@@ -1,5 +1,14 @@
 import React from "react";
-import { Button, Image, Header, Card, Grid, Feed } from "semantic-ui-react";
+import {
+  Input,
+  TextArea,
+  Form,
+  Button,
+  Image,
+  Header,
+  Card,
+  Grid,
+} from "semantic-ui-react";
 import FundingStatus from "../../components/FundingStatus";
 import CopyButton from "../../components/CopyButton";
 
@@ -19,8 +28,7 @@ export default function Company({ address }) {
     fundingRoundsCount: 0,
     isFinancing: false,
     listingDate: "",
-    preMoneyValuation: "",
-    postMoneyValuation: "",
+    currentValuation: "",
     currentFundingRoundDetails: {},
     fundingRoundSummaries: [],
   });
@@ -45,75 +53,230 @@ export default function Company({ address }) {
     isFinancing,
   } = companyDetails;
 
-  return (
-    <div>
-      <br />
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={10}>
-            <div className="companies-container cardborder">
-              <CopyButton floated="right" text={address} />
-              <div style={{ fontSize: "1.25rem" }}>
-                INVEST IN <b>{`${name} (${symbol})`}</b>
-              </div>
-              <Image
-                className="companies-image"
-                bordered
-                centered
-                fluid
-                src="/static/company-image.jpg"
-              />
-              <div>
-                <div
-                  style={{ float: "left" }}
-                  className="companies-pre-description"
-                >
-                  website
-                </div>
-                <div
-                  style={{
-                    position: "absolute",
-                    left: "47%",
-                  }}
-                  className="companies-pre-description"
-                >
-                  location
-                </div>
-                <div
-                  style={{ float: "right" }}
-                  className="companies-pre-description"
-                >
-                  date
-                </div>
-              </div>
-              <br />
-              <Header as="h3">Company Description:</Header>
-              <div className="companies-description">{description}</div>
-              <br />
-              <Header as="h3">Company Details:</Header>
-              <div className="companies-details">
-                <Details companyDetails={{ ...companyDetails, address }} />
-              </div>
-              <Downloads address={address} />
-              <br />
-            </div>
-          </Grid.Column>
-          <Grid.Column width={6}>
-            <Grid.Row>
-              <FundingStatus
-                fundingRoundSummaries={fundingRoundSummaries}
-                currentFundingRoundDetails={currentFundingRoundDetails}
-                address={address}
-                isFinancing={isFinancing}
-              />
-            </Grid.Row>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
-    </div>
-  );
-}
+  const [editView, setEditView] = React.useState(false);
 
+  const handleEdit = () => {
+    setEditView(!editView);
+  };
+
+  if (editView) {
+    return (
+      <div>
+        <br />
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={10}>
+              <div className="companies-container cardborder">
+                <Button.Group
+                  floated="right"
+                  size="mini"
+                  style={{ marginLeft: "10px" }}
+                >
+                  <Button
+                    toggle
+                    icon="edit"
+                    active={editView}
+                    onClick={handleEdit}
+                  ></Button>
+                </Button.Group>
+                <CopyButton floated="right" text={address} />
+                <div style={{ fontSize: "1.25rem" }}>
+                  INVEST IN <b>{`${name} (${symbol})`}</b>
+                </div>
+                <Image
+                  className="companies-image"
+                  bordered
+                  centered
+                  fluid
+                  src="/static/company-image.jpg"
+                />
+                <div>
+                  <div
+                    style={{ float: "left" }}
+                    className="companies-pre-description"
+                  >
+                    website
+                  </div>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "47%",
+                    }}
+                    className="companies-pre-description"
+                  >
+                    location
+                  </div>
+                  <div
+                    style={{ float: "right" }}
+                    className="companies-pre-description"
+                  >
+                    date
+                  </div>
+                </div>
+                <br />
+                <Header as="h3">Company Description:</Header>
+                <Form>
+                  <TextArea
+                    className="companies-description-edit"
+                    placeholder={description}
+                  />
+                </Form>
+
+                <Header as="h3">Company Details:</Header>
+                <div className="companies-details">
+                  <Details companyDetails={{ ...companyDetails, address }} />
+                </div>
+                <Header as="h3">Downloads:</Header>
+                <div>
+                  <div className="companies-downloads-edit-header">
+                    <Header as="h4">Financial Details:</Header>
+                  </div>
+                  <Input
+                    className="companies-downloads-edit-input"
+                    label="http://"
+                    placeholder="mysite.com"
+                  />
+                  <div className="companies-downloads-edit-header">
+                    <Header as="h4">Disclosures:</Header>
+                  </div>
+                  <Input
+                    className="companies-downloads-edit-input"
+                    label="http://"
+                    placeholder="mysite.com"
+                  />
+                  <div className="companies-downloads-edit-header">
+                    <Header as="h4">Contact Details:</Header>
+                  </div>
+                  <Input
+                    className="companies-downloads-edit-input"
+                    label="http://"
+                    placeholder="mysite.com"
+                  />
+                  <div className="companies-downloads-edit-header">
+                    <Header as="h4">Company Roadmap:</Header>
+                  </div>
+                  <Input
+                    className="companies-downloads-edit-input"
+                    label="http://"
+                    placeholder="mysite.com"
+                  />
+                  <div className="companies-downloads-edit-header">
+                    <Header as="h4">Pitchdeck:</Header>
+                  </div>
+                  <Input
+                    className="companies-downloads-edit-input"
+                    label="http://"
+                    placeholder="mysite.com"
+                  />
+                  <div className="companies-downloads-edit-header">
+                    <Header as="h4">Founders:</Header>
+                  </div>
+                  <Input
+                    className="companies-downloads-edit-input"
+                    label="http://"
+                    placeholder="mysite.com"
+                  />
+                  <br />
+                </div>
+              </div>
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <Grid.Row>
+                <FundingStatus
+                  fundingRoundSummaries={fundingRoundSummaries}
+                  currentFundingRoundDetails={currentFundingRoundDetails}
+                  address={address}
+                  isFinancing={isFinancing}
+                />
+              </Grid.Row>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <br />
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={10}>
+              <div className="companies-container cardborder">
+                <Button.Group
+                  floated="right"
+                  size="mini"
+                  style={{ marginLeft: "10px" }}
+                >
+                  <Button
+                    toggle
+                    icon="edit"
+                    active={editView}
+                    onClick={handleEdit}
+                  ></Button>
+                </Button.Group>
+                <CopyButton floated="right" text={address} />
+                <div style={{ fontSize: "1.25rem" }}>
+                  INVEST IN <b>{`${name} (${symbol})`}</b>
+                </div>
+                <Image
+                  className="companies-image"
+                  bordered
+                  centered
+                  fluid
+                  src="/static/company-image.jpg"
+                />
+                <div>
+                  <div
+                    style={{ float: "left" }}
+                    className="companies-pre-description"
+                  >
+                    website
+                  </div>
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: "47%",
+                    }}
+                    className="companies-pre-description"
+                  >
+                    location
+                  </div>
+                  <div
+                    style={{ float: "right" }}
+                    className="companies-pre-description"
+                  >
+                    date
+                  </div>
+                </div>
+                <br />
+                <Header as="h3">Company Description:</Header>
+                <div className="companies-description">{description}</div>
+
+                <Header as="h3">Company Details:</Header>
+                <div className="companies-details">
+                  <Details companyDetails={{ ...companyDetails, address }} />
+                </div>
+                <Header as="h3">Downloads:</Header>
+                <Downloads address={address} />
+                <br />
+              </div>
+            </Grid.Column>
+            <Grid.Column width={6}>
+              <Grid.Row>
+                <FundingStatus
+                  fundingRoundSummaries={fundingRoundSummaries}
+                  currentFundingRoundDetails={currentFundingRoundDetails}
+                  address={address}
+                  isFinancing={isFinancing}
+                />
+              </Grid.Row>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </div>
+    );
+  }
+}
 
 const Details = ({ companyDetails }) => {
   const truncateAddress = (str) => {
@@ -132,8 +295,7 @@ const Details = ({ companyDetails }) => {
       manager,
       fundingRoundsCount,
       listingDate,
-      preMoneyValuation,
-      postMoneyValuation,
+      currentValuation,
     } = companyDetails;
     setItems([
       {
@@ -149,13 +311,8 @@ const Details = ({ companyDetails }) => {
       {
         key: 2,
         header:
-          preMoneyValuation === "0" ? "UNKNOWN" : `${preMoneyValuation} ETH`,
-        meta: "Pre-Money Valuation",
-      },
-      {
-        key: 3,
-        header: postMoneyValuation === "0" ? "NA" : `${postMoneyValuation} ETH`,
-        meta: "Post-Money Valuation",
+          currentValuation === "0" ? "UNEVALUATED" : `${currentValuation} ETH`,
+        meta: "Current Valuation",
       },
       {
         key: 4,
@@ -185,29 +342,35 @@ const Details = ({ companyDetails }) => {
 
 const Downloads = ({ address }) => {
   return (
-    <div>
-      <Header as="h3">Downloads:</Header>
-      <div className="companies-download-container">
-        <div style={{ display: "inline-block" }}>
-          <Button secondary style={{ margin: "1em" }}>
-            Financial Details
-          </Button>
-          <Button secondary style={{ margin: "1em" }}>
-            Disclosures
-          </Button>
-          <Button secondary style={{ margin: "1em" }}>
-            Contract Details
-          </Button>
-          <Button secondary style={{ margin: "1em" }}>
-            Company Roadmap
-          </Button>
-          <Button secondary style={{ margin: "1em" }}>
-            Pitchdeck
-          </Button>
-          <Button secondary style={{ margin: "1em" }}>
-            Founders
-          </Button>
-        </div>
+    <div className="companies-download-container">
+      <div style={{ display: "inline-block" }}>
+        <Button
+          secondary
+          style={{ marginLeft: "1em", marginRight: "1em", marginBottom: "1em" }}
+        >
+          Financial Details
+        </Button>
+        <Button
+          secondary
+          style={{ marginLeft: "1em", marginRight: "1em", marginBottom: "1em" }}
+        >
+          Disclosures
+        </Button>
+        <Button
+          secondary
+          style={{ marginLeft: "1em", marginRight: "1em", marginBottom: "1em" }}
+        >
+          Contract Details
+        </Button>
+        <Button secondary style={{ margin: "1em" }}>
+          Company Roadmap
+        </Button>
+        <Button secondary style={{ margin: "1em" }}>
+          Pitchdeck
+        </Button>
+        <Button secondary style={{ margin: "1em" }}>
+          Founders
+        </Button>
       </div>
     </div>
   );

@@ -19,6 +19,7 @@ export default function ConnectWalletModal({ open, setOpen }) {
       .then((accounts) => {
         setAccount(accounts[0]);
         setConnected(true);
+        setTimeout(() => setOpen(false), 1000);
       })
       .catch((err) => {
         if (err.code === 4001) {
@@ -39,14 +40,11 @@ export default function ConnectWalletModal({ open, setOpen }) {
     >
       <Header
         content={
-          connected
-            ? "Use this account?"
-            : "You have not connected your wallet!"
+          connected ? "Connected!" : "You have not connected your wallet!"
         }
       />
       <Modal.Content>
         <Button
-          style={{ marginTop: "2" }}
           fluid
           color="green"
           onClick={handleConnect}

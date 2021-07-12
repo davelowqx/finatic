@@ -45,30 +45,32 @@ export default function ManagerForm({ address, isFinancing }) {
 
   return (
     <div className="companies-container cardborder">
-      <Form error={!!fields.errorMessage}>
-        <Form.Field disabled={isFinancing}>
-          <label>Target Amount</label>
-          <Input
-            value={fields.targetAmount}
-            onChange={(event) =>
-              setFields({ ...fields, targetAmount: event.target.value })
-            }
-            label="ETH"
-            labelPosition="right"
-          />
-        </Form.Field>
-        <Form.Field disabled={isFinancing}>
-          <label>Shares Offered</label>
-          <Input
-            value={fields.sharesOffered}
-            onChange={(event) =>
-              setFields({ ...fields, sharesOffered: event.target.value })
-            }
-          />
-        </Form.Field>
+      {!isFinancing && (
+        <Form error={!!fields.errorMessage}>
+          <Form.Field>
+            <label>Target Amount</label>
+            <Input
+              value={fields.targetAmount}
+              onChange={(event) =>
+                setFields({ ...fields, targetAmount: event.target.value })
+              }
+              label="ETH"
+              labelPosition="right"
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>Shares Offered</label>
+            <Input
+              value={fields.sharesOffered}
+              onChange={(event) =>
+                setFields({ ...fields, sharesOffered: event.target.value })
+              }
+            />
+          </Form.Field>
 
-        <Message error header="Oops!" content={fields.errorMessage} />
-      </Form>
+          <Message error header="Oops!" content={fields.errorMessage} />
+        </Form>
+      )}
       <br />
       <Button
         fluid

@@ -21,14 +21,17 @@ export default function FundingStatus({
       <ManagerForm address={address} isFinancing={isFinancing} />
       <br />
       <br />
+      {/*
       <div className="companies-container cardborder">
         <h2>Funding History</h2>
-        <FundingHistory fundingRoundSummaries={fundingRoundSummaries} />
-      </div>
+        <FundingHistory fundingRoundSummaries={fundingRoundSummaries}>
+         </div>
+      */}
     </div>
   );
 }
 
+/*
 function FundingHistory({ fundingRoundSummaries }) {
   fundingRoundSummaries = fundingRoundSummaries.filter((x) => x !== null);
   if (fundingRoundSummaries.length > 0) {
@@ -65,3 +68,4 @@ function FundingHistory({ fundingRoundSummaries }) {
     );
   }
 }
+*/

@@ -1,15 +1,12 @@
 // import App from 'next/app'
 import Layout from "../components/layout";
 import "../styles.css";
-import { AuthContext } from "../firebase/GoogleAuth";
 
 export default function MyApp({ Component, pageProps }) {
   return (
-    // <AuthContext>
     <Layout>
       <Component {...pageProps} />
     </Layout>
-    //</AuthContext>
   );
 }
 

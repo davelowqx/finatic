@@ -136,6 +136,21 @@
   text-align: justify;
 }
 
+.companies-description-edit {
+  height: 15em;
+}
+
+.companies-downloads-edit-header {
+  display: inline-block;
+  width: 30%;
+}
+
+.companies-downloads-edit-input {
+  display: inline-block;
+  width: 65%;
+  margin-bottom: 2em;
+}
+
 .companies-download-container {
   margin: auto;
   width: 100%;
