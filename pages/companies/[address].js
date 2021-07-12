@@ -115,6 +115,7 @@ export default function Company({ address }) {
                 </div>
                 <br />
                 <Header as="h3">Company Description:</Header>
+
                 <Form>
                   <TextArea
                     className="companies-description-edit"
@@ -125,6 +126,7 @@ export default function Company({ address }) {
                 <Header as="h3">Company Details:</Header>
                 <div className="companies-details">
                   <Details companyDetails={{ ...companyDetails, address }} />
+
                 </div>
                 <Header as="h3">Downloads:</Header>
                 <div>
@@ -177,7 +179,11 @@ export default function Company({ address }) {
                     placeholder="mysite.com"
                   />
                   <br />
+
                 </div>
+                <Header as="h3">Downloads:</Header>
+                <Downloads address={address} />
+                <br />
               </div>
             </Grid.Column>
             <Grid.Column width={6}>
