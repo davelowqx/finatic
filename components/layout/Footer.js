@@ -21,7 +21,7 @@ export default function Layout(props) {
             </div>
             <br />
             <div style={{ marginTop: "1em" }}>
-              Giving everyone access to early-stage startup investing
+              Allowing anyone to invest in early-stage companies
             </div>
           </Grid.Column>
           <Grid.Column width={3}>
@@ -152,11 +152,8 @@ export default function Layout(props) {
             </div>
             <br />
             <div style={{ marginTop: "1em" }}>
-              <Icon size="big" name="facebook" />
-              <Icon size="big" name="instagram" />
-              <Icon size="big" name="twitter" />
-              <Icon size="big" name="linkedin" />
-              <Icon size="big" name="reddit" />
+              <Icon name="facebook" />
+              <Icon name="instagram" />
             </div>
           </Grid.Column>
         </Grid.Row>

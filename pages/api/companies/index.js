@@ -5,7 +5,7 @@ import web3 from "../../../ethereum/web3";
 const fromWei = (val) => web3.utils.fromWei(val.toString(), "ether");
 
 /**
- * optimizing for speed, retrieved from database
+ * retrieved from database
  * @returns [{company}, ...]
  */
 export default async (req, res) => {

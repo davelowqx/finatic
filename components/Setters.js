@@ -9,7 +9,6 @@ export async function invest({ address, amount }) {
   const accounts = await web3.eth.getAccounts();
   await company.methods.invest().send({
     from: accounts[0],
-    // convert ether to wei
     value: toWei(amount),
   });
 

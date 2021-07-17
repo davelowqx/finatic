@@ -4,40 +4,49 @@ import { Header, Button } from "semantic-ui-react";
 
 export default function Explore() {
   const [companySummaries, setCompanySummaries] = React.useState([]);
-  React.useEffect(async () => {
-    const companySummaries = await fetch(
+
+  React.useEffect(() => {
+    fetch(
       `${
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
           : "https://fundsme.vercel.app"
       }/api/companies`
-    ).then((res) => res.json());
-
-    setCompanySummaries(companySummaries);
+    )
+      .then((res) => res.json())
+      .then((deets) => setCompanySummaries(deets.error ? [] : deets));
   }, []);
+  // TODO: handle error fetching data
 
-  const [gridView, setGridView] = React.useState(true);
+  const [viewFinancing, setViewFinancing] = React.useState(true);
+  const len = companySummaries.filter(
+    ({ isFinancing }) => isFinancing === viewFinancing
+  ).length;
   return (
     <div>
       <Button.Group size="mini">
         <Button
           toggle
-          icon="list layout"
-          active={gridView}
-          onClick={() => setGridView(true)}
+          content="Financing"
+          active={viewFinancing}
+          onClick={() => setViewFinancing(true)}
         ></Button>
         <Button
           toggle
-          icon="grid layout"
-          active={!gridView}
-          onClick={() => setGridView(false)}
+          content="Funded"
+          active={!viewFinancing}
+          onClick={() => setViewFinancing(false)}
         ></Button>
       </Button.Group>
 
       <Header as="h5" color="grey" textAlign="center">
-        {companySummaries.length} Companies Raising Capital
+        {len} {len === 1 ? "Company" : "Companies"}{" "}
+        {viewFinancing ? "Raising Capital" : "Funded"}
       </Header>
-      <CompanyCards companySummaries={companySummaries} gridView={gridView} />
+      <CompanyCards
+        companySummaries={companySummaries}
+        viewFinancing={viewFinancing}
+      />
     </div>
   );
 }

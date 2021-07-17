@@ -11,6 +11,8 @@ import {
 } from "semantic-ui-react";
 import FundingStatus from "../../components/FundingStatus";
 import CopyButton from "../../components/CopyButton";
+import { truncateAddress } from "../../components/utils";
+import { AccountContext } from "../../components/context/AccountContext";
 
 export async function getServerSideProps(context) {
   return { props: { address: context.params.address } };
@@ -32,6 +34,7 @@ export default function Company({ address }) {
     currentFundingRoundDetails: {},
     fundingRoundSummaries: [],
   });
+
   React.useEffect(async () => {
     const companyDetails = await fetch(
       `${
@@ -40,252 +43,26 @@ export default function Company({ address }) {
           : "https://fundsme.vercel.app"
       }/api/companies/${address}`
     ).then((res) => res.json());
-    console.log(companyDetails);
-    setCompanyDetails(companyDetails);
+    setCompanyDetails({ ...companyDetails, address });
   }, []);
 
-  const {
-    name,
-    symbol,
-    description,
-    fundingRoundSummaries,
-    currentFundingRoundDetails,
-    isFinancing,
-  } = companyDetails;
-
-  const [editView, setEditView] = React.useState(false);
-
-  const handleEdit = () => {
-    setEditView(!editView);
-  };
-
-  if (editView) {
-    return (
-      <div>
-        <br />
-        <Grid>
+  return (
+    <Grid>
+      <Grid.Row>
+        <Grid.Column width={10}>
+          <Something companyDetails={companyDetails} />
+        </Grid.Column>
+        <Grid.Column width={6}>
           <Grid.Row>
-            <Grid.Column width={10}>
-              <div className="companies-container cardborder">
-                <Button.Group
-                  floated="right"
-                  size="mini"
-                  style={{ marginLeft: "10px" }}
-                >
-                  <Button
-                    toggle
-                    icon="edit"
-                    active={editView}
-                    onClick={handleEdit}
-                  ></Button>
-                </Button.Group>
-                <CopyButton floated="right" text={address} />
-                <div style={{ fontSize: "1.25rem" }}>
-                  INVEST IN <b>{`${name} (${symbol})`}</b>
-                </div>
-                <Image
-                  className="companies-image"
-                  bordered
-                  centered
-                  fluid
-                  src="/static/company-image.jpg"
-                />
-                <div>
-                  <div
-                    style={{ float: "left" }}
-                    className="companies-pre-description"
-                  >
-                    website
-                  </div>
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: "47%",
-                    }}
-                    className="companies-pre-description"
-                  >
-                    location
-                  </div>
-                  <div
-                    style={{ float: "right" }}
-                    className="companies-pre-description"
-                  >
-                    date
-                  </div>
-                </div>
-                <br />
-                <Header as="h3">Company Description:</Header>
-                <Form>
-                  <TextArea
-                    className="companies-description-edit"
-                    placeholder={description}
-                  />
-                </Form>
-
-                <Header as="h3">Company Details:</Header>
-                <div className="companies-details">
-                  <Details companyDetails={{ ...companyDetails, address }} />
-                </div>
-                <Header as="h3">Downloads:</Header>
-                <div>
-                  <div className="companies-downloads-edit-header">
-                    <Header as="h4">Financial Details:</Header>
-                  </div>
-                  <Input
-                    className="companies-downloads-edit-input"
-                    label="http://"
-                    placeholder="mysite.com"
-                  />
-                  <div className="companies-downloads-edit-header">
-                    <Header as="h4">Disclosures:</Header>
-                  </div>
-                  <Input
-                    className="companies-downloads-edit-input"
-                    label="http://"
-                    placeholder="mysite.com"
-                  />
-                  <div className="companies-downloads-edit-header">
-                    <Header as="h4">Contact Details:</Header>
-                  </div>
-                  <Input
-                    className="companies-downloads-edit-input"
-                    label="http://"
-                    placeholder="mysite.com"
-                  />
-                  <div className="companies-downloads-edit-header">
-                    <Header as="h4">Company Roadmap:</Header>
-                  </div>
-                  <Input
-                    className="companies-downloads-edit-input"
-                    label="http://"
-                    placeholder="mysite.com"
-                  />
-                  <div className="companies-downloads-edit-header">
-                    <Header as="h4">Pitchdeck:</Header>
-                  </div>
-                  <Input
-                    className="companies-downloads-edit-input"
-                    label="http://"
-                    placeholder="mysite.com"
-                  />
-                  <div className="companies-downloads-edit-header">
-                    <Header as="h4">Founders:</Header>
-                  </div>
-                  <Input
-                    className="companies-downloads-edit-input"
-                    label="http://"
-                    placeholder="mysite.com"
-                  />
-                  <br />
-                </div>
-              </div>
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <Grid.Row>
-                <FundingStatus
-                  fundingRoundSummaries={fundingRoundSummaries}
-                  currentFundingRoundDetails={currentFundingRoundDetails}
-                  address={address}
-                  isFinancing={isFinancing}
-                />
-              </Grid.Row>
-            </Grid.Column>
+            <FundingStatus companyDetails={companyDetails} />
           </Grid.Row>
-        </Grid>
-      </div>
-    );
-  } else {
-    return (
-      <div>
-        <br />
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={10}>
-              <div className="companies-container cardborder">
-                <Button.Group
-                  floated="right"
-                  size="mini"
-                  style={{ marginLeft: "10px" }}
-                >
-                  <Button
-                    toggle
-                    icon="edit"
-                    active={editView}
-                    onClick={handleEdit}
-                  ></Button>
-                </Button.Group>
-                <CopyButton floated="right" text={address} />
-                <div style={{ fontSize: "1.25rem" }}>
-                  INVEST IN <b>{`${name} (${symbol})`}</b>
-                </div>
-                <Image
-                  className="companies-image"
-                  bordered
-                  centered
-                  fluid
-                  src="/static/company-image.jpg"
-                />
-                <div>
-                  <div
-                    style={{ float: "left" }}
-                    className="companies-pre-description"
-                  >
-                    website
-                  </div>
-                  <div
-                    style={{
-                      position: "absolute",
-                      left: "47%",
-                    }}
-                    className="companies-pre-description"
-                  >
-                    location
-                  </div>
-                  <div
-                    style={{ float: "right" }}
-                    className="companies-pre-description"
-                  >
-                    date
-                  </div>
-                </div>
-                <br />
-                <Header as="h3">Company Description:</Header>
-                <div className="companies-description">{description}</div>
-
-                <Header as="h3">Company Details:</Header>
-                <div className="companies-details">
-                  <Details companyDetails={{ ...companyDetails, address }} />
-                </div>
-                <Header as="h3">Downloads:</Header>
-                <Downloads address={address} />
-                <br />
-              </div>
-            </Grid.Column>
-            <Grid.Column width={6}>
-              <Grid.Row>
-                <FundingStatus
-                  fundingRoundSummaries={fundingRoundSummaries}
-                  currentFundingRoundDetails={currentFundingRoundDetails}
-                  address={address}
-                  isFinancing={isFinancing}
-                />
-              </Grid.Row>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
-    );
-  }
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  );
 }
 
 const Details = ({ companyDetails }) => {
-  const truncateAddress = (str) => {
-    if (`${str}`.length == 42) {
-      const s = str.toUpperCase();
-      return `0x${s.substring(2, 6)}...${s.substring(38)}`;
-    }
-  };
-
   const [items, setItems] = React.useState([]);
   React.useEffect(() => {
     const {
@@ -374,4 +151,195 @@ const Downloads = ({ address }) => {
       </div>
     </div>
   );
+};
+
+const Something = ({ companyDetails }) => {
+  const { name, symbol, description, address, manager } = companyDetails;
+  const [account, _] = React.useContext(AccountContext);
+
+  const [editView, setEditView] = React.useState(false);
+  const [editDescription, setEditDescription] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  const handleEdit = () => {
+    if (editView) {
+      setLoading(true);
+      // save form data
+      try {
+      } catch {
+      } finally {
+        setLoading(false);
+      }
+    }
+    setEditView(!editView);
+  };
+
+  React.useEffect(() => {
+    setEditDescription(description);
+  }, [description]);
+
+  const handleForm = (event) => {
+    setEditDescription(event.target.value);
+  };
+
+  if (!editView) {
+    return (
+      <div className="companies-container cardborder">
+        <Button.Group
+          floated="right"
+          size="mini"
+          style={{ marginLeft: "10px" }}
+        >
+          <CopyButton floated="right" text={address} />
+          {account.toUpperCase() === manager.toUpperCase() && (
+            <Button toggle icon="edit" onClick={handleEdit}></Button>
+          )}
+        </Button.Group>
+        <div style={{ fontSize: "1.25rem" }}>
+          <b>{`${name} (${symbol})`}</b>
+        </div>
+        <Image
+          className="companies-image"
+          bordered
+          centered
+          fluid
+          src="/static/company-image.jpg"
+        />
+        <div>
+          <div style={{ float: "left" }} className="companies-pre-description">
+            website
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "47%",
+            }}
+            className="companies-pre-description"
+          >
+            location
+          </div>
+          <div style={{ float: "right" }} className="companies-pre-description">
+            date
+          </div>
+        </div>
+        <br />
+        <Header as="h3">Company Description:</Header>
+        <div className="companies-description">{description}</div>
+
+        <Header as="h3">Company Details:</Header>
+        <div className="companies-details">
+          <Details companyDetails={companyDetails} />
+        </div>
+        <Header as="h3">Downloads:</Header>
+        <Downloads address={address} />
+        <br />
+      </div>
+    );
+  } else {
+    return (
+      <div className="companies-container cardborder">
+        <Button.Group
+          floated="right"
+          size="mini"
+          style={{ marginLeft: "10px" }}
+        >
+          <Button toggle icon="save" active onClick={handleEdit}></Button>
+          <CopyButton floated="right" text={address} />
+        </Button.Group>
+        <div style={{ fontSize: "1.25rem" }}>
+          INVEST IN <b>{`${name} (${symbol})`}</b>
+        </div>
+        <Image
+          className="companies-image"
+          bordered
+          centered
+          fluid
+          src="/static/company-image.jpg"
+        />
+        <div>
+          <div style={{ float: "left" }} className="companies-pre-description">
+            website
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              left: "47%",
+            }}
+            className="companies-pre-description"
+          >
+            location
+          </div>
+          <div style={{ float: "right" }} className="companies-pre-description">
+            date
+          </div>
+        </div>
+        <br />
+        <Header as="h3">Company Description:</Header>
+        <Form>
+          <TextArea
+            className="companies-description-edit"
+            value={editDescription}
+            onChange={handleForm}
+          />
+        </Form>
+
+        <Header as="h3">Company Details:</Header>
+        <div className="companies-details">
+          <Details companyDetails={companyDetails} />
+        </div>
+        <Header as="h3">Downloads:</Header>
+        <div>
+          <div className="companies-downloads-edit-header">
+            <Header as="h4">Financial Details:</Header>
+          </div>
+          <Input
+            className="companies-downloads-edit-input"
+            label="http://"
+            placeholder="mysite.com"
+          />
+          <div className="companies-downloads-edit-header">
+            <Header as="h4">Disclosures:</Header>
+          </div>
+          <Input
+            className="companies-downloads-edit-input"
+            label="http://"
+            placeholder="mysite.com"
+          />
+          <div className="companies-downloads-edit-header">
+            <Header as="h4">Contact Details:</Header>
+          </div>
+          <Input
+            className="companies-downloads-edit-input"
+            label="http://"
+            placeholder="mysite.com"
+          />
+          <div className="companies-downloads-edit-header">
+            <Header as="h4">Company Roadmap:</Header>
+          </div>
+          <Input
+            className="companies-downloads-edit-input"
+            label="http://"
+            placeholder="mysite.com"
+          />
+          <div className="companies-downloads-edit-header">
+            <Header as="h4">Pitchdeck:</Header>
+          </div>
+          <Input
+            className="companies-downloads-edit-input"
+            label="http://"
+            placeholder="mysite.com"
+          />
+          <div className="companies-downloads-edit-header">
+            <Header as="h4">Founders:</Header>
+          </div>
+          <Input
+            className="companies-downloads-edit-input"
+            label="http://"
+            placeholder="mysite.com"
+          />
+          <br />
+        </div>
+      </div>
+    );
+  }
 };

@@ -50,7 +50,8 @@ export default function Searchbar() {
       onSearchChange={handleSearchChange}
       results={state.results}
       value={state.value}
-      style={{ marginLeft: "1em", marginRight: "1em", paddingRight: "1em" }}
+      fluid
+      style={{ marginLeft: "1em", marginRight: "1em" }}
     ></Search>
   );
 }
