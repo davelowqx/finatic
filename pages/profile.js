@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import Link from "next/link";
 
-export default function about() {
+export default function profile() {
   return (
     <div>
       <br />

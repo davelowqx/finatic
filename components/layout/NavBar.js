@@ -11,17 +11,16 @@ export default function Header() {
         <div className="logo">fundSME</div>
       </Menu.Item>
       <Menu.Item href="/explore">Explore</Menu.Item>
-      <Menu.Item>
+      <Menu.Item className="container13" style={{ flex: "1" }}>
         <Searchbar />
       </Menu.Item>
-      <Menu.Menu position="right">
-        <Menu.Item href="/companies/new">List Your Company</Menu.Item>
-        <Menu.Item>
-          <div className="centercontainer">
-            <ConnectWallet />
-          </div>
-        </Menu.Item>
-      </Menu.Menu>
+      <Menu.Item href="/companies/new">List Your Company</Menu.Item>
+      <Menu.Item href="/companies/profile">Profile</Menu.Item>
+      <Menu.Item>
+        <div className="centercontainer">
+          <ConnectWallet />
+        </div>
+      </Menu.Item>
     </Menu>
   );
 }

@@ -3,7 +3,9 @@ a.company-card {
 }
 
 .container12 {
-  width: 12%;
+}
+
+.container13 {
 }
 
 .container12 div.logo {
@@ -41,11 +43,23 @@ a.company-card {
 
 .search-bar {
   display: block;
+  flex: 1;
 }
 
-@media (max-width: 600px) {
+.search-bar .input {
+  width: 100%;
+  flex: 1;
+}
+
+@media (max-width: 991px) {
   .search-bar {
     display: none;
+  }
+}
+
+@media (max-width: 675px) {
+  .container13 {
+    display: none !important;
   }
 }
 
