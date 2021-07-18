@@ -15,7 +15,7 @@ export default function Header() {
         <Searchbar />
       </Menu.Item>
       <Menu.Item href="/companies/new">List Your Company</Menu.Item>
-      <Menu.Item href="/companies/profile">Profile</Menu.Item>
+      <Menu.Item href="/profile">Profile</Menu.Item>
       <Menu.Item>
         <div className="centercontainer">
           <ConnectWallet />
