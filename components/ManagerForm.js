@@ -106,9 +106,9 @@ export default function ManagerForm({ address, isFinancing }) {
         content={isFinancing ? "CLOSE ROUND" : "RAISE FUNDS"}
       />
       <br />
-      <Divider />
       {!isFinancing && (
         <>
+          <Divider />
           <br />
           <Form error={!!fields.errorMessage}>
             <Form.Field>

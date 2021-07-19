@@ -50,10 +50,12 @@ export default function Company({ address }) {
     <Grid>
       <Grid.Row>
         <Grid.Column width={10}>
+          <br />
           <Something companyDetails={companyDetails} />
         </Grid.Column>
         <Grid.Column width={6}>
           <Grid.Row>
+            <br />
             <FundingStatus companyDetails={companyDetails} />
           </Grid.Row>
         </Grid.Column>
