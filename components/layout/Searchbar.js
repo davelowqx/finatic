@@ -4,25 +4,23 @@ import { db } from "../../firebase";
 import _ from "lodash";
 
 export default function Searchbar() {
-  const source =
-    // let i = 0;
-    db
-      .collection("companies")
-      //.where("name" === state.value)
-      .get()
-      .then((querySnapshot) => {
-        console.log(querySnapshot.docs);
-        // querySnapshot.forEach((doc) => {
-        //   console.log(doc.data().name);
-        // state.results[i++] = {
-        //   title: doc.data().name,
-        //   description: doc.data().symbol,
-        // };
-        // });
+  db.collection("companies")
+    //.where("name" === state.value)
+    .get()
+    .then((querySnapshot) => {
+      let i = 0;
+      // console.log(querySnapshot.docs);
+      querySnapshot.forEach((doc) => {
+        // console.log(doc.data().name);
+        state.results[i++] = {
+          title: doc.data().name,
+          description: doc.data().symbol,
+        };
       });
-  // .catch((err) => {
-  //   console.log(err);
-  // });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
   const initialState = {
     loading: false,
@@ -50,23 +48,23 @@ export default function Searchbar() {
   const { loading, results, value } = state;
   const timeoutRef = React.useRef();
 
-  const handleSearchChange = React.useCallback((event, data) => {
+  const handleSearchChange = React.useCallback((event) => {
     clearTimeout(timeoutRef.current);
 
-    dispatch({ type: "START_SEARCH", query: data.value });
+    dispatch({ type: "START_SEARCH", query: event.target.selection });
 
     timeoutRef.current = setTimeout(() => {
-      if (data.value.length === 0) {
+      if (event.target.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" });
         return;
       }
 
-      const re = new RegExp(_.escapeRegExp(data.value), "i");
+      const re = new RegExp(_.escapeRegExp(event.target.selection), "i");
       const isMatch = (result) => re.test(result.title);
 
       dispatch({
         type: "FINISH_SEARCH",
-        results: _.filter(source, isMatch),
+        results: _.filter(state.results, isMatch),
       });
     }, 300);
   }, []);
@@ -114,8 +112,11 @@ export default function Searchbar() {
     <Search
       className="search-bar"
       loading={state.loading}
-      onResultSelect={(event, data) =>
-        dispatch({ type: "UPDATE_SELECTION", selection: data.result.title })
+      onResultSelect={(event) =>
+        dispatch({
+          type: "UPDATE_SELECTION",
+          selection: event.target.selection,
+        })
       }
       onSearchChange={handleSearchChange}
       results={state.results}

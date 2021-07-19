@@ -32,28 +32,21 @@ export default function Layout(props) {
             <List animated divided verticalAlign="middle">
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
+                  <List.Header as="a" href="/about#whyinvest">
                     Why Invest
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
+                  <List.Header as="a" href="/about#howitworks">
                     How it works
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
-                    FAQ
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about">
+                  <List.Header as="a" href="/about#risks">
                     Risks
                   </List.Header>
                 </List.Content>
@@ -68,36 +61,22 @@ export default function Layout(props) {
             <List animated divided verticalAlign="middle">
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
+                  <List.Header as="a" href="/about#whyraise">
                     Why Raise
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
+                  <List.Header as="a" href="/about#learn">
                     Learn
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
-                    FAQ
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about">
+                  <List.Header as="a" href="/about#instruments">
                     Instruments
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about">
-                    Crowd SAFE
                   </List.Header>
                 </List.Content>
               </List.Item>
@@ -105,42 +84,28 @@ export default function Layout(props) {
           </Grid.Column>
           <Grid.Column width={3}>
             <div>
-              <Header as="h3">Company</Header>
+              <Header as="h3">TwoFinGeeks</Header>
             </div>
             <br />
             <List animated divided verticalAlign="middle">
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
+                  <List.Header as="a" href="/about#about">
                     About
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
-                    Blog
+                  <List.Header as="a" href="/about#community">
+                    Community
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about">
-                    Events
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about">
-                    Contact
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about">
-                    We're Hiring!
+                  <List.Header as="a" href="/about#contactus">
+                    Contact Us
                   </List.Header>
                 </List.Content>
               </List.Item>
