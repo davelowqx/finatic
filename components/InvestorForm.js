@@ -56,7 +56,8 @@ export default function InvestorForm({ address, fundingRoundDetails }) {
         <Grid.Row>
           <Grid.Column>
             <Progress percent={percent} progress indicating />
-            <Header as="h3">INVESTMENT TERMS</Header>
+            <Header as="h3">Investment Details</Header>
+            <br />
             <div className="container100">
               <div className="container50-2">
                 <h3>{currentAmount} ETH</h3> of {targetAmount} ETH goal
@@ -69,7 +70,9 @@ export default function InvestorForm({ address, fundingRoundDetails }) {
                 <b>{daysLeft}</b> Days Left
               </div>
             </div>
+            <br />
             <Divider clearing />
+            <br />
             <Form onSubmit={onSubmit} error={!!states.errorMessage}>
               <Form.Field>
                 <label style={{ fontSize: "1.28571429rem" }}>Invest</label>

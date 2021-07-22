@@ -2,6 +2,12 @@ a.company-card {
   transition: none;
 }
 
+.container11 {
+  display: block;
+  align-items: center;
+  text-align: center;
+}
+
 .container12 {
 }
 
