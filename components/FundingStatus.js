@@ -22,7 +22,11 @@ export default function FundingStatus({ companyDetails }) {
         </>
       )}
       {account.toUpperCase() === manager.toUpperCase() && (
-        <ManagerForm address={address} isFinancing={isFinancing} />
+        <ManagerForm
+          address={address}
+          manager={manager}
+          isFinancing={isFinancing}
+        />
       )}
       {/*
       <div className="companies-container cardborder">

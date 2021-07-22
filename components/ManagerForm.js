@@ -3,7 +3,7 @@ import { Divider, Form, Input, Message, Button } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { concludeFundingRound, createFundingRound, withdraw } from "./Setters";
 
-export default function ManagerForm({ address, isFinancing }) {
+export default function ManagerForm({ address, isFinancing, manager }) {
   const [fields, setFields] = React.useState({
     targetAmount: "",
     sharesOffered: "",
@@ -46,10 +46,13 @@ export default function ManagerForm({ address, isFinancing }) {
   };
 
   const handleWithdraw = async (event) => {
+    const withdrawAmount = fields.withdrawAmount;
+
+    event.preventDefault();
     setStates({ loading: true, errorMessage: "" });
     try {
-      //await withdraw({ address, fields.amount });
-      //router.reload();
+      await withdraw({ withdrawAmount, address, manager });
+      router.reload();
     } catch (err) {
       console.log(err);
       setStates({ loading: false, errorMessage: err.message });
@@ -118,8 +121,12 @@ export default function ManagerForm({ address, isFinancing }) {
                 step={0.1}
                 min={0}
                 value={fields.withdrawAmount}
+                onInput={(event) => {}}
                 onChange={(event) =>
-                  setFields({ ...fields, withdrawAmount: event.target.value })
+                  setFields({
+                    ...fields,
+                    withdrawAmount: event.target.value,
+                  })
                 }
                 label="ETH"
                 labelPosition="right"
@@ -130,6 +137,7 @@ export default function ManagerForm({ address, isFinancing }) {
           <br />
           <Button
             fluid
+            primary
             loading={states.loading}
             disabled={states.loading}
             onClick={handleWithdraw}

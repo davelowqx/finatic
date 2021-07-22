@@ -52,6 +52,14 @@ export async function concludeFundingRound({ address }) {
   });
 }
 
+export async function withdraw({ withdrawAmount, address, manager }) {
+  const company = Company(address);
+  const accounts = await web3.eth.getAccounts();
+  await company.methods.withdraw(toWei(withdrawAmount), manager).send({
+    from: accounts[0],
+  });
+}
+
 export async function listCompany(
   { name, symbol, sharesOutstanding, description },
   func
