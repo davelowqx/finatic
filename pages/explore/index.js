@@ -24,6 +24,7 @@ export default function Explore() {
   ).length;
   return (
     <div>
+      <br />
       <Button.Group size="mini">
         <Button
           toggle

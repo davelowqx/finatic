@@ -34,6 +34,18 @@ a.company-card {
   float: left;
 }
 
+.container50-2 {
+  width: 50%;
+  float: left;
+  display: block;
+}
+
+.container100 {
+  width: 100%;
+  overflow: auto;
+  display: block;
+}
+
 .centercontainer {
   margin: auto;
 }
