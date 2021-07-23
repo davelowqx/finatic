@@ -2,6 +2,12 @@ a.company-card {
   transition: none;
 }
 
+.container11 {
+  display: block;
+  align-items: center;
+  text-align: center;
+}
+
 .container12 {
 }
 
@@ -32,6 +38,18 @@ a.company-card {
   width: 50%;
   height: 100%;
   float: left;
+}
+
+.container50-2 {
+  width: 50%;
+  float: left;
+  display: block;
+}
+
+.container100 {
+  width: 100%;
+  overflow: auto;
+  display: block;
 }
 
 .centercontainer {
