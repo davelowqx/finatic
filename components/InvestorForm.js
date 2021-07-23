@@ -56,25 +56,24 @@ export default function InvestorForm({ address, fundingRoundDetails }) {
         <Grid.Row>
           <Grid.Column>
             <Progress percent={percent} progress indicating />
-            <div>
-              <Header as="h3">{currentAmount} ETH</Header>
-              of {targetAmount} ETH goal
-            </div>
+            <Header as="h3">Investment Details</Header>
             <br />
-            <div>{investorsCount} Investors</div>
-            <Divider clearing />
-            <div>
-              <Header as="h3">INVESTMENT TERMS</Header>
-              <div>
-                <b>{sharesOffered}</b> Shares Offerred
+            <div className="container100">
+              <div className="container50-2">
+                <h3>{currentAmount} ETH</h3> of {targetAmount} ETH goal
               </div>
-              <div>
+              <div className="container50-2">
+                <b>{sharesOffered}</b> Shares Offerred
+                <br />
+                <b>{investorsCount}</b> Investors
+                <br />
                 <b>{daysLeft}</b> Days Left
               </div>
             </div>
             <br />
+            <Divider clearing />
+            <br />
             <Form onSubmit={onSubmit} error={!!states.errorMessage}>
-              <br />
               <Form.Field>
                 <label style={{ fontSize: "1.28571429rem" }}>Invest</label>
                 <span>min {sharePrice} ETH</span>

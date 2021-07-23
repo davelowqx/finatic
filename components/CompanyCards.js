@@ -4,6 +4,8 @@ import { Header, Button, Card, Item } from "semantic-ui-react";
 export default function CompanyCards({
   companySummaries = [],
   viewFinancing,
+  slicemin,
+  slicemax,
   max = 15,
 }) {
   return (
@@ -14,7 +16,7 @@ export default function CompanyCards({
         .filter(({ isFinancing }) =>
           viewFinancing ? isFinancing : !isFinancing
         )
-        .slice(0, max)
+        .slice(slicemin, slicemax)
         .map(
           ({
             address,
