@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Popup,
   Input,
   TextArea,
   Form,
@@ -10,7 +11,6 @@ import {
   Grid,
 } from "semantic-ui-react";
 import FundingStatus from "../../components/FundingStatus";
-import CopyButton from "../../components/CopyButton";
 import { truncateAddress } from "../../components/utils";
 import { AccountContext } from "../../components/context/AccountContext";
 
@@ -57,11 +57,11 @@ export default function Company({ address }) {
   return (
     <Grid>
       <Grid.Row>
-        <Grid.Column width={10}>
+        <Grid.Column computer={10} mobile={16}>
           <br />
           <MainInfo companyDetails={companyDetails} />
         </Grid.Column>
-        <Grid.Column width={6}>
+        <Grid.Column computer={6} mobile={16}>
           <Grid.Row>
             <br />
             <FundingStatus companyDetails={companyDetails} />
@@ -150,9 +150,21 @@ const MainInfo = ({ companyDetails }) => {
   return (
     <div className="companies-container cardborder">
       <Button.Group floated="right" size="mini" style={{ marginLeft: "10px" }}>
-        <CopyButton floated="right" text={address} />
+        <Popup
+          content={"Copy Smart Contract Address"}
+          trigger={
+            <Button
+              icon="copy"
+              floated="right"
+              onClick={() => navigator.clipboard.writeText(address)}
+            />
+          }
+        />
         {account.toUpperCase() === manager.toUpperCase() && !editView && (
-          <Button toggle icon="edit" onClick={handleEdit}></Button>
+          <Popup
+            content="Edit Company Details"
+            trigger={<Button toggle icon="edit" onClick={handleEdit} />}
+          />
         )}
         {account.toUpperCase() === manager.toUpperCase() && editView && (
           <Button toggle icon="save" active onClick={handleEdit}></Button>

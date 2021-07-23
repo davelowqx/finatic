@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import Link from "next/link";
 
-export default function about() {
+export default function About() {
   return (
     <div>
       <br />
@@ -22,25 +22,19 @@ export default function about() {
         <Grid centered>
           <Grid.Row>
             <Grid.Column width={14}>
-              <Header as="h3">Why invest in Early Stage Startups?</Header>
+              <Header as="h3">Preface</Header>
               <div>
                 <p>
-                  Angel investing — hunting for a unicorn — was previously
-                  available to only the wealthiest 3% of the US population. With
-                  fundSME, everyone can invest in private startups for a chance
-                  to earn a return. Unicorns are startups that reach the
-                  valuation of over $1B. If you find and invest in one at an
-                  early stage, you could earn a significant return on
-                  investment. While no one can predict which companies will
-                  become unicorns, fundSME gives you access to companies who
-                  have the potential to become one.
+                  Previously, angel investing was only available to the
+                  wealthiest people, with regulators commonly citing the high
+                  risks of investing in early stage companies. This is
+                  controversial, as life changing wealth can be created by
+                  getting in early. This spurred us to create fundSME, where
+                  anyone with an ethereum wallet can back projects they want to.
                 </p>
               </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="howitworks" />
-          <Grid.Row>
-            <Grid.Column width={14}>
+              <br />
+              <Divider id="howitworks" />
               <Header as="h3">How fundSME platform works</Header>
               <div>
                 When a startup lists on fundSME, a smart contract is created on
@@ -59,14 +53,9 @@ export default function about() {
                 added to a MetaMask wallet. However, if the funding round failed
                 to meet its target, all investors will be fully refunded.
               </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="whyus" />
-          <Grid.Row>
-            <Grid.Column width={14}>
-              <Header as="h3">
-                Why choose fundSME over other investing platforms?
-              </Header>
+              <br />
+              <Divider id="whyus" />
+              <Header as="h3">Why choose fundSME?</Header>
               <div>
                 <p>
                   Most other equity financing platforms depend on a central
@@ -81,11 +70,7 @@ export default function about() {
                 </p>
                 <br />
               </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="risks" />
-          <Grid.Row>
-            <Grid.Column width={14}>
+              <Divider id="risks" />
               <Header as="h3">What are the risks?</Header>
               <div>
                 <p>
@@ -136,11 +121,7 @@ export default function about() {
                 </p>
                 <br />
               </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="whyraise" />
-          <Grid.Row>
-            <Grid.Column width={14}>
+              <Divider id="whyraise" />
               <Header as="h3">
                 As a company, why should I raise my money with fundSME?
               </Header>
@@ -154,11 +135,7 @@ export default function about() {
                 </p>
                 <br />
               </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="learn" />
-          <Grid.Row>
-            <Grid.Column width={14}>
+              <Divider id="learn" />
               <Header as="h3">
                 How can I learn more about equity financing?
               </Header>
@@ -173,27 +150,19 @@ export default function about() {
                 </p>
                 <br />
               </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="instruments" />
-          <Grid.Row>
-            <Grid.Column width={14}>
+              <Divider id="instruments" />
               <Header as="h3">
                 What are the investment instruments available on fundSME?
               </Header>
               <div>
                 <p>
-                  fundSME currently offers only one type of financing
-                  instruments which is equity financing. In the future, we look
-                  forward to providing debt financing and convertable notes.
+                  Currently we only offers equity financing. In the future, we
+                  look forward to providing debt financing and convertable
+                  notes.
                 </p>
                 <br />
               </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="about" />
-          <Grid.Row>
-            <Grid.Column width={14}>
+              <Divider id="about" />
               <Header as="h3">
                 What is fundSME and who are the TwoFinGeeks?
               </Header>
@@ -210,29 +179,9 @@ export default function about() {
                 </p>
                 <br />
               </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="community" />
-          <Grid.Row>
-            <Grid.Column width={14}>
-              <Header as="h3">Is there a community telegram channel?</Header>
-              <div>
-                <p>No, you are on your own.</p>
-                <br />
-              </div>
-            </Grid.Column>
-          </Grid.Row>
-          <Divider id="contactus" />
-          <Grid.Row>
-            <Grid.Column width={14}>
+              <Divider id="contactus" />
               <Header as="h3">How do we contact the TwoFinGeeks team?</Header>
-              <div>
-                <p>
-                  For technical queries, call Dave at +65 8817 9584 <br />
-                  For general queries, call David at +65 8288 3695
-                </p>
-                <br />
-              </div>
+              <div></div>
             </Grid.Column>
           </Grid.Row>
         </Grid>
