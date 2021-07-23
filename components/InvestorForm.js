@@ -8,17 +8,14 @@ import {
   Progress,
   Grid,
   Divider,
+  Popup,
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { invest } from "./Setters";
 
-export default function InvestorForm({
-  address,
-  isFinancing,
-  fundingRoundDetails,
-}) {
-  const [values, setValues] = React.useState({
-    amount: "",
+export default function InvestorForm({ address, fundingRoundDetails }) {
+  const [amount, setAmount] = React.useState(0);
+  const [states, setStates] = React.useState({
     errorMessage: "",
     loading: false,
   });
@@ -27,16 +24,19 @@ export default function InvestorForm({
 
   const onSubmit = async (event) => {
     event.preventDefault();
-    setValues({ ...values, loading: true, errorMessage: "" });
+    if (amount < sharePrice) {
+      //show tooltip
+    }
+    setStates({ loading: true, errorMessage: "" });
     try {
-      await invest({ address, amount: values.amount });
+      await invest({ address, amount });
     } catch (err) {
-      setValues({ ...values, errorMessage: err.message });
+      setStates({ ...states, errorMessage: err.message });
     }
 
-    // reset state back to normal
-    setValues({ ...values, loading: false, amount: "" });
-    router.reload();
+    setStates({ ...states, loading: false });
+    setAmount(0);
+    //router.reload();
   };
 
   const {
@@ -50,62 +50,56 @@ export default function InvestorForm({
 
   const percent = Math.round((100 * currentAmount) / targetAmount);
 
-  if (isFinancing) {
-    return (
-      <div className="companies-container cardborder">
-        <Grid>
-          <Grid.Row>
-            <Grid.Column>
-              <Progress percent={percent} progress indicating />
-              <div>
-                <Header as="h3">{currentAmount} ETH</Header>
-                of {targetAmount} ETH goal
+  return (
+    <div className="companies-container cardborder">
+      <Grid>
+        <Grid.Row>
+          <Grid.Column>
+            <Progress percent={percent} progress indicating />
+            <Header as="h3">Investment Details</Header>
+            <br />
+            <div className="container100">
+              <div className="container50-2">
+                <h3>{currentAmount} ETH</h3> of {targetAmount} ETH goal
               </div>
-              <br />
-              <div>{investorsCount} Investors</div>
-              <Divider clearing />
-              <div>
-                <Header as="h3">INVESTMENT TERMS</Header>
-                <div>
-                  <b>{sharesOffered}</b> Shares Offerred
-                </div>
-                <div>
-                  <b>{daysLeft}</b> Days Left
-                </div>
+              <div className="container50-2">
+                <b>{sharesOffered}</b> Shares Offerred
+                <br />
+                <b>{investorsCount}</b> Investors
+                <br />
+                <b>{daysLeft}</b> Days Left
               </div>
+            </div>
+            <br />
+            <Divider clearing />
+            <br />
+            <Form onSubmit={onSubmit} error={!!states.errorMessage}>
+              <Form.Field>
+                <label style={{ fontSize: "1.28571429rem" }}>Invest</label>
+                <span>min {sharePrice} ETH</span>
+                <Input
+                  type="decimal"
+                  value={amount}
+                  onChange={(event) => setAmount(event.target.value)}
+                  label="ETH"
+                  labelPosition="right"
+                />
+              </Form.Field>
               <br />
-              <Form onSubmit={onSubmit} error={!!values.errorMessage}>
-                <br />
-                <Form.Field>
-                  <label style={{ fontSize: "1.28571429rem" }}>Invest</label>
-                  <span>min {sharePrice} ETH</span>
-                  <Input
-                    value={values.amount}
-                    onChange={(event) =>
-                      setValues({ ...values, amount: event.target.value })
-                    }
-                    label="ETH"
-                    labelPosition="right"
-                  />
-                </Form.Field>
-                <br />
-                <Message error header="Oops!" content={values.errorMessage} />
-                <Button
-                  fluid
-                  primary
-                  disabled={values.loading}
-                  loading={values.loading}
-                >
-                  INVEST
-                </Button>
-                <br />
-              </Form>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
-    );
-  } else {
-    return <></>;
-  }
+              <Message error header="Oops!" content={states.errorMessage} />
+              <Button
+                fluid
+                primary
+                disabled={states.loading}
+                loading={states.loading}
+              >
+                INVEST
+              </Button>
+              <br />
+            </Form>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </div>
+  );
 }

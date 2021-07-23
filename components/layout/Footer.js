@@ -21,7 +21,7 @@ export default function Layout(props) {
             </div>
             <br />
             <div style={{ marginTop: "1em" }}>
-              Giving everyone access to early-stage startup investing
+              Allowing anyone to invest in early-stage companies
             </div>
           </Grid.Column>
           <Grid.Column width={3}>
@@ -32,28 +32,21 @@ export default function Layout(props) {
             <List animated divided verticalAlign="middle">
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
+                  <List.Header as="a" href="/about#whyinvest">
                     Why Invest
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
+                  <List.Header as="a" href="/about#howitworks">
                     How it works
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
-                    FAQ
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/faq">
+                  <List.Header as="a" href="/about#risks">
                     Risks
                   </List.Header>
                 </List.Content>
@@ -68,36 +61,22 @@ export default function Layout(props) {
             <List animated divided verticalAlign="middle">
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
+                  <List.Header as="a" href="/about#whyraise">
                     Why Raise
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
+                  <List.Header as="a" href="/about#learn">
                     Learn
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
-                    FAQ
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/faq">
+                  <List.Header as="a" href="/about#instruments">
                     Instruments
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/faq">
-                    Crowd SAFE
                   </List.Header>
                 </List.Content>
               </List.Item>
@@ -105,42 +84,28 @@ export default function Layout(props) {
           </Grid.Column>
           <Grid.Column width={3}>
             <div>
-              <Header as="h3">Company</Header>
+              <Header as="h3">TwoFinGeeks</Header>
             </div>
             <br />
             <List animated divided verticalAlign="middle">
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
+                  <List.Header as="a" href="/about#about">
                     About
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
-                    Blog
+                  <List.Header as="a" href="/about#community">
+                    Community
                   </List.Header>
                 </List.Content>
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/faq">
-                    Events
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/faq">
-                    Contact
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/faq">
-                    We're Hiring!
+                  <List.Header as="a" href="/about#contactus">
+                    Contact Us
                   </List.Header>
                 </List.Content>
               </List.Item>
@@ -152,11 +117,8 @@ export default function Layout(props) {
             </div>
             <br />
             <div style={{ marginTop: "1em" }}>
-              <Icon size="big" name="facebook" />
-              <Icon size="big" name="instagram" />
-              <Icon size="big" name="twitter" />
-              <Icon size="big" name="linkedin" />
-              <Icon size="big" name="reddit" />
+              <Icon name="facebook" />
+              <Icon name="instagram" />
             </div>
           </Grid.Column>
         </Grid.Row>
@@ -170,7 +132,7 @@ export default function Layout(props) {
                 name="money bill alternate outline"
               />
               <Header as="h2" style={{ marginBottom: "1em" }}>
-                <a href="/faq">Refer a startup, get $1,000</a>
+                <a href="/about">Refer a startup, get $1,000</a>
               </Header>
             </div>
           </Grid.Column>

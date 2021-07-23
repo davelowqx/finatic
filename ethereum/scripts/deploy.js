@@ -40,6 +40,12 @@ const provider = new HDWalletProvider({
   numberOfAddresses: 5,
 });
 
+console.log(
+  process.env.NODE_ENV === "development"
+    ? `ganache-cli -m "oyster exercise random pledge thrive food mail hover knee cry sure eternal"`
+    : ""
+);
+
 const web3 = new Web3(provider);
 
 (async () => {

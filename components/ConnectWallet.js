@@ -1,45 +1,95 @@
 import React from "react";
-import { Button } from "semantic-ui-react";
-import Link from "next/link";
+import { Modal, Button } from "semantic-ui-react";
+import { truncateAddress } from "./utils";
+import { AccountContext } from "./context/AccountContext";
 
 export default function ConnectWallet() {
-  const [account, setAccount] = React.useState("");
-  const [connected, setConnected] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [modal, setModal] = React.useState({ open: false, content: "" });
+  const [account, setAccount] = React.useContext(AccountContext);
 
-  const truncateAddress = (str) => {
-    if (str.length == 42) {
-      const s = str.toUpperCase();
-      return `0x${s.substring(2, 6)}...${s.substring(38)}`;
+  // on page load, setup account listener
+  React.useEffect(() => {
+    if (typeof window.ethereum !== "undefined") {
+      ethereum.on("accountsChanged", handleAccounts);
+    }
+  }, []);
+
+  const handleAccounts = (accounts) => {
+    if (accounts.length === 0) {
+      setModal({
+        open: true,
+        content: "You do not have accounts?",
+      });
+    } else {
+      setAccount(accounts[0]);
     }
   };
 
-  const connectWallet = (event) => {
+  const handleConnect = (event) => {
     event.preventDefault();
-    if (!connected) {
-      ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((accounts) => {
-          setAccount(accounts[0]);
-          setConnected(true);
-        })
-        .catch((err) => {
-          if (err.code === 4001) {
-            // EIP-1193 userRejectedRequest error
-            // If this happens, the user rejected the connection request.
-            console.log("Please connect to MetaMask.");
-          } else {
-            console.error(err);
-          }
-        });
-    } else {
-      setConnected(false);
-      setAccount("");
+    setLoading(true);
+
+    //check if MetaMask is installed
+    if (typeof window.ethereum === "undefined") {
+      setModal({
+        open: true,
+        content: "Please install MetaMask",
+      });
+      setLoading(false);
+      return;
     }
+
+    ethereum
+      .request({ method: "eth_requestAccounts" })
+      .then(handleAccounts)
+      .catch((err) => {
+        if (err.code === 4001) {
+          // EIP-1193 userRejectedRequest error
+          setModal({
+            open: true,
+            content: "You have rejected the connection request",
+          });
+        } else {
+          setModal({
+            open: true,
+            content: err,
+          });
+        }
+      });
+
+    // check chainID
+    ethereum.request({ method: "eth_chainId" }).then((chainId) => {
+      if (
+        chainId !== (process.env.NODE_ENV !== "development" ? "0x4" : "0x539")
+      ) {
+        setModal({
+          open: true,
+          content:
+            "You are connected to the wrong ethereum network! Please select Rinkeby",
+        });
+      }
+    });
   };
 
   return (
-    <Button fluid color={!connected ? "green" : "red"} onClick={connectWallet}>
-      {connected ? truncateAddress(account) : "CONNECT WALLET"}
-    </Button>
+    <>
+      <Modal
+        onClose={() => setModal({ ...modal, open: false })}
+        onOpen={() => setModal({ ...modal, open: true })}
+        open={modal.open}
+        header="Oops!"
+        content={modal.content}
+        actions={[{ content: "OK", positive: true }]}
+      />
+      <Button
+        fluid
+        color="green"
+        onClick={handleConnect}
+        disabled={loading || !!account}
+      >
+        {!account ? "CONNECT WALLET" : truncateAddress(account)}
+      </Button>
+    </>
   );
 }

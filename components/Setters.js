@@ -9,7 +9,6 @@ export async function invest({ address, amount }) {
   const accounts = await web3.eth.getAccounts();
   await company.methods.invest().send({
     from: accounts[0],
-    // convert ether to wei
     value: toWei(amount),
   });
 
@@ -49,6 +48,14 @@ export async function concludeFundingRound({ address }) {
   const company = Company(address);
   const accounts = await web3.eth.getAccounts();
   await company.methods.concludeFundingRound().send({
+    from: accounts[0],
+  });
+}
+
+export async function withdraw({ withdrawAmount, address, manager }) {
+  const company = Company(address);
+  const accounts = await web3.eth.getAccounts();
+  await company.methods.withdraw(toWei(withdrawAmount), manager).send({
     from: accounts[0],
   });
 }

@@ -1,14 +1,26 @@
+a.company-card {
+  transition: none;
+}
+
+.container11 {
+  display: block;
+  align-items: center;
+  text-align: center;
+}
+
 .container12 {
-  width: 12%;
+}
+
+.container13 {
+}
+
+.container14 {
+  padding: 4%;
 }
 
 .container12 div.logo {
   display: block;
   margin: auto;
-}
-
-.container68 {
-  width: 68%;
 }
 
 .container20 {
@@ -28,6 +40,18 @@
   float: left;
 }
 
+.container50-2 {
+  width: 50%;
+  float: left;
+  display: block;
+}
+
+.container100 {
+  width: 100%;
+  overflow: auto;
+  display: block;
+}
+
 .centercontainer {
   margin: auto;
 }
@@ -40,11 +64,25 @@
 }
 
 .search-bar {
-  width: 100%;
+  display: block;
+  flex: 1;
 }
 
 .search-bar .input {
   width: 100%;
+  flex: 1;
+}
+
+@media (max-width: 991px) {
+  .search-bar {
+    display: none;
+  }
+}
+
+@media (max-width: 675px) {
+  .container13 {
+    display: none !important;
+  }
 }
 
 .posterboy {
@@ -136,6 +174,21 @@
   text-align: justify;
 }
 
+.companies-description-edit {
+  height: 15em;
+}
+
+.companies-downloads-edit-header {
+  display: inline-block;
+  width: 30%;
+}
+
+.companies-downloads-edit-input {
+  display: inline-block;
+  width: 65%;
+  margin-bottom: 2em;
+}
+
 .companies-download-container {
   margin: auto;
   width: 100%;
@@ -171,3 +224,31 @@
 .companycard {
   flex-grow: 0;
 }
+
+/* -webkit-text-size-adjust: 100%;
+    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
+    line-height: 1.4285em;
+    text-align: left;
+    box-sizing: inherit;
+    color: #4183c4;
+    text-decoration: none;
+    position: relative;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+    min-height: 0;
+    background: #fff;
+    padding: 0;
+    border: none;
+    border-radius: .28571429rem;
+    transition: box-shadow .1s ease,transform .1s ease,-webkit-box-shadow .1s ease,-webkit-transform .1s ease;
+    display: flex;
+    margin: .875em .5em;
+    float: none;
+    max-width: 9999px;
+    font-size: 1em;
+    transform: none;
+    box-shadow: 0 0 0 1px #d4d4d5,0 2px 0 0 #21ba45,0 1px 3px 0 #d4d4d5;
+    width: calc(33.33333333% - 2em);
+    margin-left: 1em;
+    margin-right: 1em; */

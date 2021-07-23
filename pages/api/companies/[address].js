@@ -47,7 +47,7 @@ export default async (req, res) => {
         fundingRoundsCount: companyDetailsETH[5],
         isFinancing: companyDetailsETH[6],
         listingDate: timeStampToDate(companyDetailsETH[7]),
-        preMoneyValuation: fromWei(companyDetailsETH[8]),
+        currentValuation: fromWei(companyDetailsETH[8]),
         postMoneyValuation: fromWei(companyDetailsETH[9]),
       };
 
