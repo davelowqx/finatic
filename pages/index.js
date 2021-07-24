@@ -171,7 +171,8 @@ export default function LandingPage() {
           <CompanyCards
             companySummaries={companySummaries}
             viewFinancing={true}
-            max={3}
+            sliceMin={0}
+            sliceMax={3}
           />
         </Grid.Column>
       </Grid.Row>
@@ -198,7 +199,8 @@ export default function LandingPage() {
           <CompanyCards
             companySummaries={companySummaries}
             viewFinancing={false}
-            max={3}
+            sliceMin={0}
+            sliceMax={3}
           />
         </Grid.Column>
       </Grid.Row>

@@ -4,10 +4,6 @@ const AccountContext = React.createContext();
 
 function AccountContextProvider({ children }) {
   const [account, setAccount] = React.useState("");
-  const setAndLogAccount = (acc) => {
-    console.log(acc);
-    setAccount(acc);
-  };
 
   React.useEffect(() => {
     const acc = sessionStorage.getItem("account");
@@ -16,11 +12,10 @@ function AccountContextProvider({ children }) {
 
   React.useEffect(() => {
     sessionStorage.setItem("account", account);
-    console.log("account:", account);
   }, [account]);
 
   return (
-    <AccountContext.Provider value={[account, setAndLogAccount]}>
+    <AccountContext.Provider value={[account, setAccount]}>
       {children}
     </AccountContext.Provider>
   );

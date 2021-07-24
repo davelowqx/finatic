@@ -23,7 +23,7 @@ export default function ManagerForm({ address, isFinancing, manager }) {
     if (isFinancing) {
       try {
         await concludeFundingRound({ address });
-        router.reload();
+        // router.reload();
       } catch (err) {
         console.log(err);
         setStates({ loading: false, errorMessage: err.message });
@@ -52,7 +52,7 @@ export default function ManagerForm({ address, isFinancing, manager }) {
     setStates({ loading: true, errorMessage: "" });
     try {
       await withdraw({ withdrawAmount, address, manager });
-      router.reload();
+      // router.reload();
     } catch (err) {
       console.log(err);
       setStates({ loading: false, errorMessage: err.message });

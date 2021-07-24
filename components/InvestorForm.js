@@ -10,17 +10,14 @@ import {
   Divider,
   Popup,
 } from "semantic-ui-react";
-import { useRouter } from "next/router";
 import { invest } from "./Setters";
 
-export default function InvestorForm({ address, fundingRoundDetails }) {
+export default function InvestorForm({ address, activeFundingRoundDetails }) {
   const [amount, setAmount] = React.useState(0);
   const [states, setStates] = React.useState({
     errorMessage: "",
     loading: false,
   });
-
-  const router = useRouter();
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -36,7 +33,6 @@ export default function InvestorForm({ address, fundingRoundDetails }) {
 
     setStates({ ...states, loading: false });
     setAmount(0);
-    //router.reload();
   };
 
   const {
@@ -44,9 +40,9 @@ export default function InvestorForm({ address, fundingRoundDetails }) {
     targetAmount,
     sharesOffered,
     sharePrice,
-    daysLeft,
+    creationTimestamp,
     investorsCount,
-  } = fundingRoundDetails;
+  } = activeFundingRoundDetails;
 
   const percent = Math.round((100 * currentAmount) / targetAmount);
 
@@ -67,7 +63,7 @@ export default function InvestorForm({ address, fundingRoundDetails }) {
                 <br />
                 <b>{investorsCount}</b> Investors
                 <br />
-                <b>{daysLeft}</b> Days Left
+                <b>{creationTimestamp}</b> Days Left
               </div>
             </div>
             <br />

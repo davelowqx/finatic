@@ -31,7 +31,7 @@ export default function Company({ address }) {
     isFinancing: false,
     listingDate: "",
     currentValuation: "",
-    currentFundingRoundDetails: {},
+    activeFundingRoundDetails: {},
     fundingRoundSummaries: [],
   });
 
@@ -43,16 +43,9 @@ export default function Company({ address }) {
           : "https://fundsme.vercel.app"
       }/api/companies/${address}`
     ).then((res) => res.json());
+    console.log(companyDetails);
     setCompanyDetails({ ...companyDetails, address });
-  }, []);
-
-  const fullwidth = () => {
-    if (!isFinancing && account.toUpperCase() !== manager.toUpperCase()) {
-      return 16;
-    } else {
-      return 10;
-    }
-  };
+  }, []); // refresh data when investing/managing
 
   return (
     <Grid>
@@ -81,7 +74,7 @@ const Details = ({ companyDetails }) => {
       balance,
       manager,
       fundingRoundsCount,
-      listingDate,
+      listingTimestamp,
       currentValuation,
     } = companyDetails;
     setItems([
@@ -118,7 +111,7 @@ const Details = ({ companyDetails }) => {
       },
       {
         key: 7,
-        header: listingDate,
+        header: new Date(listingTimestamp * 1000).toUTCString(),
         meta: "Date Listed",
       },
     ]);

@@ -13,7 +13,7 @@
     "@babel/core": "^7.14.3",
     "@truffle/hdwallet-provider": "1.x",
     "dotenv": "^10.0.0",
-    "firebase": "^8.6.7",
+    "firebase": "^8.8.0",
     "firebase-admin": "^9.9.0",
     "ganache-cli": "^6.12.2",
     "mocha": "^8.4.0",

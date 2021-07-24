@@ -1,12 +1,12 @@
 import React from "react";
 import { Feed } from "semantic-ui-react";
 
-export default function ProfileTransactions({ address }) {
+export default function ProfileTransactions({ account }) {
   return (
-    <Feed.Event
-      icon="clock"
-      date="Today"
-      summary="You posted on your friend Stevie Feliciano's wall."
-    ></Feed.Event>
+    <Card.Group>
+      {/* {checkInvestments(account).then(({ name, symbol, addr, balance }) => (
+        <Card key={addr} fluid header={name} content={balance} meta={symbol} />
+      ))} */}
+    </Card.Group>
   );
 }
