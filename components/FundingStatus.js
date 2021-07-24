@@ -1,44 +1,48 @@
 import React from "react";
 import { Image, Feed } from "semantic-ui-react";
-import InvestForm from "./InvestorForm";
+import InvestorForm from "./InvestorForm";
 import ManagerForm from "./ManagerForm";
 import { AccountContext } from "./context/AccountContext";
 
 export default function FundingStatus({ companyDetails }) {
   const [account, _] = React.useContext(AccountContext);
-  const { isFinancing, address, manager, currentFundingRoundDetails } =
-    companyDetails;
+  const {
+    isFinancing,
+    address,
+    manager,
+    activeFundingRoundDetails,
+    fundingRoundSummaries,
+  } = companyDetails;
 
   return (
     <div>
       {isFinancing && (
         <>
-          <InvestForm
+          <InvestorForm
             address={address}
-            fundingRoundDetails={currentFundingRoundDetails}
+            activeFundingRoundDetails={activeFundingRoundDetails}
           />
-          <br />
           <br />
         </>
       )}
       {account.toUpperCase() === manager.toUpperCase() && (
-        <ManagerForm
-          address={address}
-          manager={manager}
-          isFinancing={isFinancing}
-        />
+        <>
+          <ManagerForm
+            address={address}
+            manager={manager}
+            isFinancing={isFinancing}
+          />
+          <br />
+        </>
       )}
-      {/*
       <div className="companies-container cardborder">
         <h2>Funding History</h2>
-        <FundingHistory fundingRoundSummaries={fundingRoundSummaries}>
-         </div>
-      */}
+        <FundingHistory fundingRoundSummaries={fundingRoundSummaries} />
+      </div>
     </div>
   );
 }
 
-/*
 function FundingHistory({ fundingRoundSummaries }) {
   fundingRoundSummaries = fundingRoundSummaries.filter((x) => x !== null);
   if (fundingRoundSummaries.length > 0) {
@@ -75,4 +79,3 @@ function FundingHistory({ fundingRoundSummaries }) {
     );
   }
 }
-*/

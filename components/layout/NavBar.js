@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Container, Button, Menu, Grid } from "semantic-ui-react";
 import Searchbar from "./Searchbar";
-import ConnectWallet from "../ConnectWallet";
+import ConnectWallet from "./ConnectWallet";
 
 export default function Header() {
   return (
@@ -15,12 +15,7 @@ export default function Header() {
         <Searchbar />
       </Menu.Item>
       <Menu.Item href="/companies/new">List Your Company</Menu.Item>
-      <Menu.Item href="/profile">Profile</Menu.Item>
-      <Menu.Item>
-        <div className="centercontainer">
-          <ConnectWallet />
-        </div>
-      </Menu.Item>
+      <ConnectWallet />
     </Menu>
   );
 }

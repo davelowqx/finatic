@@ -7,7 +7,6 @@ require("firebase/firestore");
 require("dotenv").config();
 
 const toWei = (str) => Web3.utils.toWei(str, "ether");
-
 const randInt = (i) => Math.floor(Math.random() * i);
 
 const { CompanyProducer, Company } = JSON.parse(
@@ -103,11 +102,17 @@ const web3 = new Web3(provider);
     }
 
     const isFinancing = await company.methods.isFinancing().call();
-    const fundingRoundDetails = await company.methods
-      .getFundingRoundDetails()
-      .call();
-    const currentAmount = fundingRoundDetails[0];
-    const targetAmount = fundingRoundDetails[1];
+    let activeFundingRoundDetails = {};
+    if (isFinancing) {
+      activeFundingRoundDetails = await company.methods
+        .getActiveFundingRoundDetails()
+        .call();
+      activeFundingRoundDetails = {
+        currentAmount: parseInt(activeFundingRoundDetails[0]),
+        targetAmount: parseInt(activeFundingRoundDetails[1]),
+        creationTimestamp: parseInt(activeFundingRoundDetails[4]),
+      };
+    }
 
     const companyDetails = {
       companyAddress,
@@ -116,15 +121,14 @@ const web3 = new Web3(provider);
       sharesOutstanding,
       description,
       isFinancing,
-      currentAmount,
-      targetAmount,
-      sharesOffered,
+      activeFundingRoundDetails,
     };
     console.log(companyDetails);
     await db.collection("companies").doc(companyAddress).set(companyDetails);
     i++;
   }
 
+  // write to db instead?????????????
   fs.writeFileSync(
     path.resolve(__dirname, "../address.json"),
     JSON.stringify({

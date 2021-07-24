@@ -1,27 +1,6 @@
 import { Company } from "../../../ethereum/contracts";
 import { db } from "../../../firebase";
-import web3 from "../../../ethereum/web3";
-
-function timeStampToDate(timeStamp) {
-  const MONTH = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const date = new Date(timeStamp * 1e3);
-  return `${MONTH[date.getMonth()]} ${date.getDay()}, ${date.getFullYear()}`;
-}
-
-const fromWei = (str) => web3.utils.fromWei(str, "ether");
+import { fromWei } from "../../../components/utils";
 
 export default async (req, res) => {
   const address = req.query.address;
@@ -41,45 +20,45 @@ export default async (req, res) => {
       const companyDetails = {
         name: companyDetailsETH[0],
         symbol: companyDetailsETH[1],
-        sharesOutstanding: companyDetailsETH[2],
+        sharesOutstanding: parseInt(companyDetailsETH[2]),
         balance: fromWei(companyDetailsETH[3]),
         manager: companyDetailsETH[4],
-        fundingRoundsCount: companyDetailsETH[5],
+        fundingRoundsCount: parseInt(companyDetailsETH[5]),
         isFinancing: companyDetailsETH[6],
-        listingDate: timeStampToDate(companyDetailsETH[7]),
+        listingTimestamp: parseInt(companyDetailsETH[7]),
         currentValuation: fromWei(companyDetailsETH[8]),
         postMoneyValuation: fromWei(companyDetailsETH[9]),
       };
 
-      const currentFundingRoundDetailsETH = await company.methods
-        .getFundingRoundDetails()
-        .call();
+      const { fundingRoundsCount } = companyDetails;
 
-      const currentTime = await web3.eth.getBlock("latest");
+      let activeFundingRoundDetails = {};
+      if (companyDetails.isFinancing) {
+        const activeFundingRoundDetailsETH = await company.methods
+          .getActiveFundingRoundDetails()
+          .call();
 
-      const currentFundingRoundDetails = {
-        currentAmount: fromWei(currentFundingRoundDetailsETH[0]),
-        targetAmount: fromWei(currentFundingRoundDetailsETH[1]),
-        sharesOffered: currentFundingRoundDetailsETH[2],
-        sharePrice: fromWei(currentFundingRoundDetailsETH[3]),
-        daysLeft:
-          (currentFundingRoundDetailsETH[4] + 60 * 86400 - currentTime) / 86400,
-        investorsCount: currentFundingRoundDetailsETH[5],
-      };
+        activeFundingRoundDetails = {
+          currentAmount: fromWei(activeFundingRoundDetailsETH[0]),
+          targetAmount: fromWei(activeFundingRoundDetailsETH[1]),
+          sharesOffered: activeFundingRoundDetailsETH[2],
+          sharePrice: fromWei(activeFundingRoundDetailsETH[3]),
+          creationTimestamp: activeFundingRoundDetailsETH[4],
+          investorsCount: activeFundingRoundDetailsETH[5],
+        };
+      }
 
-      // TODO: get from db instead
-      const fundingRoundSummariesPromises = Array(
-        companyDetails.fundingRoundsCount
-      )
+      const fundingRoundSummariesPromises = Array(fundingRoundsCount)
         .fill()
-        .map(async (_, i) => {
-          company.methods
-            .getFundingRoundSummary(i + 1)
+        .map((_, i) => {
+          return company.methods
+            .getFundingRoundSummary(i)
             .call()
             .then((arr) => {
               return {
                 creationTimestamp: arr[0],
                 valuation: fromWei(arr[1]),
+                success: arr[2],
               };
             });
         });
@@ -90,11 +69,12 @@ export default async (req, res) => {
 
       const data = {
         ...companyDetails,
-        currentFundingRoundDetails,
+        activeFundingRoundDetails,
         fundingRoundSummaries,
         address,
         description,
       };
+      console.log(data);
       res.status(200).json(data);
     } catch (e) {
       res.status(400).json({ error: e.message });

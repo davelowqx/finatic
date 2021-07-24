@@ -1,8 +1,6 @@
 import { companyProducer } from "../../../ethereum/contracts";
 import { db } from "../../../firebase";
-import web3 from "../../../ethereum/web3";
-
-const fromWei = (val) => web3.utils.fromWei(val.toString(), "ether");
+import { fromWei } from "../../../components/utils";
 
 /**
  * retrieved from database
@@ -23,21 +21,20 @@ export default async (req, res) => {
           .then((doc) => {
             const {
               description,
-              sharesOffered,
-              sharesOutstanding,
               name,
               isFinancing,
-              targetAmount = 0,
-              currentAmount = 0,
+              activeFundingRoundDetails,
             } = doc.data();
+            const { currentAmount, targetAmount, creationTimestamp } =
+              activeFundingRoundDetails;
             return {
               name,
               address,
               description,
-              currentAmount: fromWei(currentAmount),
-              targetAmount: fromWei(targetAmount),
-              valuation:
-                (fromWei(targetAmount) / sharesOffered) * sharesOutstanding,
+              activeFundingRoundDetails: {
+                targetAmount: !!targetAmount ? fromWei(targetAmount) : 0,
+                creationTimestamp,
+              },
               isFinancing,
               progress: Math.round((100 * currentAmount) / targetAmount),
             };

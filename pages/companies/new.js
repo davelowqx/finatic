@@ -2,6 +2,7 @@ import React from "react";
 import {
   Image,
   Header,
+  Input,
   TextArea,
   Form,
   Button,
@@ -21,12 +22,14 @@ export default function CompanyNew() {
     sharesOutstanding: "",
   });
 
+  const [image, setImage] = React.useState({});
+
   const [states, setStates] = React.useState({
     errorMessage: "",
     loading: false,
   });
 
-  const handleUpload = () => {};
+  const handleFileSelect = (event) => {};
 
   const router = useRouter();
   const handleSubmit = async (event) => {
@@ -36,6 +39,20 @@ export default function CompanyNew() {
       companyProducer.once("ListCompany", async (err, res) => {
         if (!err) {
           const address = res.returnValues.addr;
+          // upload image to db
+          await fetch(
+            `${
+              process.env.NODE_ENV === "development"
+                ? "http://localhost:3000"
+                : "https://fundsme.vercel.app"
+            }/api/companies/upload`,
+            {
+              headers: { "Content-Type": "application/json" },
+              method: "POST",
+              body: image,
+            }
+          );
+          // append image link to firestroe
           await fetch(
             `${
               process.env.NODE_ENV === "development"
@@ -134,34 +151,30 @@ export default function CompanyNew() {
                   error={fields.sharesOutstanding > 1000000000000} //<1T
                 />
                 <br />
-                <Button
-                  label="Upload Image"
-                  icon="upload"
-                  onClick={handleUpload}
+                <Form.Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => {
+                    const file = event.target.files[0];
+                    if (file.size < 1000000) {
+                      setImage(file);
+                      console.log(event.target.files[0]);
+                    }
+                  }}
                 />
                 <br />
-                <br />
-                <br />
-                <Form.Field>
-                  <Checkbox label="I agree to the Terms and Conditions" />
-                </Form.Field>
-                <br />
-                <div className="login-button-container">
-                  <div className="login-button-container">
-                    <Button
-                      size="big"
-                      fluid
-                      color="blue"
-                      href="/signup"
-                      loading={states.loading}
-                      primary
-                      onClick={handleSubmit}
-                    >
-                      {" "}
-                      List
-                    </Button>
-                  </div>
-                </div>
+                <Button
+                  size="big"
+                  fluid
+                  color="blue"
+                  href="/signup"
+                  loading={states.loading}
+                  primary
+                  onClick={handleSubmit}
+                >
+                  {" "}
+                  List
+                </Button>
                 <Message error header="Error!" content={states.errorMessage} />
               </Form>
             </Grid.Column>
