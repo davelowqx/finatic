@@ -62,8 +62,8 @@ export default function CompanyCards({
                   {isFinancing && (
                     <Card.Meta>
                       <Header>
-                        {activeFundingRoundDetails.targetAmount} ETH
-                      </Header>{" "}
+                        {activeFundingRoundDetails.targetAmount} ETH raised
+                      </Header>
                       {progress}% funded
                     </Card.Meta>
                   )}

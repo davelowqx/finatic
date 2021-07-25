@@ -95,7 +95,9 @@ export default function ConnectWallet() {
         href={!!account ? "/profile" : ""}
         disabled={loading}
       >
-        {!account ? "CONNECT WALLET" : truncateAddress(account)}
+        <b style={{ color: "blue" }}>
+          {!account ? "CONNECT WALLET" : truncateAddress(account)}
+        </b>
       </Menu.Item>
     </>
   );

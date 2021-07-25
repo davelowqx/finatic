@@ -1,5 +1,5 @@
 import React from "react";
-import { Feed, Header, Grid } from "semantic-ui-react";
+import { Header, Grid } from "semantic-ui-react";
 import { AccountContext } from "../components/context/AccountContext";
 import { truncateAddress } from "../components/utils";
 import ProfileTransactions from "../components/ProfileTransactions";
@@ -31,9 +31,7 @@ export default function profile() {
               <div className="cardborder container14">
                 <Header as="h3">Latest Transactions</Header>
                 <br />
-                <Feed>
-                  <ProfileTransactions address={account} />
-                </Feed>
+                <ProfileTransactions address={account} />
               </div>
             </Grid.Column>
           </Grid.Row>
