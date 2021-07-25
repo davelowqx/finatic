@@ -33,6 +33,7 @@ export default async (req, res) => {
               description,
               activeFundingRoundDetails: {
                 targetAmount: !!targetAmount ? fromWei(targetAmount) : 0,
+                currentAmount: !!currentAmount ? fromWei(currentAmount) : 0,
                 creationTimestamp,
               },
               isFinancing,

@@ -1,13 +1,19 @@
 import React from "react";
 import { Divider, Form, Input, Message, Button } from "semantic-ui-react";
 import { useRouter } from "next/router";
-import { concludeFundingRound, createFundingRound, withdraw } from "./Setters";
+import {
+  concludeFundingRound,
+  createFundingRound,
+  withdraw,
+  payoutDividends,
+} from "./Setters";
 
 export default function ManagerForm({ address, isFinancing, manager }) {
   const [fields, setFields] = React.useState({
     targetAmount: "",
     sharesOffered: "",
     withdrawAmount: "",
+    dividendAmount: "",
   });
 
   const [states, setStates] = React.useState({
@@ -58,6 +64,22 @@ export default function ManagerForm({ address, isFinancing, manager }) {
       setStates({ loading: false, errorMessage: err.message });
     } finally {
       setFields({ ...fields, withdrawAmount: "" });
+    }
+  };
+
+  const handleDividends = async (event) => {
+    const dividendAmount = fields.dividendAmount;
+
+    event.preventDefault();
+    setStates({ loading: true, errorMessage: "" });
+    try {
+      await payoutDividends({ dividendAmount, address });
+      // router.reload();
+    } catch (err) {
+      console.log(err);
+      setStates({ loading: false, errorMessage: err.message });
+    } finally {
+      setFields({ ...fields, dividendAmount: "" });
     }
   };
 
@@ -142,6 +164,39 @@ export default function ManagerForm({ address, isFinancing, manager }) {
             disabled={states.loading}
             onClick={handleWithdraw}
             content="WITHDRAW"
+          />
+          <br />
+          <Divider />
+          <br />
+          <Form error={!!fields.errorMessage}>
+            <Form.Field>
+              <label>Payout Dividends (per shareholder)</label>
+              <Input
+                type="number"
+                step={0.1}
+                min={0}
+                value={fields.dividendAmount}
+                onInput={(event) => {}}
+                onChange={(event) =>
+                  setFields({
+                    ...fields,
+                    dividendAmount: event.target.value,
+                  })
+                }
+                label="ETH"
+                labelPosition="right"
+              />
+            </Form.Field>
+            <Message error header="Oops!" content={fields.errorMessage} />
+          </Form>
+          <br />
+          <Button
+            fluid
+            color="red"
+            loading={states.loading}
+            disabled={states.loading}
+            onClick={handleDividends}
+            content="PAYOUT DIVIDENDS"
           />
         </>
       )}

@@ -81,7 +81,16 @@ export default function InvestorForm({
                 <b>{sharesOffered}</b> Shares
               </div>
               <div className="container33">
-                <b>{investorsCount}</b> Investors
+                {investorsCount === "1" && (
+                  <div>
+                    <b>{investorsCount}</b> Investor
+                  </div>
+                )}
+                {investorsCount != "1" && (
+                  <div>
+                    <b>{investorsCount}</b> Investors
+                  </div>
+                )}
               </div>
               <div className="container33">
                 <b>{days}</b> Days Left

@@ -229,8 +229,8 @@ a.company-card {
   height: 100%;
 }
 
-.companies-container > h2 {
-  margin-bottom: 20px;
+.fundinground {
+  margin-top: 20px;
 }
 
 .companies-funding-history-event {
@@ -244,6 +244,7 @@ a.company-card {
   width: 70px;
   margin-top: auto;
   margin-bottom: auto;
+  margin-left: 5px;
 }
 
 .companies-funding-history-details {
@@ -253,8 +254,7 @@ a.company-card {
   font-weight: 700;
   font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
   line-height: 1.5em;
-  margin-left: 15px;
-  margin: auto;
+  margin-left: 25px;
 }
 
 .companies-manager-button {

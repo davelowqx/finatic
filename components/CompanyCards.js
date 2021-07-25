@@ -27,8 +27,7 @@ export default function CompanyCards({
             progress,
             description,
           }) => {
-            const { creationTimestamp } = activeFundingRoundDetails;
-            const days = daysLeft(creationTimestamp);
+            const days = daysLeft(activeFundingRoundDetails.creationTimestamp);
             return (
               <Card
                 className="company-card"
@@ -60,6 +59,7 @@ export default function CompanyCards({
                   {isFinancing && (
                     <Card.Meta>
                       <Header>
+                        {activeFundingRoundDetails.currentAmount} {" of "}
                         {activeFundingRoundDetails.targetAmount} ETH raised
                       </Header>
                       {progress}% funded

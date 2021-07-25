@@ -45,7 +45,7 @@ export default function Company({ address }) {
           : "https://fundsme.vercel.app"
       }/api/companies/${address}`
     ).then((res) => res.json());
-    console.log(companyDetails);
+    // console.log(companyDetails);
     setCompanyDetails({ ...companyDetails, address });
   }, []); // refresh data when investing/managing
 

@@ -79,6 +79,13 @@ export async function withdraw({ withdrawAmount, address }) {
   });
 }
 
+export async function payoutDividends({ dividendAmount, address }) {
+  const company = Company(address);
+  await company.methods.payoutDividends(toWei(dividendAmount)).send({
+    from: await getActiveAccount(),
+  });
+}
+
 export async function listCompany(
   { name, symbol, sharesOutstanding, description },
   func
