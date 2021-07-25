@@ -83,10 +83,158 @@ export default function LandingPage() {
       </Grid.Row>
       <Divider />
       <Grid.Row>
-        <Grid.Column>
-          <Description />
+        <Description />
+        <br />
+      </Grid.Row>
+      <Divider />
+      <Grid.Row>
+        <Statistics />
+        <br />
+        <br />
+      </Grid.Row>
+      <Divider />
+      <Grid.Row>
+        <Grid.Column width={10}>
+          <Header
+            as="h1"
+            content="Invest Now"
+            style={{
+              fontSize: "3em",
+              fontWeight: "bold",
+              marginTop: "10px",
+            }}
+          />
+        </Grid.Column>
+        <Grid.Column width={6}>
+          <div>
+            <Button
+              href="/explore"
+              floated="right"
+              content="SEE THEM"
+              color="green"
+              labelPosition="right"
+              icon="right arrow"
+              style={{
+                marginTop: "20px",
+              }}
+            />
+          </div>
         </Grid.Column>
       </Grid.Row>
+      <Grid.Row>
+        <Grid.Column>
+          <CompanyCards
+            companySummaries={companySummaries}
+            viewFinancing={true}
+            sliceMin={0}
+            sliceMax={3}
+          />
+          <br />
+          <br />
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column width={10}>
+          <Header
+            as="h1"
+            content="Funded"
+            style={{
+              fontSize: "3em",
+              fontWeight: "bold",
+            }}
+          />
+        </Grid.Column>
+        <Grid.Column width={6}></Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column width={16}>
+          <CompanyCards
+            companySummaries={companySummaries}
+            viewFinancing={false}
+            sliceMin={0}
+            sliceMax={3}
+          />
+          <br />
+          <br />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  );
+}
+
+const Description = () => {
+  const text = [
+    {
+      title: `Build the future`,
+      desc: `Your dollars go to the company to help create jobs,
+        build products, and grow companies.`,
+    },
+    {
+      title: `It's much riskier`,
+      desc: `Never invest more than you can afford to lose. 
+      Startups are hard. Even the best founders fail.`,
+    },
+    {
+      title: `Win big or lose all`,
+      desc: `Startups win big or go bankrupt. Consider
+            investing in them more like socially-good lottery tickets.`,
+    },
+    {
+      title: `Hold for the long term`,
+      desc: `When it works, it takes a long time to 
+      earn a return. Expect to hold for years.`,
+    },
+
+    {
+      title: `There are often perks `,
+      desc: `Investors often get perks like VIP access to new products or discounts.
+      You can help`,
+    },
+    {
+      title: `You can offer more than money.`,
+      desc: `The best angel investors help the companies they invest in succeed.`,
+    },
+  ];
+
+  return (
+    <Grid centered>
+      <br />
+      <Header as="h1" content="fundSME is a new kind of stock market" />
+      <Header
+        as="h3"
+        content="Unlike the NASDAQ, we’re meant for startups and small businesses.
+            What’s the difference? "
+      />
+      <Grid.Row>
+        {text.slice(0, 3).map((obj) => (
+          <Grid.Column width={5}>
+            <Header textAlign="center" as="h4" content={obj.title} />
+            <div>{obj.desc}</div>
+          </Grid.Column>
+        ))}
+      </Grid.Row>
+      {/* <Grid.Row>
+        {text.slice(3, 6).map((obj, i) => (
+          <Grid.Column width={5} key={i}>
+            <Header textAlign="center" as="h4" content={obj.title} />
+            <div>{obj.desc}</div>
+          </Grid.Column>
+        ))}
+      </Grid.Row> */}
+      <Grid.Row>
+        <div style={{ marginTop: "20px", marginBottom: "20px" }}>
+          <Button size="large" href="/about" content="HOW IT WORKS" />
+        </div>
+      </Grid.Row>
+    </Grid>
+  );
+};
+
+const Statistics = () => {
+  return (
+    <Grid centered>
+      <br />
+      <Header as="h1" content="Check out our platform statistics" />
       <Grid.Row>
         <Grid.Column width={4}>
           <Card className="eq-card">
@@ -139,148 +287,6 @@ export default function LandingPage() {
             </div>
           </div>
         </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <br />
-        <br />
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column width={10}>
-          <Header
-            as="h1"
-            content="Invest Now"
-            style={{
-              fontSize: "3em",
-              fontWeight: "bold",
-            }}
-          />
-        </Grid.Column>
-        <Grid.Column width={6}>
-          <Button
-            href="/explore"
-            floated="right"
-            content="SEE THEM"
-            color="green"
-            labelPosition="right"
-            icon="right arrow"
-          />
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column>
-          <CompanyCards
-            companySummaries={companySummaries}
-            viewFinancing={true}
-            sliceMin={0}
-            sliceMax={3}
-          />
-        </Grid.Column>
-      </Grid.Row>
-      <Grid.Row>
-        <br />
-        <br />
-      </Grid.Row>
-      <Grid.Row>
-        <Grid.Column width={10}>
-          <Header
-            as="h1"
-            content="Funded"
-            style={{
-              fontSize: "3em",
-              fontWeight: "bold",
-            }}
-          />
-        </Grid.Column>
-        <Grid.Column width={6}></Grid.Column>
-      </Grid.Row>
-
-      <Grid.Row>
-        <Grid.Column width={16}>
-          <CompanyCards
-            companySummaries={companySummaries}
-            viewFinancing={false}
-            sliceMin={0}
-            sliceMax={3}
-          />
-        </Grid.Column>
-      </Grid.Row>
-
-      <Grid.Row>
-        <br />
-        <br />
-      </Grid.Row>
-      <Grid.Row>
-        <br />
-        <br />
-      </Grid.Row>
-    </Grid>
-  );
-}
-
-const Description = () => {
-  const text = [
-    {
-      title: `It's much riskier`,
-      desc: `Never invest more than you can afford to lose. 
-      Startups are hard. Even the best founders fail.`,
-    },
-    {
-      title: `Win big or lose all`,
-      desc: `Startups win big or go bankrupt. Consider
-            investing in them more like socially-good lottery tickets.`,
-    },
-    {
-      title: `Hold for the long term`,
-      desc: `When it works, it takes a long time to 
-      earn a return. Expect to hold for years.`,
-    },
-    {
-      title: `Build the future`,
-      desc: `Your dollars go to the company to help create jobs,
-        build products, and grow companies.`,
-    },
-    {
-      title: `There are often perks `,
-      desc: `Investors often get perks like VIP access to new products or discounts.
-      You can help`,
-    },
-    {
-      title: `You can offer more than money.`,
-      desc: `The best angel investors help the companies they invest in succeed.`,
-    },
-  ];
-
-  return (
-    <Grid centered>
-      <br />
-      <Header as="h1" content="fundSME is a new kind of stock market" />
-      <Header
-        as="h3"
-        content="Unlike the NASDAQ, we’re meant for startups and small businesses.
-            What’s the difference? "
-      />
-      <Grid.Row>
-        {text.slice(0, 3).map((obj) => (
-          <Grid.Column width={5}>
-            <Header textAlign="center" as="h4" content={obj.title} />
-            <div>{obj.desc}</div>
-          </Grid.Column>
-        ))}
-      </Grid.Row>
-      <Grid.Row>
-        {text.slice(3, 6).map((obj, i) => (
-          <Grid.Column width={5} key={i}>
-            <Header textAlign="center" as="h4" content={obj.title} />
-            <div>{obj.desc}</div>
-          </Grid.Column>
-        ))}
-      </Grid.Row>
-      <Grid.Row>
-        <br />
-      </Grid.Row>
-      <Button href="/about" content="HOW IT WORKS" />
-      <Grid.Row>
-        <br />
       </Grid.Row>
     </Grid>
   );

@@ -2,6 +2,11 @@ a.company-card {
   transition: none;
 }
 
+.container10 {
+  overflow: auto;
+  vertical-align: middle;
+}
+
 .container11 {
   display: block;
   align-items: center;
@@ -34,6 +39,15 @@ a.company-card {
   float: left;
 }
 
+.container33 {
+  display: block;
+  width: 33.33%;
+  float: left;
+  text-align: center;
+  border-style: outset;
+  padding: 5px;
+}
+
 .container50 {
   width: 50%;
   height: 100%;
@@ -44,12 +58,33 @@ a.company-card {
   width: 50%;
   float: left;
   display: block;
+  text-align: center;
+  border-style: outset;
+  padding: 5px;
 }
 
 .container100 {
   width: 100%;
   overflow: auto;
   display: block;
+}
+
+.container-investorform-1 {
+  width: 40%;
+  float: left;
+  display: block;
+  text-align: center;
+  border-style: outset;
+  padding: 5px;
+}
+
+.container-investorform-2 {
+  width: 60%;
+  float: left;
+  display: block;
+  text-align: center;
+  border-style: outset;
+  padding: 5px;
 }
 
 .centercontainer {
@@ -194,20 +229,32 @@ a.company-card {
   height: 100%;
 }
 
+.companies-container > h2 {
+  margin-bottom: 20px;
+}
+
+.companies-funding-history-event {
+  display: flex;
+  height: auto;
+  overflow: auto;
+}
+
 .companies-funding-history-logo {
-  display: inline-block;
-  width: 40px;
-  height: 40px;
+  display: block;
+  width: 70px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .companies-funding-history-details {
-  display: inline-block;
+  display: block;
   width: auto;
   font-size: large;
   font-weight: 700;
   font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
   line-height: 1.5em;
   margin-left: 15px;
+  margin: auto;
 }
 
 .companies-manager-button {
@@ -219,6 +266,10 @@ a.company-card {
 
 .companycard {
   flex-grow: 0;
+}
+
+.fundinground {
+  padding: 3%;
 }
 
 /* -webkit-text-size-adjust: 100%;

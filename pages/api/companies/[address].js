@@ -74,7 +74,7 @@ export default async (req, res) => {
         address,
         description,
       };
-      console.log(data);
+      // console.log(data);
       res.status(200).json(data);
     } catch (e) {
       res.status(400).json({ error: e.message });

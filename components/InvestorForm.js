@@ -11,8 +11,14 @@ import {
   Popup,
 } from "semantic-ui-react";
 import { invest } from "./Setters";
+import { daysLeft } from "../components/utils";
 
-export default function InvestorForm({ address, activeFundingRoundDetails }) {
+export default function InvestorForm({
+  address,
+  currentValuation,
+  postMoneyValuation,
+  activeFundingRoundDetails,
+}) {
   const [amount, setAmount] = React.useState(0);
   const [states, setStates] = React.useState({
     errorMessage: "",
@@ -46,6 +52,8 @@ export default function InvestorForm({ address, activeFundingRoundDetails }) {
 
   const percent = Math.round((100 * currentAmount) / targetAmount);
 
+  const days = daysLeft(creationTimestamp);
+
   return (
     <div className="companies-container cardborder">
       <Grid>
@@ -55,15 +63,28 @@ export default function InvestorForm({ address, activeFundingRoundDetails }) {
             <Header as="h3">Investment Details</Header>
             <br />
             <div className="container100">
-              <div className="container50-2">
+              <div
+                className="container-investorform-1"
+                style={{ paddingTop: "11px", paddingBottom: "11px" }}
+              >
                 <h3>{currentAmount} ETH</h3> of {targetAmount} ETH goal
               </div>
-              <div className="container50-2">
-                <b>{sharesOffered}</b> Shares Offerred
-                <br />
+              <div className="container-investorform-2">
+                Current Valuation: <b>{currentValuation} ETH</b>
+              </div>
+              <div className="container-investorform-2">
+                Post Valuation: <b>{postMoneyValuation} ETH</b>
+              </div>
+            </div>
+            <div className="container100">
+              <div className="container33">
+                <b>{sharesOffered}</b> Shares
+              </div>
+              <div className="container33">
                 <b>{investorsCount}</b> Investors
-                <br />
-                <b>{creationTimestamp}</b> Days Left
+              </div>
+              <div className="container33">
+                <b>{days}</b> Days Left
               </div>
             </div>
             <br />

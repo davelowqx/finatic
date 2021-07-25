@@ -13,6 +13,7 @@ import {
 import FundingStatus from "../../components/FundingStatus";
 import { truncateAddress } from "../../components/utils";
 import { AccountContext } from "../../components/context/AccountContext";
+import { timeConverter } from "../../components/utils";
 
 export async function getServerSideProps(context) {
   return { props: { address: context.params.address } };
@@ -20,19 +21,20 @@ export async function getServerSideProps(context) {
 
 export default function Company({ address }) {
   const [companyDetails, setCompanyDetails] = React.useState({
-    address,
     name: "",
     symbol: "",
     sharesOutstanding: 0,
-    description: "",
     balance: 0,
     manager: "",
     fundingRoundsCount: 0,
     isFinancing: false,
-    listingDate: "",
+    listingTimestamp: "",
     currentValuation: "",
+    postMoneyValuation: "",
     activeFundingRoundDetails: {},
     fundingRoundSummaries: [],
+    description: "",
+    address,
   });
 
   React.useEffect(async () => {
@@ -67,6 +69,7 @@ export default function Company({ address }) {
 
 const Details = ({ companyDetails }) => {
   const [items, setItems] = React.useState([]);
+
   React.useEffect(() => {
     const {
       address,
@@ -111,7 +114,7 @@ const Details = ({ companyDetails }) => {
       },
       {
         key: 7,
-        header: new Date(listingTimestamp * 1000).toUTCString(),
+        header: timeConverter(new Date(listingTimestamp)),
         meta: "Date Listed",
       },
     ]);

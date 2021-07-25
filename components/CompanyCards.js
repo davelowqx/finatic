@@ -1,6 +1,7 @@
 import React from "react";
 import { Header, Button, Card, Item } from "semantic-ui-react";
 import { createFundingRound } from "./Setters";
+import { daysLeft } from "../components/utils";
 
 export default function CompanyCards({
   companySummaries = [],
@@ -27,10 +28,7 @@ export default function CompanyCards({
             description,
           }) => {
             const { creationTimestamp } = activeFundingRoundDetails;
-            const daysLeft = parseInt(
-              (creationTimestamp + 60 * 24 * 60 * 60 - Date.now() / 1000) /
-                (24 * 60 * 60)
-            );
+            const days = daysLeft(creationTimestamp);
             return (
               <Card
                 className="company-card"
@@ -49,7 +47,7 @@ export default function CompanyCards({
                 >
                   {isFinancing && (
                     <Button size="mini" color="green" floated="right">
-                      {daysLeft} Days Left
+                      {days} Days Left
                     </Button>
                   )}
                 </Card.Content>

@@ -3,6 +3,7 @@ import { Image, Feed } from "semantic-ui-react";
 import InvestorForm from "./InvestorForm";
 import ManagerForm from "./ManagerForm";
 import { AccountContext } from "./context/AccountContext";
+import { timeConverter } from "../components/utils";
 
 export default function FundingStatus({ companyDetails }) {
   const [account, _] = React.useContext(AccountContext);
@@ -10,6 +11,8 @@ export default function FundingStatus({ companyDetails }) {
     isFinancing,
     address,
     manager,
+    currentValuation,
+    postMoneyValuation,
     activeFundingRoundDetails,
     fundingRoundSummaries,
   } = companyDetails;
@@ -20,6 +23,8 @@ export default function FundingStatus({ companyDetails }) {
         <>
           <InvestorForm
             address={address}
+            currentValuation={currentValuation}
+            postMoneyValuation={postMoneyValuation}
             activeFundingRoundDetails={activeFundingRoundDetails}
           />
           <br />
@@ -45,14 +50,15 @@ export default function FundingStatus({ companyDetails }) {
 
 function FundingHistory({ fundingRoundSummaries }) {
   fundingRoundSummaries = fundingRoundSummaries.filter((x) => x !== null);
+
   if (fundingRoundSummaries.length > 0) {
     return (
       <Feed>
         {fundingRoundSummaries
           .reverse()
-          .map(({ creationTimestamp, valuation }, index) => (
-            <div key={index}>
-              <Feed.Event>
+          .map(({ success, creationTimestamp, valuation }, index) => (
+            <div className="cardborder fundinground" key={index}>
+              <Feed.Event className="companies-funding-history-event">
                 <Feed.Label className="companies-funding-history-logo">
                   <Image
                     src="/static/logo.svg"
@@ -61,8 +67,9 @@ function FundingHistory({ fundingRoundSummaries }) {
                 </Feed.Label>
                 <Feed.Content
                   className="companies-funding-history-details"
-                  date={`Date: ${creationTimestamp} UNIX`}
+                  date={`Date: ${timeConverter(creationTimestamp)}`}
                   summary={`Valuation: ${valuation} ETH`}
+                  content={`Success: ${success}`}
                 />
               </Feed.Event>
             </div>
@@ -72,9 +79,15 @@ function FundingHistory({ fundingRoundSummaries }) {
   } else {
     return (
       <Feed>
-        <Feed.Event>
-          <Feed.Label>No Funding History</Feed.Label>
-        </Feed.Event>
+        <div className="cardborder fundinground">
+          <Feed.Event className="companies-funding-history-event">
+            <Feed.Content
+              className="companies-funding-history-details"
+              content="No Data"
+              style={{ marginTop: "10px", marginBottom: "10px" }}
+            />
+          </Feed.Event>
+        </div>
       </Feed>
     );
   }
