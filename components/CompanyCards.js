@@ -20,19 +20,21 @@ export default function CompanyCards({
         .slice(sliceMin, sliceMax)
         .map(
           ({
-            address,
+            companyAddress,
             name,
-            activeFundingRoundDetails,
-            isFinancing,
-            progress,
+            symbol,
             description,
+            imageUrl,
+            isFinancing,
+            activeFundingRoundDetails,
+            progress,
           }) => {
             const days = daysLeft(activeFundingRoundDetails.creationTimestamp);
             return (
               <Card
                 className="company-card"
-                key={address}
-                href={`/companies/${address}`}
+                key={companyAddress}
+                href={`/companies/${companyAddress}`}
                 fluid
                 color={isFinancing ? "green" : "red"}
               >
@@ -40,7 +42,7 @@ export default function CompanyCards({
                 <Card.Content
                   style={{
                     height: "200px",
-                    backgroundImage: `url(https://cdn.pixabay.com/photo/2017/05/13/15/18/dear-2309801_1280.jpg)`,
+                    backgroundImage: imageUrl,
                     backgroundSize: "cover",
                   }}
                 >

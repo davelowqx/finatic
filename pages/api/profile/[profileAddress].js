@@ -5,8 +5,7 @@ import { fromWei } from "../../../components/utils";
 import { AccountContext } from "../../../components/context/AccountContext";
 
 export default async (req, res) => {
-  const profileAddress = "0xb273bFAc12ef7D4021c12dF8deB9d825A19e6Aa1";
-  // const profileAddress = req.query;
+  const profileAddress = req.query.profileAddress;
 
   if (req.method === "GET") {
     try {
@@ -17,8 +16,10 @@ export default async (req, res) => {
       const investmentPromises = companyAddresses.map(
         async (companyAddress) => {
           const company = Company(companyAddress);
-          const amount = await company.methods.balanceOf(profileAddress).call();
-          const fbinfo = await db
+          const numberOfShares = await company.methods
+            .balanceOf(profileAddress)
+            .call();
+          const companySummary = await db
             .collection("companies")
             .doc(companyAddress)
             .get()
@@ -31,10 +32,9 @@ export default async (req, res) => {
             });
 
           return {
-            companyAddress: companyAddress,
-            companyName: fbinfo.name,
-            companySymbol: fbinfo.symbol,
-            companyHolding: fromWei(amount),
+            companyAddress,
+            ...companySummary,
+            numberOfShares,
           };
         }
       );

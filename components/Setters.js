@@ -6,8 +6,8 @@ const toWei = (str) => web3.utils.toWei(str, "ether");
 
 const getActiveAccount = async () => (await web3.eth.getAccounts())[0];
 
-export async function invest({ address, amount }) {
-  const company = Company(address);
+export async function invest({ companyAddress, amount }) {
+  const company = Company(companyAddress);
   await company.methods.invest().send({
     from: await getActiveAccount(),
     value: toWei(amount),
@@ -15,7 +15,7 @@ export async function invest({ address, amount }) {
 
   await db
     .collection("companies")
-    .doc(address)
+    .doc(companyAddress)
     .collection("activeFundingRoundDetails")
     .update({
       currentAmount: firebase.firestore.FieldValue.increment(amount),
@@ -23,18 +23,18 @@ export async function invest({ address, amount }) {
 }
 
 export async function createFundingRound({
-  address,
+  companyAddress,
   targetAmount,
   sharesOffered,
 }) {
-  const company = Company(address);
+  const company = Company(companyAddress);
   await company.methods
     .createFundingRound(toWei(targetAmount), sharesOffered)
     .send({
       from: await getActiveAccount(),
     });
 
-  await db.collection("companies").doc(address).set(
+  await db.collection("companies").doc(companyAddress).set(
     {
       isFinancing: true,
     },
@@ -43,7 +43,7 @@ export async function createFundingRound({
 
   await db
     .collection("companies")
-    .doc(address)
+    .doc(companyAddress)
     .collection("activeFundingRoundDetails")
     .set(
       {
@@ -55,32 +55,28 @@ export async function createFundingRound({
     );
 }
 
-export async function concludeFundingRound({ address }) {
-  const company = Company(address);
+export async function concludeFundingRound({ companyAddress }) {
+  const company = Company(companyAddress);
   await company.methods.concludeFundingRound().send({
     from: await getActiveAccount(),
   });
-  await db
-    .collection("companies")
-    .doc(address)
-    .collection("activeFundingRoundDetails")
-    .set(
-      {
-        activeFundingRoundDetails: {},
-      },
-      { merge: true }
-    );
+  await db.collection("companies").doc(companyAddress).set(
+    {
+      activeFundingRoundDetails: {},
+    },
+    { merge: true }
+  );
 }
 
-export async function withdraw({ withdrawAmount, address }) {
-  const company = Company(address);
+export async function withdraw({ withdrawAmount, companyAddress }) {
+  const company = Company(companyAddress);
   await company.methods.withdraw(toWei(withdrawAmount)).send({
     from: await getActiveAccount(),
   });
 }
 
-export async function payoutDividends({ dividendAmount, address }) {
-  const company = Company(address);
+export async function payoutDividends({ dividendAmount, companyAddress }) {
+  const company = Company(companyAddress);
   await company.methods.payoutDividends(toWei(dividendAmount)).send({
     from: await getActiveAccount(),
   });
@@ -92,7 +88,7 @@ export async function listCompany(
 ) {
   companyProducer.once("ListCompany", async (err, res) => {
     if (!err) {
-      const companyAddress = res.returnValues.addr;
+      const companyAddress = res.returnValues.companyAddress;
       await db.collection("companies").doc(companyAddress).set({
         companyAddress,
         name,
@@ -102,8 +98,8 @@ export async function listCompany(
         isFinancing: false,
         activeFundingRoundDetails: {},
       });
-      console.log(address);
-      func(address);
+      console.log(companyAddress);
+      func(companyAddress);
     } else {
       console.log(err);
     }

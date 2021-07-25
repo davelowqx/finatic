@@ -4,17 +4,16 @@ import fs from "fs";
 export default async (req, res) => {
   if (req.method === "POST") {
     try {
-      const { address, name, symbol, sharesOutstanding, description } =
-        req.body;
+      const { companyAddress, name, symbol, description, imageUrl } = req.body;
 
-      await db.collection("companies").doc(address).set({
-        address,
+      await db.collection("companies").doc(companyAddress).set({
+        companyAddress,
         name,
         symbol,
-        sharesOutstanding,
         description,
+        imageUrl,
         isFinancing: false,
-        fundingRounds: [],
+        activeFundingRoundDetails: {},
       });
       res.status(200).json({ message: "yay" });
     } catch (err) {

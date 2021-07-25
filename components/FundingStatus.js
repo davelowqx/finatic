@@ -9,8 +9,8 @@ export default function FundingStatus({ companyDetails }) {
   const [account, _] = React.useContext(AccountContext);
   const {
     isFinancing,
-    address,
-    manager,
+    companyAddress,
+    managerAddress,
     currentValuation,
     postMoneyValuation,
     activeFundingRoundDetails,
@@ -22,7 +22,7 @@ export default function FundingStatus({ companyDetails }) {
       {isFinancing && (
         <>
           <InvestorForm
-            address={address}
+            companyAddress={companyAddress}
             currentValuation={currentValuation}
             postMoneyValuation={postMoneyValuation}
             activeFundingRoundDetails={activeFundingRoundDetails}
@@ -30,11 +30,11 @@ export default function FundingStatus({ companyDetails }) {
           <br />
         </>
       )}
-      {account.toUpperCase() === manager.toUpperCase() && (
+      {account.toUpperCase() === managerAddress.toUpperCase() && (
         <>
           <ManagerForm
-            address={address}
-            manager={manager}
+            companyAddress={companyAddress}
+            managerAddress={managerAddress}
             isFinancing={isFinancing}
           />
           <br />
@@ -56,7 +56,7 @@ function FundingHistory({ fundingRoundSummaries }) {
       <Feed>
         {fundingRoundSummaries
           .reverse()
-          .map(({ success, creationTimestamp, valuation }, index) => (
+          .map(({ status, creationTimestamp, valuation }, index) => (
             <div className="cardborder fundinground" key={index}>
               <Feed.Event className="companies-funding-history-event">
                 <Feed.Label className="companies-funding-history-logo">
@@ -69,7 +69,7 @@ function FundingHistory({ fundingRoundSummaries }) {
                   className="companies-funding-history-details"
                   date={`Date: ${timeConverter(creationTimestamp)}`}
                   summary={`Valuation: ${valuation} ETH`}
-                  content={`Success: ${success}`}
+                  content={`Success: ${status}`}
                 />
               </Feed.Event>
             </div>

@@ -16,16 +16,16 @@ import { AccountContext } from "../../components/context/AccountContext";
 import { timeConverter } from "../../components/utils";
 
 export async function getServerSideProps(context) {
-  return { props: { address: context.params.address } };
+  return { props: { companyAddress: context.params.companyAddress } };
 }
 
-export default function Company({ address }) {
+export default function Company({ companyAddress }) {
   const [companyDetails, setCompanyDetails] = React.useState({
     name: "",
     symbol: "",
     sharesOutstanding: 0,
     balance: 0,
-    manager: "",
+    managerAddress: "",
     fundingRoundsCount: 0,
     isFinancing: false,
     listingTimestamp: "",
@@ -34,7 +34,7 @@ export default function Company({ address }) {
     activeFundingRoundDetails: {},
     fundingRoundSummaries: [],
     description: "",
-    address,
+    companyAddress,
   });
 
   React.useEffect(async () => {
@@ -43,10 +43,10 @@ export default function Company({ address }) {
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
           : "https://fundsme.vercel.app"
-      }/api/companies/${address}`
+      }/api/companies/${companyAddress}`
     ).then((res) => res.json());
     // console.log(companyDetails);
-    setCompanyDetails({ ...companyDetails, address });
+    setCompanyDetails({ ...companyDetails });
   }, []); // refresh data when investing/managing
 
   return (
@@ -72,23 +72,22 @@ const Details = ({ companyDetails }) => {
 
   React.useEffect(() => {
     const {
-      address,
+      companyAddress,
       sharesOutstanding,
       balance,
-      manager,
-      fundingRoundsCount,
+      managerAddress,
       listingTimestamp,
       currentValuation,
     } = companyDetails;
     setItems([
       {
         key: 0,
-        header: truncateAddress(address),
+        header: truncateAddress(companyAddress),
         meta: "Address of Smart Contract",
       },
       {
         key: 1,
-        header: truncateAddress(manager),
+        header: truncateAddress(managerAddress),
         meta: "Address of Manager",
       },
       {
@@ -108,11 +107,6 @@ const Details = ({ companyDetails }) => {
         meta: "Company Balance",
       },
       {
-        key: 6,
-        header: fundingRoundsCount,
-        meta: "Number of Funding Rounds",
-      },
-      {
         key: 7,
         header: timeConverter(new Date(listingTimestamp)),
         meta: "Date Listed",
@@ -124,7 +118,14 @@ const Details = ({ companyDetails }) => {
 };
 
 const MainInfo = ({ companyDetails }) => {
-  const { name, symbol, description, address, manager } = companyDetails;
+  const {
+    name,
+    symbol,
+    description,
+    companyAddress,
+    managerAddress,
+    imageUrl,
+  } = companyDetails;
   const [account, _] = React.useContext(AccountContext);
 
   const [editView, setEditView] = React.useState(false);
@@ -152,17 +153,18 @@ const MainInfo = ({ companyDetails }) => {
             <Button
               icon="copy"
               floated="right"
-              onClick={() => navigator.clipboard.writeText(address)}
+              onClick={() => navigator.clipboard.writeText(companyAddress)}
             />
           }
         />
-        {account.toUpperCase() === manager.toUpperCase() && !editView && (
-          <Popup
-            content="Edit Company Details"
-            trigger={<Button toggle icon="edit" onClick={handleEdit} />}
-          />
-        )}
-        {account.toUpperCase() === manager.toUpperCase() && editView && (
+        {account.toUpperCase() === managerAddress.toUpperCase() &&
+          !editView && (
+            <Popup
+              content="Edit Company Details"
+              trigger={<Button toggle icon="edit" onClick={handleEdit} />}
+            />
+          )}
+        {account.toUpperCase() === managerAddress.toUpperCase() && editView && (
           <Button toggle icon="save" active onClick={handleEdit}></Button>
         )}
       </Button.Group>
@@ -174,7 +176,7 @@ const MainInfo = ({ companyDetails }) => {
         bordered
         centered
         fluid
-        src="/static/company-image.jpg"
+        src={imageUrl}
       />
       <div>
         <div style={{ float: "left" }} className="companies-pre-description">
@@ -201,12 +203,12 @@ const MainInfo = ({ companyDetails }) => {
         <Details companyDetails={companyDetails} />
       </div>
       <Header as="h3">Downloads:</Header>
-      <Downloads address={address} editView={editView} />
+      <Downloads companyAddress={companyAddress} editView={editView} />
     </div>
   );
 };
 
-const Downloads = ({ address, editView }) => {
+const Downloads = ({ companyAddress, editView }) => {
   if (!editView) {
     return (
       <div className="companies-download-container">

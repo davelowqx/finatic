@@ -31,7 +31,7 @@ export default function profile() {
               <div className="cardborder container14">
                 <Header as="h3">Latest Transactions</Header>
                 <br />
-                <ProfileTransactions address={account} />
+                <ProfileTransactions profileAddress={account} />
               </div>
             </Grid.Column>
           </Grid.Row>

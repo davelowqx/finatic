@@ -14,7 +14,7 @@ import { invest } from "./Setters";
 import { daysLeft } from "../components/utils";
 
 export default function InvestorForm({
-  address,
+  companyAddress,
   currentValuation,
   postMoneyValuation,
   activeFundingRoundDetails,
@@ -32,7 +32,7 @@ export default function InvestorForm({
     }
     setStates({ loading: true, errorMessage: "" });
     try {
-      await invest({ address, amount });
+      await invest({ companyAddress, amount });
     } catch (err) {
       setStates({ ...states, errorMessage: err.message });
     }

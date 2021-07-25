@@ -61,8 +61,8 @@ describe("TESTS", () => {
   });
 
   it("marks caller as the company manager", async () => {
-    const manager = await company.methods.manager().call();
-    assert.strictEqual(accounts[1], manager);
+    const managerAddress = await company.methods.managerAddress().call();
+    assert.strictEqual(accounts[1], managerAddress);
   });
 
   it("creates funding round", async () => {

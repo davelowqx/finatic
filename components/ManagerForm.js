@@ -8,7 +8,11 @@ import {
   payoutDividends,
 } from "./Setters";
 
-export default function ManagerForm({ address, isFinancing, manager }) {
+export default function ManagerForm({
+  companyAddress,
+  isFinancing,
+  managerAddress,
+}) {
   const [fields, setFields] = React.useState({
     targetAmount: "",
     sharesOffered: "",
@@ -28,7 +32,7 @@ export default function ManagerForm({ address, isFinancing, manager }) {
     setStates({ loading: true, errorMessage: "" });
     if (isFinancing) {
       try {
-        await concludeFundingRound({ address });
+        await concludeFundingRound({ companyAddress });
         // router.reload();
       } catch (err) {
         console.log(err);
@@ -37,7 +41,7 @@ export default function ManagerForm({ address, isFinancing, manager }) {
     } else {
       try {
         await createFundingRound({
-          address,
+          companyAddress,
           targetAmount: fields.targetAmount,
           sharesOffered: fields.sharesOffered,
         });
@@ -57,7 +61,7 @@ export default function ManagerForm({ address, isFinancing, manager }) {
     event.preventDefault();
     setStates({ loading: true, errorMessage: "" });
     try {
-      await withdraw({ withdrawAmount, address, manager });
+      await withdraw({ withdrawAmount, companyAddress, managerAddress });
       // router.reload();
     } catch (err) {
       console.log(err);
@@ -73,7 +77,7 @@ export default function ManagerForm({ address, isFinancing, manager }) {
     event.preventDefault();
     setStates({ loading: true, errorMessage: "" });
     try {
-      await payoutDividends({ dividendAmount, address });
+      await payoutDividends({ dividendAmount, companyAddress });
       // router.reload();
     } catch (err) {
       console.log(err);

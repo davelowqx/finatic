@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/router";
 import { companyProducer } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
+import { storage } from "../../firebase";
 
 export default function CompanyNew() {
   const [fields, setFields] = React.useState({
@@ -20,16 +21,15 @@ export default function CompanyNew() {
     symbol: "",
     description: "",
     sharesOutstanding: "",
+    imageUrl: "https://via.placeholder.com/450.png",
   });
 
-  const [image, setImage] = React.useState({});
+  const [image, setImage] = React.useState(null);
 
   const [states, setStates] = React.useState({
     errorMessage: "",
     loading: false,
   });
-
-  const handleFileSelect = (event) => {};
 
   const router = useRouter();
   const handleSubmit = async (event) => {
@@ -38,20 +38,33 @@ export default function CompanyNew() {
     try {
       companyProducer.once("ListCompany", async (err, res) => {
         if (!err) {
-          const address = res.returnValues.addr;
+          const companyAddress = res.returnValues.companyAddress;
           // upload image to db
-          await fetch(
-            `${
-              process.env.NODE_ENV === "development"
-                ? "http://localhost:3000"
-                : "https://fundsme.vercel.app"
-            }/api/companies/upload`,
-            {
-              headers: { "Content-Type": "application/json" },
-              method: "POST",
-              body: image,
-            }
-          );
+          try {
+            const uploadTask = storage
+              .ref(`images/${companyAddress}`)
+              .put(image);
+            uploadTask.on(
+              "state_changed",
+              (snapshot) => {},
+              (error) => {
+                console.log(error);
+              },
+              () => {
+                storage
+                  .ref("images")
+                  .child(companyAddress)
+                  .getDownloadURL()
+                  .then((imageUrl) => {
+                    console.log(imageUrl);
+                    setFields(...fields, imageUrl);
+                  });
+              }
+            );
+          } catch (e) {
+            console.log(e);
+          }
+
           // append image link to firestroe
           await fetch(
             `${
@@ -62,10 +75,10 @@ export default function CompanyNew() {
             {
               headers: { "Content-Type": "application/json" },
               method: "POST",
-              body: JSON.stringify({ ...fields, address }),
+              body: JSON.stringify({ ...fields, companyAddress }),
             }
           );
-          router.push(address);
+          router.push(companyAddress);
         } else {
           throw err;
         }
@@ -155,10 +168,11 @@ export default function CompanyNew() {
                   type="file"
                   accept="image/*"
                   onChange={(event) => {
-                    const file = event.target.files[0];
-                    if (file.size < 1000000) {
-                      setImage(file);
-                      console.log(event.target.files[0]);
+                    if (event.target.files[0]) {
+                      const file = event.target.files[0];
+                      if (file.size < 1000000) {
+                        setImage(file);
+                      }
                     }
                   }}
                 />

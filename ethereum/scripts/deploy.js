@@ -26,6 +26,8 @@ const firebaseConfig = {
   measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
+// console.log(firebaseConfig);
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -104,13 +106,16 @@ const web3 = new Web3(provider);
     const isFinancing = await company.methods.isFinancing().call();
     let activeFundingRoundDetails = {};
     if (isFinancing) {
-      activeFundingRoundDetails = await company.methods
+      const activeFundingRoundDetailsETH = await company.methods
         .getActiveFundingRoundDetails()
         .call();
       activeFundingRoundDetails = {
-        currentAmount: parseInt(activeFundingRoundDetails[0]),
-        targetAmount: parseInt(activeFundingRoundDetails[1]),
-        creationTimestamp: parseInt(activeFundingRoundDetails[4]),
+        currentAmount: activeFundingRoundDetailsETH[0],
+        targetAmount: activeFundingRoundDetailsETH[1],
+        sharesOffered: activeFundingRoundDetailsETH[2],
+        sharePrice: activeFundingRoundDetailsETH[3],
+        creationTimestamp: activeFundingRoundDetailsETH[4],
+        investorsCount: activeFundingRoundDetailsETH[5],
       };
     }
 
@@ -118,8 +123,8 @@ const web3 = new Web3(provider);
       companyAddress,
       name,
       symbol,
-      sharesOutstanding,
       description,
+      imageUrl: "https://via.placeholder.com/450.png",
       isFinancing,
       activeFundingRoundDetails,
     };
@@ -130,9 +135,9 @@ const web3 = new Web3(provider);
 
   // write to db instead?????????????
   fs.writeFileSync(
-    path.resolve(__dirname, "../address.json"),
+    path.resolve(__dirname, "../companyProducerAddress.json"),
     JSON.stringify({
-      address: companyProducerAddress,
+      companyProducerAddress,
     })
   );
 

@@ -13,15 +13,17 @@ export default async (req, res) => {
         .getCompanyAddresses()
         .call();
 
-      const promises = companyAddresses.map((address) => {
+      const promises = companyAddresses.map((companyAddress) => {
         return db
           .collection("companies")
-          .doc(address)
+          .doc(companyAddress)
           .get()
           .then((doc) => {
             const {
-              description,
               name,
+              symbol,
+              description,
+              imageUrl,
               isFinancing,
               activeFundingRoundDetails,
             } = doc.data();
@@ -29,14 +31,16 @@ export default async (req, res) => {
               activeFundingRoundDetails;
             return {
               name,
-              address,
+              symbol,
               description,
+              imageUrl,
+              isFinancing,
+              companyAddress,
               activeFundingRoundDetails: {
-                targetAmount: !!targetAmount ? fromWei(targetAmount) : 0,
                 currentAmount: !!currentAmount ? fromWei(currentAmount) : 0,
+                targetAmount: !!targetAmount ? fromWei(targetAmount) : 0,
                 creationTimestamp,
               },
-              isFinancing,
               progress: Math.round((100 * currentAmount) / targetAmount),
             };
           });

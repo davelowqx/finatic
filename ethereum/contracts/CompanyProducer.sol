@@ -6,7 +6,7 @@ import "./Company.sol";
 contract CompanyProducer {
     address[] public companyAddresses;
 
-    event ListCompany(address indexed addr);
+    event ListCompany(address indexed companyAddress);
 
     function listCompany(string calldata name, string calldata symbol, uint256 sharesOutstanding) public {
         Company c = new Company(name, symbol, sharesOutstanding, msg.sender);

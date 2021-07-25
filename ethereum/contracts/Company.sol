@@ -14,7 +14,7 @@ contract Company is IERC20 {
     address[] private _shareholders; //will contain addresses with 0 balance 
     mapping(address => bool) private _seen; //ensures _shareholders contains unique addresses
 
-    address public manager;
+    address public managerAddress;
     mapping(uint256 => FundingRound) public fundingRounds;
     uint256 public fundingRoundsCount;
     bool public isFinancing; 
@@ -30,13 +30,13 @@ contract Company is IERC20 {
         uint256 creationTimestamp;
         mapping(address => uint256) investment;  
         address[] investors; //array of unique investors
-        bool success;
+        uint8 status;
     }
 
-    constructor(string memory name_, string memory symbol_, uint256 sharesOutstanding_, address manager_) {
+    constructor(string memory name_, string memory symbol_, uint256 sharesOutstanding_, address managerAddress_) {
         _name = name_;
         _symbol = symbol_;
-        manager = manager_;
+        managerAddress = managerAddress_;
         _sharesOutstanding = sharesOutstanding_;
         _balances[address(this)] = sharesOutstanding_;
         _shareholders.push(address(this));
@@ -45,7 +45,7 @@ contract Company is IERC20 {
     }
 
     modifier authorized() {
-        require (msg.sender == manager, "UNAUTHORIZED");
+        require (msg.sender == managerAddress, "UNAUTHORIZED");
         _;
     }
 
@@ -58,7 +58,7 @@ contract Company is IERC20 {
         fr.sharePrice = targetAmount_/sharesOffered_; 
         fr.sharesOutstanding = _sharesOutstanding + sharesOffered_;
         fr.creationTimestamp = block.timestamp; 
-        fr.success = false;
+        fr.status = 0;
         isFinancing = true;
     }
 
@@ -68,10 +68,10 @@ contract Company is IERC20 {
         isFinancing = false;
         FundingRound storage fr = fundingRounds[fundingRoundsCount - 1];
         if ((fr.creationTimestamp + 86400 * 60 >= block.timestamp) && (fr.currentAmount >= fr.targetAmount)) {
-            fr.success = true;
+            fr.status = 1;
             _distribute();
         } else {
-            fr.success = false;
+            fr.status = 2;
             _refund();
         } 
     }
@@ -107,7 +107,7 @@ contract Company is IERC20 {
 
     function withdraw(uint256 amount) public authorized {
         require(!isFinancing, "company has ongoing financing round");
-        payable(manager).transfer(amount);
+        payable(managerAddress).transfer(amount);
     }
 
     //IERC20
@@ -182,9 +182,9 @@ contract Company is IERC20 {
         require(!isFinancing, "company has ongoing financing round");
 
         for (uint256 i = 0; i < _shareholders.length; i++) {
-            address holder = _shareholders[i];
-            if (holder != address(this) && _balances[holder] > 0) { 
-                payable(holder).transfer(amount * _balances[holder] / _sharesOutstanding);
+            address shareholder = _shareholders[i];
+            if (shareholder != address(this) && _balances[shareholder] > 0) { 
+                payable(shareholder).transfer(amount * (_balances[shareholder] / _sharesOutstanding));
             }
         }
     } 
@@ -192,13 +192,13 @@ contract Company is IERC20 {
     //GETTERS
 
     function getFundingRoundSummary(uint256 index) public view returns (
-        uint256, uint256, bool
+        uint256, uint256, uint8
     ) {
         FundingRound storage fr = fundingRounds[index];
         return (
             fr.creationTimestamp,
             fr.sharesOutstanding * fr.sharePrice,
-            fr.success
+            fr.status
         );
     }
 
@@ -221,13 +221,8 @@ contract Company is IERC20 {
         return (_name, _symbol, _sharesOutstanding, isFinancing);
     }
 
-    function getCompanyDetails() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool, uint256, uint256, uint256) {
+    function getCompanyDetails() public view returns (string memory, string memory, uint256, uint256, address,  uint256, bool, uint256, uint256) {
         uint256 currentValuation;
-        uint256 postMoneyValuation;
-        if (isFinancing) {
-            FundingRound storage fr = fundingRounds[fundingRoundsCount - 1];
-            postMoneyValuation = fr.sharesOutstanding * fr.sharePrice;
-        }
         if ((fundingRoundsCount > 1) || (fundingRoundsCount == 1 && !isFinancing)) {
             FundingRound storage fr = fundingRounds[fundingRoundsCount - 1];
             currentValuation = fr.sharesOutstanding * fr.sharePrice;
@@ -238,12 +233,11 @@ contract Company is IERC20 {
             _symbol, 
             _sharesOutstanding, 
             address(this).balance, 
-            manager, 
+            managerAddress, 
             fundingRoundsCount, 
             isFinancing, 
             listingTimestamp, 
-            currentValuation,
-            postMoneyValuation
+            currentValuation
         );
     }
 }
