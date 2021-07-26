@@ -290,6 +290,23 @@ a.company-card {
   padding: 5%;
 }
 
+.companycard-image {
+  display: block !important;
+  height: 200px;
+  background-size: "cover";
+  margin: auto;
+}
+
+.companycard-button {
+  position: absolute;
+  right: 5%;
+  top: 15%;
+}
+
+/* .ui.card .content img {
+  height: "200px" !important;
+} */
+
 /* -webkit-text-size-adjust: 100%;
     font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
     line-height: 1.4285em;

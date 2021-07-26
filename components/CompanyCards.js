@@ -1,5 +1,5 @@
 import React from "react";
-import { Header, Button, Card, Item } from "semantic-ui-react";
+import { Image, Header, Button, Card, Item } from "semantic-ui-react";
 import { createFundingRound } from "./Setters";
 import { daysLeft } from "../components/utils";
 
@@ -39,15 +39,14 @@ export default function CompanyCards({
                 color={isFinancing ? "green" : "red"}
               >
                 <Card.Content header={name} textAlign="center" />
-                <Card.Content
-                  style={{
-                    height: "200px",
-                    backgroundImage: imageUrl,
-                    backgroundSize: "cover",
-                  }}
-                >
+                <Card.Content>
+                  <img src={imageUrl} className="companycard-image" />
                   {isFinancing && (
-                    <Button size="mini" color="green" floated="right">
+                    <Button
+                      size="mini"
+                      color="green"
+                      className="companycard-button"
+                    >
                       {days} Days Left
                     </Button>
                   )}
