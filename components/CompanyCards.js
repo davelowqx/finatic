@@ -6,18 +6,16 @@ import { daysLeft } from "../components/utils";
 export default function CompanyCards({
   companySummaries = [],
   viewFinancing,
-  sliceMin,
-  sliceMax,
+  max,
 }) {
   return (
     <Card.Group itemsPerRow={3}>
       {companySummaries
-        .slice()
-        .reverse()
         .filter(({ isFinancing }) =>
           viewFinancing ? isFinancing : !isFinancing
         )
-        .slice(sliceMin, sliceMax)
+        .slice(0, max)
+        .reverse()
         .map(
           ({
             companyAddress,

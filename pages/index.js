@@ -126,8 +126,7 @@ export default function LandingPage() {
           <CompanyCards
             companySummaries={companySummaries}
             viewFinancing={true}
-            sliceMin={0}
-            sliceMax={3}
+            max={3}
           />
           <br />
           <br />
@@ -151,8 +150,7 @@ export default function LandingPage() {
           <CompanyCards
             companySummaries={companySummaries}
             viewFinancing={false}
-            sliceMin={0}
-            sliceMax={3}
+            max={3}
           />
           <br />
           <br />

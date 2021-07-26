@@ -18,19 +18,6 @@ export default function Explore() {
   }, []);
   // TODO: handle error fetching data
 
-  const [pageNumber, setPageNumber] = React.useState(0);
-  const companiesPerPage = 6;
-  const pagesVisited = pageNumber * companiesPerPage;
-  const displayCompanies = pagesVisited + companiesPerPage;
-  const pageCount = Math.ceil(
-    companySummaries.filter(({ isFinancing }) =>
-      viewFinancing ? isFinancing : !isFinancing
-    ).length / companiesPerPage
-  );
-  const changePage = ({ selected }) => {
-    setPageNumber(selected);
-  };
-
   const [viewFinancing, setViewFinancing] = React.useState(true);
   const len = companySummaries.filter(
     ({ isFinancing }) => isFinancing === viewFinancing
@@ -63,18 +50,8 @@ export default function Explore() {
       <CompanyCards
         companySummaries={companySummaries}
         viewFinancing={viewFinancing}
-        slicemin={pagesVisited}
-        slicemax={displayCompanies}
+        max={len}
       />
-      <br />
-      <br />
-      <div className="container11">
-        <Pagination
-          defaultActivePage={1}
-          totalPages={pageCount}
-          onPageChange={changePage}
-        />
-      </div>
     </div>
   );
 }
