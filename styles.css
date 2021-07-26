@@ -272,6 +272,24 @@ a.company-card {
   padding: 3%;
 }
 
+.portfolio-card {
+  display: block;
+}
+
+.portfolio-card-symbol {
+  display: block;
+  width: 50%;
+  float: left;
+  padding: 5%;
+}
+
+.portfolio-card-shares {
+  display: block;
+  width: 50%;
+  float: left;
+  padding: 5%;
+}
+
 /* -webkit-text-size-adjust: 100%;
     font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
     line-height: 1.4285em;

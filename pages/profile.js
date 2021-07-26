@@ -29,7 +29,7 @@ export default function profile() {
           <Grid.Row>
             <Grid.Column width={14}>
               <div className="cardborder container14">
-                <Header as="h3">Latest Transactions</Header>
+                <Header as="h3">Your Holdings</Header>
                 <br />
                 <Portfolio profileAddress={account} />
               </div>
