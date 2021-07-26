@@ -15,7 +15,6 @@ export default function CompanySidePanel({
     companyAddress,
     managerAddress,
     currentValuation,
-    postMoneyValuation,
     activeFundingRoundDetails,
     balance,
     fundingRoundSummaries,
@@ -28,7 +27,6 @@ export default function CompanySidePanel({
           <InvestorForm
             companyAddress={companyAddress}
             currentValuation={currentValuation}
-            postMoneyValuation={postMoneyValuation}
             activeFundingRoundDetails={activeFundingRoundDetails}
             toggleRefreshData={toggleRefreshData}
           />
@@ -63,24 +61,35 @@ function FundingHistory({ fundingRoundSummaries }) {
       {fundingRoundSummaries.length > 0 &&
         fundingRoundSummaries
           .reverse()
-          .map(({ status, creationTimestamp, valuation }, index) => (
-            <div className="cardborder fundinground" key={index}>
-              <Feed.Event className="companies-funding-history-event">
-                <Feed.Label className="companies-funding-history-logo">
-                  <Image
-                    src="/static/logo.svg"
-                    className="companies-funding-history-logo"
+          .map(
+            (
+              { creationTimestamp, sharePrice, sharesOutstanding, status },
+              index
+            ) => (
+              <div className="cardborder fundinground" key={index}>
+                <Feed.Event className="companies-funding-history-event">
+                  <Feed.Label className="companies-funding-history-logo">
+                    <Image
+                      src={
+                        status === 0
+                          ? "/static/logo_gray.svg"
+                          : status === 1
+                          ? "/static/logo.svg"
+                          : "/static/logo_fail.svg"
+                      }
+                      className="companies-funding-history-logo"
+                    />
+                  </Feed.Label>
+                  <Feed.Content
+                    className="companies-funding-history-details"
+                    date={`Date: ${timeConverter(creationTimestamp)}`}
+                    summary={`Valuation: ${sharesOutstanding * sharePrice} ETH`}
+                    content={`Share Price: ${sharePrice}`}
                   />
-                </Feed.Label>
-                <Feed.Content
-                  className="companies-funding-history-details"
-                  date={`Date: ${timeConverter(creationTimestamp)}`}
-                  summary={`Valuation: ${valuation} ETH`}
-                  content={`Success: ${status}`}
-                />
-              </Feed.Event>
-            </div>
-          ))}
+                </Feed.Event>
+              </div>
+            )
+          )}
       {fundingRoundSummaries.length === 0 && (
         <div className="cardborder fundinground">
           <Feed.Event className="companies-funding-history-event">

@@ -50,7 +50,7 @@ export default function Company({ companyAddress }) {
           : "https://fundsme.vercel.app"
       }/api/companies/${companyAddress}`
     ).then((res) => res.json());
-    // console.log(companyDetails);
+    console.log(companyDetails);
     setCompanyDetails({ ...companyDetails });
   };
 

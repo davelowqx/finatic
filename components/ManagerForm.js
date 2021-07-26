@@ -38,8 +38,9 @@ export default function ManagerForm({
         // router.reload();
       } catch (err) {
         console.log(err);
-        setStates({ loading: false, errorMessage: err.message });
+        setStates({ ...states, errorMessage: err.message });
       } finally {
+        setStates({ ...states, loading: false });
         toggleRefreshData();
       }
     } else {
@@ -54,6 +55,7 @@ export default function ManagerForm({
         console.log(err);
         setStates({ loading: false, errorMessage: err.message });
       } finally {
+        setStates({ ...states, loading: false });
         setFields({ ...fields, targetAmount: "", sharesOffered: "" });
         toggleRefreshData();
       }
@@ -72,6 +74,7 @@ export default function ManagerForm({
       console.log(err);
       setStates({ loading: false, errorMessage: err.message });
     } finally {
+      setStates({ ...states, loading: false });
       setFields({ ...fields, withdrawAmount: "" });
       toggleRefreshData();
     }
@@ -89,6 +92,7 @@ export default function ManagerForm({
       console.log(err);
       setStates({ loading: false, errorMessage: err.message });
     } finally {
+      setStates({ ...states, loading: false });
       setFields({ ...fields, dividendAmount: "" });
       toggleRefreshData();
     }

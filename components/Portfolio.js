@@ -2,15 +2,10 @@ import React from "react";
 import { Card } from "semantic-ui-react";
 
 export default function ProfileTransactions({ profileAddress }) {
-  const [investmentDetails, setinvestmentDetails] = React.useState({
-    companyAddress: "",
-    name: "",
-    symbol: "",
-    numberOfShares: "",
-  });
+  const [investmentDetails, setinvestmentDetails] = React.useState([]);
 
-  React.useEffect(async () => {
-    const investmentDetails = await fetch(
+  React.useEffect(() => {
+    fetch(
       `${
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
@@ -18,27 +13,16 @@ export default function ProfileTransactions({ profileAddress }) {
       }/api/profile/${profileAddress}`
     )
       .then((res) => res.json())
-      .then((deets) => setinvestmentDetails(deets.error ? [] : deets));
-
-    // setinvestmentDetails({
-    //   ...investmentDetails,
-    //   companyAddress,
-    //   name,
-    //   symbol,
-    //   numberOfShares,
-    // });
-  }, []);
-
-  const { companyAddress, name, symbol, numberOfShares } = investmentDetails;
-
-  // console.log(investmentDetails);
+      .then((deets) => {
+        console.log(deets);
+        setinvestmentDetails(deets);
+      });
+  }, [profileAddress]);
 
   return (
     <Card.Group>
       {investmentDetails
-        // .filter(({ numberOfShares }) =>
-        //   numberOfShares > 0 ? isFinancing : !isFinancing
-        // )
+        .filter(({ numberOfShares }) => numberOfShares > 0)
         .map(({ companyAddress, name, symbol, numberOfShares }) => {
           return (
             <Card
@@ -48,8 +32,8 @@ export default function ProfileTransactions({ profileAddress }) {
             >
               <Card.Content textAlign={"center"}>
                 <Card.Header>{name}</Card.Header>
-                <div className="portfolio-card-symbol">{symbol}</div>
-                <div className="portfolio-card-shares">{numberOfShares}</div>
+                <div>{symbol}</div>
+                <div>{numberOfShares}</div>
               </Card.Content>
             </Card>
           );

@@ -192,18 +192,19 @@ contract Company is IERC20 {
     //GETTERS
 
     function getFundingRoundSummary(uint256 index) public view returns (
-        uint256, uint256, uint8
+        uint256, uint256, uint256, uint8
     ) {
         FundingRound storage fr = fundingRounds[index];
         return (
             fr.creationTimestamp,
-            fr.sharesOutstanding * fr.sharePrice,
+            fr.sharePrice,
+            fr.sharesOutstanding,
             fr.status
         );
     }
 
     function getActiveFundingRoundDetails() public view returns (
-        uint256, uint256, uint256, uint256, uint256, uint256
+        uint256, uint256, uint256, uint256, uint256, uint256, uint256
     ) {
         require(isFinancing, "company is not currently financing");
         FundingRound storage fr = fundingRounds[fundingRoundsCount - 1];
@@ -212,6 +213,7 @@ contract Company is IERC20 {
             fr.targetAmount,
             fr.sharesOffered,
             fr.sharePrice,
+            fr.sharesOutstanding,
             fr.creationTimestamp,
             fr.investors.length
         );

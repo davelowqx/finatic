@@ -16,7 +16,6 @@ import { daysLeft } from "../components/utils";
 export default function InvestorForm({
   companyAddress,
   currentValuation,
-  postMoneyValuation,
   activeFundingRoundDetails,
   toggleRefreshData,
 }) {
@@ -47,10 +46,13 @@ export default function InvestorForm({
     currentAmount,
     targetAmount,
     sharesOffered,
+    sharesOutstanding,
     sharePrice,
     creationTimestamp,
     investorsCount,
   } = activeFundingRoundDetails;
+
+  console.log(activeFundingRoundDetails);
 
   const percent = Math.round((100 * currentAmount) / targetAmount);
 
@@ -72,10 +74,16 @@ export default function InvestorForm({
                 <h3>{currentAmount} ETH</h3> of {targetAmount} ETH goal
               </div>
               <div className="container-investorform-2">
-                Current Valuation: <b>{currentValuation} ETH</b>
+                Current Valuation:{" "}
+                <b>
+                  {currentValuation === "0"
+                    ? "UNEVALUATED"
+                    : `${currentValuation} ETH`}
+                </b>
               </div>
               <div className="container-investorform-2">
-                Post Valuation: <b>{postMoneyValuation} ETH</b>
+                Post Money Valuation:{" "}
+                <b>{sharePrice * sharesOutstanding} ETH</b>
               </div>
             </div>
             <div className="container100">
@@ -83,16 +91,10 @@ export default function InvestorForm({
                 <b>{sharesOffered}</b> Shares
               </div>
               <div className="container33">
-                {investorsCount === "1" && (
-                  <div>
-                    <b>{investorsCount}</b> Investor
-                  </div>
-                )}
-                {investorsCount != "1" && (
-                  <div>
-                    <b>{investorsCount}</b> Investors
-                  </div>
-                )}
+                <div>
+                  <b>{investorsCount}</b>{" "}
+                  {"Investor" + (investorsCount === 1 ? "" : "s")}
+                </div>
               </div>
               <div className="container33">
                 <b>{days}</b> Days Left
@@ -106,7 +108,8 @@ export default function InvestorForm({
                 <label style={{ fontSize: "1.28571429rem" }}>Invest</label>
                 <span>min {sharePrice} ETH</span>
                 <Input
-                  type="decimal"
+                  type="number"
+                  step={sharePrice}
                   value={amount}
                   min={sharePrice}
                   onChange={(event) => setAmount(event.target.value)}

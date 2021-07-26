@@ -22,8 +22,9 @@ export async function invest({ companyAddress, amount }) {
     targetAmount: activeFundingRoundDetailsETH[1],
     sharesOffered: activeFundingRoundDetailsETH[2],
     sharePrice: activeFundingRoundDetailsETH[3],
-    creationTimestamp: activeFundingRoundDetailsETH[4],
-    investorsCount: activeFundingRoundDetailsETH[5],
+    sharesOutstanding: activeFundingRoundDetailsETH[4],
+    creationTimestamp: activeFundingRoundDetailsETH[5],
+    investorsCount: activeFundingRoundDetailsETH[6],
   };
 
   await fetch(

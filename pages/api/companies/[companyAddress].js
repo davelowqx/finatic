@@ -31,7 +31,6 @@ export default async (req, res) => {
         imageUrl,
         companyAddress,
         isFinancing,
-        activeFundingRoundDetails,
         sharesOutstanding: parseInt(companyDetailsETH[2]),
         balance: fromWei(companyDetailsETH[3]),
         managerAddress: companyDetailsETH[4],
@@ -40,10 +39,30 @@ export default async (req, res) => {
         currentValuation: fromWei(companyDetailsETH[8]),
       };
 
-      const { fundingRoundsCount } = companyDetails;
+      let activeFundingRoundDetailsConverted = {};
+      if (Object.keys(activeFundingRoundDetails).length) {
+        const {
+          currentAmount,
+          targetAmount,
+          sharesOffered,
+          sharePrice,
+          sharesOutstanding,
+          creationTimestamp,
+          investorsCount,
+        } = activeFundingRoundDetails;
+        activeFundingRoundDetailsConverted = {
+          currentAmount: fromWei(currentAmount),
+          targetAmount: fromWei(targetAmount),
+          sharesOffered: parseInt(sharesOffered),
+          sharesOutstanding: parseInt(sharesOutstanding),
+          sharePrice: fromWei(sharePrice),
+          creationTimestamp: parseInt(creationTimestamp),
+          investorsCount: parseInt(investorsCount),
+        };
+      }
 
       const fundingRoundSummaries = await Promise.all(
-        Array(fundingRoundsCount)
+        Array(companyDetails.fundingRoundsCount)
           .fill()
           .map((_, i) => {
             return company.methods
@@ -52,8 +71,9 @@ export default async (req, res) => {
               .then((arr) => {
                 return {
                   creationTimestamp: arr[0],
-                  valuation: fromWei(arr[1]),
-                  status: arr[2],
+                  sharePrice: fromWei(arr[1]),
+                  sharesOutstanding: arr[2],
+                  status: parseInt(arr[3]),
                 };
               });
           })
@@ -61,6 +81,7 @@ export default async (req, res) => {
 
       const data = {
         ...companyDetails,
+        activeFundingRoundDetails: activeFundingRoundDetailsConverted,
         fundingRoundSummaries,
       };
       // console.log(data);
@@ -70,7 +91,7 @@ export default async (req, res) => {
     }
   } else if (req.method === "PUT") {
     try {
-      console.log(req.body);
+      console.log("PUT request", req.body);
       await db
         .collection("companies")
         .doc(companyAddress)
