@@ -1,6 +1,7 @@
-import { db } from "../firebase";
+import { db, storage } from "../firebase";
 import { companyProducer, Company } from "../ethereum/contracts";
 import web3 from "../ethereum/web3";
+import { useRouter } from "next/router";
 
 const toWei = (str) => web3.utils.toWei(str, "ether");
 
@@ -13,13 +14,32 @@ export async function invest({ companyAddress, amount }) {
     value: toWei(amount),
   });
 
-  await db
-    .collection("companies")
-    .doc(companyAddress)
-    .collection("activeFundingRoundDetails")
-    .update({
-      currentAmount: firebase.firestore.FieldValue.increment(amount),
-    });
+  const activeFundingRoundDetailsETH = await company.methods
+    .getActiveFundingRoundDetails()
+    .call();
+  const activeFundingRoundDetails = {
+    currentAmount: activeFundingRoundDetailsETH[0],
+    targetAmount: activeFundingRoundDetailsETH[1],
+    sharesOffered: activeFundingRoundDetailsETH[2],
+    sharePrice: activeFundingRoundDetailsETH[3],
+    creationTimestamp: activeFundingRoundDetailsETH[4],
+    investorsCount: activeFundingRoundDetailsETH[5],
+  };
+
+  await fetch(
+    `${
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : "https://fundsme.vercel.app"
+    }/api/companies/${companyAddress}`,
+    {
+      headers: { "Content-Type": "application/json" },
+      method: "PUT",
+      body: JSON.stringify({
+        activeFundingRoundDetails,
+      }),
+    }
+  );
 }
 
 export async function createFundingRound({
@@ -34,25 +54,28 @@ export async function createFundingRound({
       from: await getActiveAccount(),
     });
 
-  await db.collection("companies").doc(companyAddress).set(
+  await fetch(
+    `${
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : "https://fundsme.vercel.app"
+    }/api/companies/${companyAddress}`,
     {
-      isFinancing: true,
-    },
-    { merge: true }
+      headers: { "Content-Type": "application/json" },
+      method: "PUT",
+      body: JSON.stringify({
+        isFinancing: true,
+        activeFundingRoundDetails: {
+          currentAmount: 0,
+          targetAmount,
+          sharesOffered,
+          sharePrice: targetAmount / sharesOffered,
+          creationTimestamp: Date.now(),
+          investorsCount: 0,
+        },
+      }),
+    }
   );
-
-  await db
-    .collection("companies")
-    .doc(companyAddress)
-    .collection("activeFundingRoundDetails")
-    .set(
-      {
-        currentAmount: 0,
-        targetAmount,
-        sharesOffered,
-      },
-      { merge: true }
-    );
 }
 
 export async function concludeFundingRound({ companyAddress }) {
@@ -60,11 +83,20 @@ export async function concludeFundingRound({ companyAddress }) {
   await company.methods.concludeFundingRound().send({
     from: await getActiveAccount(),
   });
-  await db.collection("companies").doc(companyAddress).set(
+  await fetch(
+    `${
+      process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : "https://fundsme.vercel.app"
+    }/api/companies/${companyAddress}`,
     {
-      activeFundingRoundDetails: {},
-    },
-    { merge: true }
+      headers: { "Content-Type": "application/json" },
+      method: "PUT",
+      body: JSON.stringify({
+        isFinancing: false,
+        activeFundingRoundDetails: {},
+      }),
+    }
   );
 }
 
@@ -82,26 +114,66 @@ export async function payoutDividends({ dividendAmount, companyAddress }) {
   });
 }
 
-export async function listCompany(
-  { name, symbol, sharesOutstanding, description },
-  func
-) {
+/*
+export async function listCompany({
+  name,
+  symbol,
+  sharesOutstanding,
+  image,
+  description,
+}) {
+  const postData = (imageUrl, companyAddress) => {
+    fetch(
+      `${
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://fundsme.vercel.app"
+      }/api/companies/new`,
+      {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({
+          name,
+          symbol,
+          description,
+          imageUrl,
+          companyAddress,
+        }),
+      }
+    ).then(() => {
+      const router = useRouter();
+      router.push(companyAddress);
+    });
+  };
+
   companyProducer.once("ListCompany", async (err, res) => {
     if (!err) {
       const companyAddress = res.returnValues.companyAddress;
-      await db.collection("companies").doc(companyAddress).set({
-        companyAddress,
-        name,
-        symbol,
-        sharesOutstanding,
-        description,
-        isFinancing: false,
-        activeFundingRoundDetails: {},
-      });
-      console.log(companyAddress);
-      func(companyAddress);
+      // upload image to db
+      try {
+        const uploadTask = storage
+          .ref()
+          .child(`images/${companyAddress}`)
+          .put(image);
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {},
+          (err) => {
+            console.log("upload error", err);
+            postData("https://via/placeholder.com/450.png", companyAddress);
+          },
+          () => {
+            // success
+            uploadTask.snapshot.ref.getDownloadURL().then((imageUrl) => {
+              postData(imageUrl, companyAddress);
+            });
+          }
+        );
+      } catch (e) {
+        console.log(e);
+      }
     } else {
-      console.log(err);
+      throw err;
     }
   });
 
@@ -111,3 +183,5 @@ export async function listCompany(
       from: await getActiveAccount(),
     });
 }
+
+*/

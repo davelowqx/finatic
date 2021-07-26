@@ -12,6 +12,8 @@ export default function ManagerForm({
   companyAddress,
   isFinancing,
   managerAddress,
+  balance,
+  toggleRefreshData,
 }) {
   const [fields, setFields] = React.useState({
     targetAmount: "",
@@ -37,6 +39,8 @@ export default function ManagerForm({
       } catch (err) {
         console.log(err);
         setStates({ loading: false, errorMessage: err.message });
+      } finally {
+        toggleRefreshData();
       }
     } else {
       try {
@@ -51,6 +55,7 @@ export default function ManagerForm({
         setStates({ loading: false, errorMessage: err.message });
       } finally {
         setFields({ ...fields, targetAmount: "", sharesOffered: "" });
+        toggleRefreshData();
       }
     }
   };
@@ -68,6 +73,7 @@ export default function ManagerForm({
       setStates({ loading: false, errorMessage: err.message });
     } finally {
       setFields({ ...fields, withdrawAmount: "" });
+      toggleRefreshData();
     }
   };
 
@@ -84,11 +90,13 @@ export default function ManagerForm({
       setStates({ loading: false, errorMessage: err.message });
     } finally {
       setFields({ ...fields, dividendAmount: "" });
+      toggleRefreshData();
     }
   };
 
   return (
     <div className="companies-container cardborder">
+      <h2>Manager Actions</h2>
       {!isFinancing && (
         <Form error={!!fields.errorMessage}>
           <Form.Field>
@@ -146,6 +154,7 @@ export default function ManagerForm({
                 type="number"
                 step={0.1}
                 min={0}
+                max={balance}
                 value={fields.withdrawAmount}
                 onInput={(event) => {}}
                 onChange={(event) =>
@@ -174,11 +183,12 @@ export default function ManagerForm({
           <br />
           <Form error={!!fields.errorMessage}>
             <Form.Field>
-              <label>Payout Dividends (per shareholder)</label>
+              <label>Payout Dividends (Total)</label>
               <Input
                 type="number"
                 step={0.1}
                 min={0}
+                max={balance}
                 value={fields.dividendAmount}
                 onInput={(event) => {}}
                 onChange={(event) =>

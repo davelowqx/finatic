@@ -10,7 +10,7 @@ import {
   Card,
   Grid,
 } from "semantic-ui-react";
-import FundingStatus from "../../components/FundingStatus";
+import CompanySidePanel from "../../components/CompanySidePanel";
 import { truncateAddress } from "../../components/utils";
 import { AccountContext } from "../../components/context/AccountContext";
 import { timeConverter } from "../../components/utils";
@@ -37,7 +37,12 @@ export default function Company({ companyAddress }) {
     companyAddress,
   });
 
-  React.useEffect(async () => {
+  const [refreshData, setRefreshData] = React.useState(false);
+  const toggleRefreshData = () => {
+    setRefreshData(!refreshData);
+  };
+
+  const fetchCompanyDetails = async () => {
     const companyDetails = await fetch(
       `${
         process.env.NODE_ENV === "development"
@@ -47,19 +52,33 @@ export default function Company({ companyAddress }) {
     ).then((res) => res.json());
     // console.log(companyDetails);
     setCompanyDetails({ ...companyDetails });
-  }, []); // refresh data when investing/managing
+  };
+
+  React.useEffect(() => {
+    fetchCompanyDetails();
+  }, []);
+
+  React.useEffect(() => {
+    fetchCompanyDetails();
+  }, [refreshData]); // refresh data when investing/managing
 
   return (
     <Grid>
       <Grid.Row>
         <Grid.Column computer={10} mobile={16}>
           <br />
-          <MainInfo companyDetails={companyDetails} />
+          <MainInfo
+            companyDetails={companyDetails}
+            toggleRefreshData={toggleRefreshData}
+          />
         </Grid.Column>
         <Grid.Column computer={6} mobile={16}>
           <Grid.Row>
             <br />
-            <FundingStatus companyDetails={companyDetails} />
+            <CompanySidePanel
+              companyDetails={companyDetails}
+              toggleRefreshData={toggleRefreshData}
+            />
           </Grid.Row>
         </Grid.Column>
       </Grid.Row>
@@ -117,7 +136,7 @@ const Details = ({ companyDetails }) => {
   return <Card.Group items={items} />;
 };
 
-const MainInfo = ({ companyDetails }) => {
+const MainInfo = ({ companyDetails, toggleRefreshData }) => {
   const {
     name,
     symbol,
@@ -126,20 +145,38 @@ const MainInfo = ({ companyDetails }) => {
     managerAddress,
     imageUrl,
   } = companyDetails;
-  const [account, _] = React.useContext(AccountContext);
 
+  const [account, _] = React.useContext(AccountContext);
   const [editView, setEditView] = React.useState(false);
+  const [fields, setFields] = React.useState({
+    description: "",
+  });
   const [loading, setLoading] = React.useState(false);
 
-  const handleEdit = () => {
+  const handleEdit = async () => {
     if (editView) {
       setLoading(true);
-      // save form data
       try {
-      } catch {
+        await fetch(
+          `${
+            process.env.NODE_ENV === "development"
+              ? "http://localhost:3000"
+              : "https://fundsme.vercel.app"
+          }/api/companies/${companyAddress}`,
+          {
+            headers: { "Content-Type": "application/json" },
+            method: "PUT",
+            body: JSON.stringify(fields),
+          }
+        );
+        toggleRefreshData();
+      } catch (err) {
+        console.log(err);
       } finally {
         setLoading(false);
       }
+    } else {
+      setFields({ ...fields, description });
     }
     setEditView(!editView);
   };
@@ -165,7 +202,13 @@ const MainInfo = ({ companyDetails }) => {
             />
           )}
         {account.toUpperCase() === managerAddress.toUpperCase() && editView && (
-          <Button toggle icon="save" active onClick={handleEdit}></Button>
+          <Button
+            toggle
+            loading={loading}
+            icon="save"
+            active
+            onClick={handleEdit}
+          ></Button>
         )}
       </Button.Group>
       <div style={{ fontSize: "1.25rem" }}>
@@ -197,17 +240,27 @@ const MainInfo = ({ companyDetails }) => {
       </div>
       <br />
       <Header as="h3">Company Description:</Header>
-      <Description editView={editView} description={description} />
+      {!editView && <div className="companies-description">{description}</div>}
+      {editView && (
+        <Form>
+          <TextArea
+            className="companies-description-edit"
+            value={fields.description}
+            onChange={(event) => setFields({ description: event.target.value })}
+          />
+        </Form>
+      )}
       <Header as="h3">Company Details:</Header>
       <div className="companies-details">
         <Details companyDetails={companyDetails} />
       </div>
-      <Header as="h3">Downloads:</Header>
-      <Downloads companyAddress={companyAddress} editView={editView} />
+      {/* <Header as="h3">Downloads:</Header> */}
+      {/* <Downloads companyAddress={companyAddress} editView={editView} /> */}
     </div>
   );
 };
 
+/*
 const Downloads = ({ companyAddress, editView }) => {
   if (!editView) {
     return (
@@ -311,27 +364,4 @@ const Downloads = ({ companyAddress, editView }) => {
   }
 };
 
-const Description = ({ editView, description }) => {
-  const [editDescription, setEditDescription] = React.useState("");
-  React.useEffect(() => {
-    setEditDescription(description);
-  }, [description]);
-
-  const handleForm = (event) => {
-    setEditDescription(event.target.value);
-  };
-
-  if (!editView) {
-    return <div className="companies-description">{description}</div>;
-  } else {
-    return (
-      <Form>
-        <TextArea
-          className="companies-description-edit"
-          value={editDescription}
-          onChange={handleForm}
-        />
-      </Form>
-    );
-  }
-};
+*/

@@ -3,9 +3,12 @@ import { Image, Feed } from "semantic-ui-react";
 import InvestorForm from "./InvestorForm";
 import ManagerForm from "./ManagerForm";
 import { AccountContext } from "./context/AccountContext";
-import { timeConverter } from "../components/utils";
+import { timeConverter } from "./utils";
 
-export default function FundingStatus({ companyDetails }) {
+export default function CompanySidePanel({
+  companyDetails,
+  toggleRefreshData,
+}) {
   const [account, _] = React.useContext(AccountContext);
   const {
     isFinancing,
@@ -14,6 +17,7 @@ export default function FundingStatus({ companyDetails }) {
     currentValuation,
     postMoneyValuation,
     activeFundingRoundDetails,
+    balance,
     fundingRoundSummaries,
   } = companyDetails;
 
@@ -26,6 +30,7 @@ export default function FundingStatus({ companyDetails }) {
             currentValuation={currentValuation}
             postMoneyValuation={postMoneyValuation}
             activeFundingRoundDetails={activeFundingRoundDetails}
+            toggleRefreshData={toggleRefreshData}
           />
           <br />
         </>
@@ -36,6 +41,8 @@ export default function FundingStatus({ companyDetails }) {
             companyAddress={companyAddress}
             managerAddress={managerAddress}
             isFinancing={isFinancing}
+            balance={balance}
+            toggleRefreshData={toggleRefreshData}
           />
           <br />
         </>
@@ -51,10 +58,10 @@ export default function FundingStatus({ companyDetails }) {
 function FundingHistory({ fundingRoundSummaries }) {
   fundingRoundSummaries = fundingRoundSummaries.filter((x) => x !== null);
 
-  if (fundingRoundSummaries.length > 0) {
-    return (
-      <Feed>
-        {fundingRoundSummaries
+  return (
+    <Feed>
+      {fundingRoundSummaries.length > 0 &&
+        fundingRoundSummaries
           .reverse()
           .map(({ status, creationTimestamp, valuation }, index) => (
             <div className="cardborder fundinground" key={index}>
@@ -74,11 +81,7 @@ function FundingHistory({ fundingRoundSummaries }) {
               </Feed.Event>
             </div>
           ))}
-      </Feed>
-    );
-  } else {
-    return (
-      <Feed>
+      {fundingRoundSummaries.length === 0 && (
         <div className="cardborder fundinground">
           <Feed.Event className="companies-funding-history-event">
             <Feed.Content
@@ -88,7 +91,7 @@ function FundingHistory({ fundingRoundSummaries }) {
             />
           </Feed.Event>
         </div>
-      </Feed>
-    );
-  }
+      )}
+    </Feed>
+  );
 }

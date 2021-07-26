@@ -68,5 +68,16 @@ export default async (req, res) => {
     } catch (e) {
       res.status(400).json({ error: e.message });
     }
+  } else if (req.method === "PUT") {
+    try {
+      console.log(req.body);
+      await db
+        .collection("companies")
+        .doc(companyAddress)
+        .set(req.body, { merge: true });
+      res.status(200).json(data);
+    } catch (e) {
+      res.status(400).json({ error: e.message });
+    }
   }
 };

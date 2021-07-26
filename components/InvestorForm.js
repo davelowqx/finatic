@@ -18,6 +18,7 @@ export default function InvestorForm({
   currentValuation,
   postMoneyValuation,
   activeFundingRoundDetails,
+  toggleRefreshData,
 }) {
   const [amount, setAmount] = React.useState(0);
   const [states, setStates] = React.useState({
@@ -25,20 +26,21 @@ export default function InvestorForm({
     loading: false,
   });
 
-  const onSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     if (amount < sharePrice) {
-      //show tooltip
+      //show error
     }
     setStates({ loading: true, errorMessage: "" });
     try {
       await invest({ companyAddress, amount });
     } catch (err) {
       setStates({ ...states, errorMessage: err.message });
+    } finally {
+      setStates({ ...states, loading: false });
+      setAmount(0);
+      toggleRefreshData();
     }
-
-    setStates({ ...states, loading: false });
-    setAmount(0);
   };
 
   const {
@@ -56,12 +58,12 @@ export default function InvestorForm({
 
   return (
     <div className="companies-container cardborder">
+      <h2>Investor Actions</h2>
       <Grid>
         <Grid.Row>
           <Grid.Column>
-            <Progress percent={percent} progress indicating />
-            <Header as="h3">Investment Details</Header>
             <br />
+            <Progress percent={percent} progress indicating />
             <div className="container100">
               <div
                 className="container-investorform-1"
@@ -99,13 +101,14 @@ export default function InvestorForm({
             <br />
             <Divider clearing />
             <br />
-            <Form onSubmit={onSubmit} error={!!states.errorMessage}>
+            <Form onSubmit={handleSubmit} error={!!states.errorMessage}>
               <Form.Field>
                 <label style={{ fontSize: "1.28571429rem" }}>Invest</label>
                 <span>min {sharePrice} ETH</span>
                 <Input
                   type="decimal"
                   value={amount}
+                  min={sharePrice}
                   onChange={(event) => setAmount(event.target.value)}
                   label="ETH"
                   labelPosition="right"

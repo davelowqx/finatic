@@ -2,7 +2,7 @@ import React from "react";
 import { Header, Grid } from "semantic-ui-react";
 import { AccountContext } from "../components/context/AccountContext";
 import { truncateAddress } from "../components/utils";
-import ProfileTransactions from "../components/ProfileTransactions";
+import Portfolio from "../components/Portfolio";
 import Link from "next/link";
 
 export default function profile() {
@@ -31,7 +31,7 @@ export default function profile() {
               <div className="cardborder container14">
                 <Header as="h3">Latest Transactions</Header>
                 <br />
-                <ProfileTransactions profileAddress={account} />
+                <Portfolio profileAddress={account} />
               </div>
             </Grid.Column>
           </Grid.Row>

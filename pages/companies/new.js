@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { companyProducer } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
 import { storage } from "../../firebase";
+import { listCompany } from "../../components/Setters";
 
 export default function CompanyNew() {
   const [fields, setFields] = React.useState({
@@ -21,7 +22,6 @@ export default function CompanyNew() {
     symbol: "",
     description: "",
     sharesOutstanding: "",
-    imageUrl: "https://via.placeholder.com/450.png",
   });
 
   const [image, setImage] = React.useState(null);
@@ -31,10 +31,41 @@ export default function CompanyNew() {
     loading: false,
   });
 
+  const putData = (imageUrl, companyAddress) => {
+    fetch(
+      `${
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://fundsme.vercel.app"
+      }/api/companies/new`,
+      {
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+        body: JSON.stringify({
+          ...fields,
+          imageUrl,
+          companyAddress,
+        }),
+      }
+    ).then(() => {
+      router.push(companyAddress);
+    });
+  };
+
   const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
     setStates({ errorMessage: "", loading: true });
+    /*
+    try {
+      await listCompany({ ...fields, image });
+    } catch (err) {
+      console.log(err);
+      setStates({ errorMessage: err, ...states });
+    } finally {
+      setStates({ errorMessage: "", loading: false });
+    }
+    */
     try {
       companyProducer.once("ListCompany", async (err, res) => {
         if (!err) {
@@ -42,43 +73,26 @@ export default function CompanyNew() {
           // upload image to db
           try {
             const uploadTask = storage
-              .ref(`images/${companyAddress}`)
+              .ref()
+              .child(`images/${companyAddress}`)
               .put(image);
             uploadTask.on(
               "state_changed",
               (snapshot) => {},
-              (error) => {
-                console.log(error);
+              (err) => {
+                console.log("upload error", err);
+                putData("https://via/placeholder.com/450.png", companyAddress);
               },
               () => {
-                storage
-                  .ref("images")
-                  .child(companyAddress)
-                  .getDownloadURL()
-                  .then((imageUrl) => {
-                    console.log(imageUrl);
-                    setFields(...fields, imageUrl);
-                  });
+                // success
+                uploadTask.snapshot.ref.getDownloadURL().then((imageUrl) => {
+                  putData(imageUrl, companyAddress);
+                });
               }
             );
           } catch (e) {
             console.log(e);
           }
-
-          // append image link to firestroe
-          await fetch(
-            `${
-              process.env.NODE_ENV === "development"
-                ? "http://localhost:3000"
-                : "https://fundsme.vercel.app"
-            }/api/companies/new`,
-            {
-              headers: { "Content-Type": "application/json" },
-              method: "POST",
-              body: JSON.stringify({ ...fields, companyAddress }),
-            }
-          );
-          router.push(companyAddress);
         } else {
           throw err;
         }
@@ -181,7 +195,6 @@ export default function CompanyNew() {
                   size="big"
                   fluid
                   color="blue"
-                  href="/signup"
                   loading={states.loading}
                   primary
                   onClick={handleSubmit}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "semantic-ui-react";
-import { AccountContext } from "../components/context/AccountContext";
+import { AccountContext } from "./context/AccountContext";
 
 export default function ProfileTransactions({ profileAddress }) {
   // const [investmentDetails, setinvestmentDetails] = React.useState({
