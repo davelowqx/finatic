@@ -68,10 +68,10 @@ export async function createFundingRound({
         isFinancing: true,
         activeFundingRoundDetails: {
           currentAmount: 0,
-          targetAmount,
+          targetAmount: toWei(targetAmount),
           sharesOffered,
-          sharePrice: targetAmount / sharesOffered,
-          creationTimestamp: Date.now(),
+          sharePrice: toWei(targetAmount) / sharesOffered,
+          creationTimestamp: Date.now(), // is this accurate?
           investorsCount: 0,
         },
       }),

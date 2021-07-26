@@ -1,6 +1,5 @@
 import React from "react";
 import { Divider, Form, Input, Message, Button } from "semantic-ui-react";
-import { useRouter } from "next/router";
 import {
   concludeFundingRound,
   createFundingRound,
@@ -27,15 +26,12 @@ export default function ManagerForm({
     loading: false,
   });
 
-  const router = useRouter();
-
-  const handleConclude = async (event) => {
+  const handleFundingRound = async (event) => {
     event.preventDefault();
     setStates({ loading: true, errorMessage: "" });
     if (isFinancing) {
       try {
         await concludeFundingRound({ companyAddress });
-        // router.reload();
       } catch (err) {
         console.log(err);
         setStates({ ...states, errorMessage: err.message });
@@ -50,7 +46,6 @@ export default function ManagerForm({
           targetAmount: fields.targetAmount,
           sharesOffered: fields.sharesOffered,
         });
-        // router.reload();
       } catch (err) {
         console.log(err);
         setStates({ loading: false, errorMessage: err.message });
@@ -69,7 +64,6 @@ export default function ManagerForm({
     setStates({ loading: true, errorMessage: "" });
     try {
       await withdraw({ withdrawAmount, companyAddress, managerAddress });
-      // router.reload();
     } catch (err) {
       console.log(err);
       setStates({ loading: false, errorMessage: err.message });
@@ -80,14 +74,13 @@ export default function ManagerForm({
     }
   };
 
-  const handleDividends = async (event) => {
+  const handlePayoutDividends = async (event) => {
     const dividendAmount = fields.dividendAmount;
 
     event.preventDefault();
     setStates({ loading: true, errorMessage: "" });
     try {
       await payoutDividends({ dividendAmount, companyAddress });
-      // router.reload();
     } catch (err) {
       console.log(err);
       setStates({ loading: false, errorMessage: err.message });
@@ -143,7 +136,7 @@ export default function ManagerForm({
         color={!isFinancing ? "green" : "red"}
         loading={states.loading}
         disabled={states.loading}
-        onClick={handleConclude}
+        onClick={handleFundingRound}
         content={isFinancing ? "CLOSE ROUND" : "RAISE FUNDS"}
       />
       <br />
@@ -213,7 +206,7 @@ export default function ManagerForm({
             color="red"
             loading={states.loading}
             disabled={states.loading}
-            onClick={handleDividends}
+            onClick={handlePayoutDividends}
             content="PAYOUT DIVIDENDS"
           />
         </>

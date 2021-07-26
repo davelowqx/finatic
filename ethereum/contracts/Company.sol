@@ -38,8 +38,8 @@ contract Company is IERC20 {
         _symbol = symbol_;
         managerAddress = managerAddress_;
         _sharesOutstanding = sharesOutstanding_;
-        _balances[address(this)] = sharesOutstanding_;
-        _shareholders.push(address(this));
+        _balances[managerAddress_] = sharesOutstanding_;
+        _shareholders.push(managerAddress_);
         _seen[address(this)] = true;
         listingTimestamp = block.timestamp;
     }
