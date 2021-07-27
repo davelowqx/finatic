@@ -67,14 +67,12 @@ export default function InvestorForm({
             <br />
             <Progress percent={percent} progress indicating />
             <div className="container100">
-              <div
-                className="container-investorform-1"
-                style={{ paddingTop: "11px", paddingBottom: "11px" }}
-              >
+              <div className="container-investorform-1">
                 <h3>{currentAmount} ETH</h3> of {targetAmount} ETH goal
               </div>
               <div className="container-investorform-2">
-                Current Valuation:{" "}
+                Current Valuation:
+                <br />
                 <b>
                   {currentValuation === "0"
                     ? "UNEVALUATED"
@@ -82,7 +80,7 @@ export default function InvestorForm({
                 </b>
               </div>
               <div className="container-investorform-2">
-                Post Money Valuation:{" "}
+                Post Money Valuation: <br />
                 <b>{sharePrice * sharesOutstanding} ETH</b>
               </div>
             </div>

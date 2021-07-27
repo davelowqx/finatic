@@ -75,7 +75,10 @@ a.company-card {
   display: block;
   text-align: center;
   border-style: outset;
-  padding: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 30px;
+  padding-bottom: 30px;
 }
 
 .container-investorform-2 {
@@ -293,6 +296,7 @@ a.company-card {
 .companycard-image {
   display: block !important;
   height: 200px;
+  max-width: 330px;
   background-size: "cover";
   margin: auto;
 }
