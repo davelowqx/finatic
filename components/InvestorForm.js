@@ -12,6 +12,7 @@ import {
 } from "semantic-ui-react";
 import { invest } from "./Setters";
 import { daysLeft } from "../components/utils";
+import { ModalContext } from "./context/ModalContext";
 
 export default function InvestorForm({
   account,
@@ -20,25 +21,30 @@ export default function InvestorForm({
   activeFundingRoundDetails,
   toggleRefreshData,
 }) {
+  const popup = React.useContext(ModalContext);
   const [amount, setAmount] = React.useState(0);
-  const [states, setStates] = React.useState({
-    errorMessage: "",
-    loading: false,
-  });
+  const [loading, setLoading] = React.useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (amount < sharePrice) {
-      return;
-    }
-    console.log(`${account}`);
-    setStates({ loading: true, errorMessage: "" });
     try {
+      if (amount < sharePrice) {
+        throw Error("That's too little...");
+      }
+      console.log(`${account}`);
+      if (!account) {
+        throw Error("Please connect your account");
+      }
+      setLoading(true);
       await invest({ companyAddress, amount });
     } catch (err) {
-      setStates({ ...states, errorMessage: err.message });
+      if (err.code === 32000 || err.code === 32603) {
+        popup("Please reset your MetaMask account");
+      } else {
+        popup(err.message);
+      }
     } finally {
-      setStates({ ...states, loading: false });
+      setLoading(false);
       setAmount(0);
       toggleRefreshData();
     }
@@ -104,7 +110,7 @@ export default function InvestorForm({
             <br />
             <Divider clearing />
             <br />
-            <Form onSubmit={handleSubmit} error={!!states.errorMessage}>
+            <Form onSubmit={handleSubmit}>
               <Form.Field>
                 <label style={{ fontSize: "1.28571429rem" }}>Invest</label>
                 <span>min {sharePrice} ETH</span>
@@ -119,13 +125,7 @@ export default function InvestorForm({
                 />
               </Form.Field>
               <br />
-              <Message error header="Oops!" content={states.errorMessage} />
-              <Button
-                fluid
-                primary
-                disabled={states.loading}
-                loading={states.loading}
-              >
+              <Button fluid primary disabled={loading} loading={loading}>
                 INVEST
               </Button>
               <br />

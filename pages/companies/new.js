@@ -9,12 +9,14 @@ import {
   Checkbox,
   Message,
   Grid,
+  Popup,
 } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { companyProducer } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
 import { storage } from "../../firebase";
 import { listCompany } from "../../components/Setters";
+import { ModalContext } from "../../components/context/ModalContext";
 
 export default function CompanyNew() {
   const [fields, setFields] = React.useState({
@@ -25,11 +27,8 @@ export default function CompanyNew() {
   });
 
   const [image, setImage] = React.useState(null);
-
-  const [states, setStates] = React.useState({
-    errorMessage: "",
-    loading: false,
-  });
+  const [loading, setLoading] = React.useState(false);
+  const popup = React.useContext(ModalContext);
 
   const putData = (imageUrl, companyAddress) => {
     fetch(
@@ -55,7 +54,8 @@ export default function CompanyNew() {
   const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setStates({ errorMessage: "", loading: true });
+
+    setLoading(true);
     /*
     try {
       await listCompany({ ...fields, image });
@@ -80,7 +80,7 @@ export default function CompanyNew() {
               "state_changed",
               (snapshot) => {},
               (err) => {
-                console.log("upload error", err);
+                popup(err.message);
                 putData("https://via/placeholder.com/450.png", companyAddress);
               },
               () => {
@@ -91,10 +91,10 @@ export default function CompanyNew() {
               }
             );
           } catch (e) {
-            console.log(e);
+            popup(e.message);
           }
         } else {
-          throw err;
+          popup(err);
         }
       });
 
@@ -106,7 +106,8 @@ export default function CompanyNew() {
           from: accounts[0],
         });
     } catch (err) {
-      setStates({ ...states, errorMessage: err.message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,7 +124,7 @@ export default function CompanyNew() {
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={12}>
-              <Form size="big" error={!!states.errorMessage}>
+              <Form>
                 <Form.Input
                   label="Name"
                   placeholder="Apple Inc"
@@ -186,23 +187,23 @@ export default function CompanyNew() {
                       const file = event.target.files[0];
                       if (file.size < 1000000) {
                         setImage(file);
+                      } else {
+                        popup("Sorry, file size must be under 1MB");
                       }
                     }
                   }}
                 />
                 <br />
                 <Button
-                  size="big"
                   fluid
                   color="blue"
-                  loading={states.loading}
+                  loading={loading}
                   primary
                   onClick={handleSubmit}
                 >
                   {" "}
                   List
                 </Button>
-                <Message error header="Error!" content={states.errorMessage} />
               </Form>
             </Grid.Column>
           </Grid.Row>

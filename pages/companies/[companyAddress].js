@@ -14,6 +14,8 @@ import CompanySidePanel from "../../components/CompanySidePanel";
 import { truncateAddress } from "../../components/utils";
 import { AccountContext } from "../../components/context/AccountContext";
 import { timeConverter } from "../../components/utils";
+import { ModalContext } from "../../components/context/ModalContext";
+import { storage } from "../../firebase";
 
 export async function getServerSideProps(context) {
   return { props: { companyAddress: context.params.companyAddress } };
@@ -36,7 +38,6 @@ export default function Company({ companyAddress }) {
     description: "",
     companyAddress,
   });
-
   const [refreshData, setRefreshData] = React.useState(false);
   const toggleRefreshData = () => {
     setRefreshData(!refreshData);
@@ -146,37 +147,65 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
     imageUrl,
   } = companyDetails;
 
+  const popup = React.useContext(ModalContext);
   const [account, _] = React.useContext(AccountContext);
   const [editView, setEditView] = React.useState(false);
+  const [image, setImage] = React.useState(null);
   const [fields, setFields] = React.useState({
     description: "",
   });
   const [loading, setLoading] = React.useState(false);
 
+  const putData = async (data) => {
+    await fetch(
+      `${
+        process.env.NODE_ENV === "development"
+          ? "http://localhost:3000"
+          : "https://fundsme.vercel.app"
+      }/api/companies/${companyAddress}`,
+      {
+        headers: { "Content-Type": "application/json" },
+        method: "PUT",
+        body: JSON.stringify(data),
+      }
+    );
+  };
+
   const handleEdit = async () => {
     if (editView) {
       setLoading(true);
       try {
-        await fetch(
-          `${
-            process.env.NODE_ENV === "development"
-              ? "http://localhost:3000"
-              : "https://fundsme.vercel.app"
-          }/api/companies/${companyAddress}`,
-          {
-            headers: { "Content-Type": "application/json" },
-            method: "PUT",
-            body: JSON.stringify(fields),
-          }
-        );
-        toggleRefreshData();
+        if (image !== null) {
+          const uploadTask = storage
+            .ref()
+            .child(`images/${companyAddress}`)
+            .put(image);
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {},
+            (err) => {
+              popup(err.message);
+            },
+            () => {
+              uploadTask.snapshot.ref.getDownloadURL().then((imageUrl) => {
+                putData({ imageUrl });
+                toggleRefreshData();
+              });
+            }
+          );
+        }
+        if (fields.description !== description) {
+          putData({ description: fields.description });
+          toggleRefreshData();
+        }
       } catch (err) {
-        console.log(err);
+        popup(err.message);
       } finally {
         setLoading(false);
+        setImage(null);
       }
     } else {
-      setFields({ ...fields, description });
+      setFields({ description });
     }
     setEditView(!editView);
   };
@@ -238,10 +267,26 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
         </div>
       </div> */}
       {/* <br /> */}
+
       <Header as="h3">Company Description:</Header>
       {!editView && <div className="companies-description">{description}</div>}
       {editView && (
         <Form>
+          <div>Replace Image</div>
+          <Form.Input
+            type="file"
+            accept="image/*"
+            onChange={(event) => {
+              if (event.target.files[0]) {
+                const file = event.target.files[0];
+                if (file.size < 1000000) {
+                  setImage(file);
+                } else {
+                  popup("Sorry, file size must be under 1MB");
+                }
+              }
+            }}
+          />
           <TextArea
             className="companies-description-edit"
             value={fields.description}

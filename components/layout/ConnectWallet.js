@@ -2,94 +2,57 @@ import React from "react";
 import { Modal, Menu } from "semantic-ui-react";
 import { truncateAddress } from "../utils";
 import { AccountContext } from "../context/AccountContext";
+import { ModalContext } from "../context/ModalContext";
 
 export default function ConnectWallet() {
   const [loading, setLoading] = React.useState(false);
-  const [modal, setModal] = React.useState({ open: false, content: "" });
+  const popup = React.useContext(ModalContext);
   const [account, setAccount] = React.useContext(AccountContext);
 
   // on page load, setup account listener
   React.useEffect(() => {
     if (typeof window.ethereum !== "undefined") {
-      ethereum.on("accountsChanged", handleAccounts);
+      ethereum.on("accountsChanged", (accounts) => setAccount(accounts[0]));
     }
   }, []);
 
-  const handleConnect = (event) => {
+  const handleConnect = async (event) => {
     event.preventDefault();
     setLoading(true);
 
     try {
       //check if MetaMask is installed
       if (typeof window.ethereum === "undefined") {
-        setModal({
-          open: false,
-          content: "Please install MetaMask",
-        });
-        throw new Error();
+        throw Error("Please install MetaMask");
       }
 
-      ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then(handleAccounts)
-        .catch((err) => {
-          if (err.code === 4001) {
-            // EIP-1193 userRejectedRequest error
-            setModal({
-              ...modal,
-              content: "You have rejected the connection request",
-            });
-          } else {
-            setModal({
-              ...modal,
-              content: err,
-            });
-          }
-        });
+      const accounts = await ethereum.request({
+        method: "eth_requestAccounts",
+      });
+      setAccount(accounts[0]);
 
       // check chainID
-      ethereum.request({ method: "eth_chainId" }).then((chainId) => {
-        if (
-          chainId !== (process.env.NODE_ENV !== "development" ? "0x4" : "0x539")
-        ) {
-          setModal({
-            ...modal,
-            content:
-              "You are connected to the wrong ethereum network! Please select Rinkeby",
-          });
-        }
-      });
+      const chainId = await ethereum.request({ method: "eth_chainId" });
+      if (
+        chainId !== (process.env.NODE_ENV !== "development" ? "0x4" : "0x539")
+      ) {
+        throw Error(
+          "You are connected to the wrong Ethereum Network! Please select Rinkeby"
+        );
+      }
     } catch (err) {
-      setModal({
-        open: true,
-        ...modal,
-      });
+      if (err.code === 4001) {
+        popup("You have rejected the connection request");
+      } else {
+        popup(err.message);
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAccounts = (accounts) => {
-    if (accounts.length === 0) {
-      setModal({
-        open: true,
-        content: "You do not have accounts?",
-      });
-    } else {
-      setAccount(accounts[0]);
-    }
-  };
-
   return (
     <>
-      <Modal
-        onClose={() => setModal({ ...modal, open: false })}
-        onOpen={() => setModal({ ...modal, open: true })}
-        open={modal.open}
-        header="Oops!"
-        content={modal.content}
-        actions={[{ content: "OK", positive: true }]}
-      />
       <Menu.Item
         onClick={!!account ? () => {} : handleConnect}
         href={!!account ? "/profile" : ""}

@@ -6,6 +6,7 @@ import {
   withdraw,
   payoutDividends,
 } from "./Setters";
+import { ModalContext } from "./context/ModalContext";
 
 export default function ManagerForm({
   companyAddress,
@@ -22,21 +23,25 @@ export default function ManagerForm({
   });
 
   const [states, setStates] = React.useState({
-    errorMessage: "",
     loadingManageFundingRound: false,
     loadingWithdraw: false,
     loadingPayoutDividends: false,
   });
 
+  const popup = React.useContext(ModalContext);
+
   const handleManageFundingRound = async (event) => {
     event.preventDefault();
-    setStates({ ...states, loadingManageFundingRound: true, errorMessage: "" });
+    setStates({ ...states, loadingManageFundingRound: true });
     if (isFinancing) {
       try {
         await concludeFundingRound({ companyAddress });
       } catch (err) {
-        console.log(err);
-        setStates({ ...states, errorMessage: err.message });
+        if (err.code === 32000 || err.code === 32603) {
+          popup("Please reset your MetaMask account");
+        } else {
+          popup(err.message);
+        }
       } finally {
         setStates({ ...states, loadingManageFundingRound: false });
         toggleRefreshData();
@@ -49,8 +54,11 @@ export default function ManagerForm({
           sharesOffered: fields.sharesOffered,
         });
       } catch (err) {
-        console.log(err);
-        setStates({ ...states, errorMessage: err.message });
+        if (err.code === 32000 || err.code === 32603) {
+          popup("Please reset your MetaMask account");
+        } else {
+          popup(err.message);
+        }
       } finally {
         setStates({ ...states, loadingManageFundingRound: false });
         setFields({ ...fields, targetAmount: "", sharesOffered: "" });
@@ -63,12 +71,15 @@ export default function ManagerForm({
     const withdrawAmount = fields.withdrawAmount;
 
     event.preventDefault();
-    setStates({ ...states, loadingWithdraw: true, errorMessage: "" });
+    setStates({ ...states, loadingWithdraw: true });
     try {
       await withdraw({ withdrawAmount, companyAddress, managerAddress });
     } catch (err) {
-      console.log(err);
-      setStates({ ...states, errorMessage: err.message });
+      if (err.code === 32000 || err.code === 32603) {
+        popup("Please reset your MetaMask account");
+      } else {
+        popup(err.message);
+      }
     } finally {
       setStates({ ...states, loadingWithdraw: false });
       setFields({ ...fields, withdrawAmount: "" });
@@ -80,12 +91,15 @@ export default function ManagerForm({
     const dividendAmount = fields.dividendAmount;
 
     event.preventDefault();
-    setStates({ ...states, loadingPayoutDividends: true, errorMessage: "" });
+    setStates({ ...states, loadingPayoutDividends: true });
     try {
       await payoutDividends({ dividendAmount, companyAddress });
     } catch (err) {
-      console.log(err);
-      setStates({ ...states, errorMessage: err.message });
+      if (err.code === 32000 || err.code === 32603) {
+        popup("Please reset your MetaMask account");
+      } else {
+        popup(err.message);
+      }
     } finally {
       setStates({ ...states, loadingPayoutDividends: false });
       setFields({ ...fields, dividendAmount: "" });
@@ -97,7 +111,7 @@ export default function ManagerForm({
     <div className="companies-container cardborder">
       <h2>Manager Actions</h2>
       {!isFinancing && (
-        <Form error={!!fields.errorMessage}>
+        <Form>
           <Form.Field>
             <label>Target Amount</label>
             <Input
@@ -128,8 +142,6 @@ export default function ManagerForm({
               }
             />
           </Form.Field>
-
-          <Message error header="Oops!" content={fields.errorMessage} />
         </Form>
       )}
       <br />
@@ -150,7 +162,7 @@ export default function ManagerForm({
         <>
           <Divider />
           <br />
-          <Form error={!!fields.errorMessage}>
+          <Form>
             <Form.Field>
               <label>Withdrawal Amount</label>
               <Input
@@ -170,7 +182,6 @@ export default function ManagerForm({
                 labelPosition="right"
               />
             </Form.Field>
-            <Message error header="Oops!" content={fields.errorMessage} />
           </Form>
           <br />
           <Button
@@ -188,7 +199,7 @@ export default function ManagerForm({
           <br />
           <Divider />
           <br />
-          <Form error={!!fields.errorMessage}>
+          <Form>
             <Form.Field>
               <label>Payout Dividends (Total)</label>
               <Input
@@ -208,7 +219,6 @@ export default function ManagerForm({
                 labelPosition="right"
               />
             </Form.Field>
-            <Message error header="Oops!" content={fields.errorMessage} />
           </Form>
           <br />
           <Button
