@@ -35,7 +35,6 @@ export default function LandingPage() {
       >
         <Grid.Column width={9}>
           <Container
-            text
             style={{
               marginTop: "1.5em",
               marginBottom: "1.5em",
@@ -77,7 +76,9 @@ export default function LandingPage() {
           </Container>
         </Grid.Column>
         <Grid.Column width={7}>
-          <Image className="posterboy" src="/static/ethereum.png" />
+          <Container className="mainpage-container">
+            <Image className="mainpage-image" src="/static/ethereum.png" />
+          </Container>
         </Grid.Column>
       </Grid.Row>
       <Divider />
