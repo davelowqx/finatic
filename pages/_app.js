@@ -2,13 +2,16 @@
 import Layout from "../components/layout";
 import "../styles.css";
 import { AccountContextProvider } from "../components/context/AccountContext";
+import { ModalContextProvider } from "../components/context/ModalContext";
 
 export default function MyApp({ Component, pageProps }) {
   return (
     <AccountContextProvider>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <ModalContextProvider>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ModalContextProvider>
     </AccountContextProvider>
   );
 }
