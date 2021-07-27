@@ -198,6 +198,9 @@ a.company-card {
 
 .companies-image {
   margin-top: 5%;
+  background-size: "cover";
+  max-height: 350px;
+  max-width: 700px;
 }
 
 .companies-pre-description {

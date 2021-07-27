@@ -5,7 +5,7 @@ import _ from "lodash";
 
 export default function Searchbar() {
   db.collection("companies")
-    //.where("name" === state.value)
+    // .where("name", "==", state.value)
     .get()
     .then((querySnapshot) => {
       let i = 0;
@@ -105,7 +105,7 @@ export default function Searchbar() {
       loading: true,
       value: event.target.selection,
     });
-    console.log(state);
+    // console.log(state);
   };
 
   return (
