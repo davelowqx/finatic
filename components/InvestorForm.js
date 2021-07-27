@@ -86,7 +86,8 @@ export default function InvestorForm({
             </div>
             <div className="container100">
               <div className="container33">
-                <b>{sharesOffered}</b> Shares
+                <b>{sharesOffered}</b>{" "}
+                {"Share" + (sharesOffered === 1 ? "" : "s")}
               </div>
               <div className="container33">
                 <div>
@@ -95,7 +96,7 @@ export default function InvestorForm({
                 </div>
               </div>
               <div className="container33">
-                <b>{days}</b> Days Left
+                <b>{days}</b> {"Day" + (days === 1 ? "" : "s")} Left
               </div>
             </div>
             <br />

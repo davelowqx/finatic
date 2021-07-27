@@ -214,14 +214,8 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
       <div style={{ fontSize: "1.25rem" }}>
         <b>{`${name} (${symbol})`}</b>
       </div>
-      <Image
-        className="companies-image"
-        bordered
-        centered
-        fluid
-        src={imageUrl}
-      />
-      <div>
+      <Image className="companies-image" bordered centered src={imageUrl} />
+      {/* <div>
         <div style={{ float: "left" }} className="companies-pre-description">
           website
         </div>
@@ -237,8 +231,8 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
         <div style={{ float: "right" }} className="companies-pre-description">
           date
         </div>
-      </div>
-      <br />
+      </div> */}
+      {/* <br /> */}
       <Header as="h3">Company Description:</Header>
       {!editView && <div className="companies-description">{description}</div>}
       {editView && (
