@@ -117,16 +117,40 @@ a.company-card {
   }
 }
 
-@media (max-width: 675px) {
+@media (max-width: 540px) {
   .container13 {
     display: none !important;
   }
 }
 
-.posterboy {
-  width: 80%;
+.mainpage-container {
+  display: block;
   margin: auto;
-  margin-top: 4em;
+  height: 100%;
+}
+
+@media (max-width: 600px) {
+  .mainpage-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    min-width: 100px;
+  }
+}
+
+.mainpage-image {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: 100px;
+  width: 70%;
+  margin: auto;
+}
+
+@media (max-width: 991px) {
+  .search-bar {
+    display: none;
+  }
 }
 
 .eq-card {
