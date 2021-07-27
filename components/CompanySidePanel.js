@@ -25,6 +25,7 @@ export default function CompanySidePanel({
       {isFinancing && (
         <>
           <InvestorForm
+            account={account}
             companyAddress={companyAddress}
             currentValuation={currentValuation}
             activeFundingRoundDetails={activeFundingRoundDetails}
@@ -33,18 +34,20 @@ export default function CompanySidePanel({
           <br />
         </>
       )}
-      {account.toUpperCase() === managerAddress.toUpperCase() && (
-        <>
-          <ManagerForm
-            companyAddress={companyAddress}
-            managerAddress={managerAddress}
-            isFinancing={isFinancing}
-            balance={balance}
-            toggleRefreshData={toggleRefreshData}
-          />
-          <br />
-        </>
-      )}
+      {account &&
+        managerAddress &&
+        account.toUpperCase() === managerAddress.toUpperCase() && (
+          <>
+            <ManagerForm
+              companyAddress={companyAddress}
+              managerAddress={managerAddress}
+              isFinancing={isFinancing}
+              balance={balance}
+              toggleRefreshData={toggleRefreshData}
+            />
+            <br />
+          </>
+        )}
       <div className="companies-container cardborder">
         <h2>Funding History</h2>
         <FundingHistory fundingRoundSummaries={fundingRoundSummaries} />
