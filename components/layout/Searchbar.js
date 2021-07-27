@@ -2,26 +2,9 @@ import React from "react";
 import { Search } from "semantic-ui-react";
 import { db } from "../../firebase";
 import _ from "lodash";
+import { useRouter } from "next/router";
 
 export default function Searchbar() {
-  db.collection("companies")
-    // .where("name", "==", state.value)
-    .get()
-    .then((querySnapshot) => {
-      let i = 0;
-      // console.log(querySnapshot.docs);
-      querySnapshot.forEach((doc) => {
-        // console.log(doc.data().name);
-        state.results[i++] = {
-          title: doc.data().name,
-          description: doc.data().symbol,
-        };
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
   const initialState = {
     loading: false,
     results: [],
@@ -36,8 +19,6 @@ export default function Searchbar() {
         return { ...state, loading: true, value: action.query };
       case "FINISH_SEARCH":
         return { ...state, loading: false, results: action.results };
-      case "UPDATE_SELECTION":
-        return { ...state, value: action.selection };
 
       default:
         throw new Error();
@@ -48,23 +29,42 @@ export default function Searchbar() {
   const { loading, results, value } = state;
   const timeoutRef = React.useRef();
 
-  const handleSearchChange = React.useCallback((event) => {
+  const handleSearchChange = React.useCallback((event, data) => {
     clearTimeout(timeoutRef.current);
+    dispatch({ type: "START_SEARCH", query: data.value });
 
-    dispatch({ type: "START_SEARCH", query: event.target.selection });
-
-    timeoutRef.current = setTimeout(() => {
-      if (event.target.value.length === 0) {
+    timeoutRef.current = setTimeout(async () => {
+      if (data.value.length === 0) {
         dispatch({ type: "CLEAN_QUERY" });
         return;
       }
 
-      const re = new RegExp(_.escapeRegExp(event.target.selection), "i");
+      state.results = [];
+      await db
+        .collection("companies")
+        // .where("name", "==", data.value)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            console.log(doc.data());
+            const { name, companyAddress } = doc.data();
+            state.results.push({
+              key: companyAddress,
+              title: name,
+              description: companyAddress,
+            });
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      const re = new RegExp(_.escapeRegExp(data.value), "i");
       const isMatch = (result) => re.test(result.title);
 
       dispatch({
         type: "FINISH_SEARCH",
-        results: _.filter(state.results, isMatch),
+        results: _.filter(state.results, isMatch), // fetch db source
       });
     }, 300);
   }, []);
@@ -74,50 +74,16 @@ export default function Searchbar() {
       clearTimeout(timeoutRef.current);
     };
   }, []);
-
-  // const handleSearchChange = async (event) => {
-  //   if (event.target.value) {
-  //     setState({ ...state, loading: true, value: event.target.value });
-  //     console.log(state);
-  //     let i = 0;
-  //     await db
-  //       .collection("companies")
-  //       //.where("name" === state.value)
-  //       .get()
-  //       .then((querySnapshot) => {
-  //         querySnapshot.forEach((doc) => {
-  //           state.results[i++] = {
-  //             title: doc.data().name,
-  //             description: doc.data().symbol,
-  //           };
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   }
-  //   setState({ ...state, loading: false });
-  // };
-
-  const handleResultSelect = (event) => {
-    setState({
-      ...state,
-      loading: true,
-      value: event.target.selection,
-    });
-    // console.log(state);
-  };
+  const router = useRouter();
 
   return (
     <Search
       className="search-bar"
       loading={state.loading}
-      onResultSelect={(event) =>
-        dispatch({
-          type: "UPDATE_SELECTION",
-          selection: event.target.selection,
-        })
-      }
+      onResultSelect={(event, data) => {
+        state.value = "";
+        router.push(`/companies/${data.result.key}`);
+      }}
       onSearchChange={handleSearchChange}
       results={state.results}
       value={state.value}

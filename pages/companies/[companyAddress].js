@@ -16,6 +16,7 @@ import { AccountContext } from "../../components/context/AccountContext";
 import { timeConverter } from "../../components/utils";
 import { ModalContext } from "../../components/context/ModalContext";
 import { storage } from "../../firebase";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   return { props: { companyAddress: context.params.companyAddress } };
@@ -54,10 +55,6 @@ export default function Company({ companyAddress }) {
     console.log(companyDetails);
     setCompanyDetails({ ...companyDetails });
   };
-
-  React.useEffect(() => {
-    fetchCompanyDetails();
-  }, []);
 
   React.useEffect(() => {
     fetchCompanyDetails();
