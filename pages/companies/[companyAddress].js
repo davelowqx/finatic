@@ -116,17 +116,17 @@ const Details = ({ companyDetails }) => {
         meta: "Current Valuation",
       },
       {
-        key: 4,
+        key: 3,
         header: sharesOutstanding,
         meta: "Shares Outstanding",
       },
       {
-        key: 5,
+        key: 4,
         header: balance + " ETH",
         meta: "Company Balance",
       },
       {
-        key: 7,
+        key: 5,
         header: timeConverter(new Date(listingTimestamp)),
         meta: "Date Listed",
       },
@@ -194,22 +194,27 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
             />
           }
         />
-        {account.toUpperCase() === managerAddress.toUpperCase() &&
+        {account &&
+          managerAddress &&
+          account.toUpperCase() === managerAddress.toUpperCase() &&
           !editView && (
             <Popup
               content="Edit Company Details"
               trigger={<Button toggle icon="edit" onClick={handleEdit} />}
             />
           )}
-        {account.toUpperCase() === managerAddress.toUpperCase() && editView && (
-          <Button
-            toggle
-            loading={loading}
-            icon="save"
-            active
-            onClick={handleEdit}
-          ></Button>
-        )}
+        {account &&
+          managerAddress &&
+          account.toUpperCase() === managerAddress.toUpperCase() &&
+          editView && (
+            <Button
+              toggle
+              loading={loading}
+              icon="save"
+              active
+              onClick={handleEdit}
+            ></Button>
+          )}
       </Button.Group>
       <div style={{ fontSize: "1.25rem" }}>
         <b>{`${name} (${symbol})`}</b>
