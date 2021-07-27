@@ -55,6 +55,19 @@ export async function createFundingRound({
       from: await getActiveAccount(),
     });
 
+  const activeFundingRoundDetailsETH = await company.methods
+    .getActiveFundingRoundDetails()
+    .call();
+  const activeFundingRoundDetails = {
+    currentAmount: activeFundingRoundDetailsETH[0],
+    targetAmount: activeFundingRoundDetailsETH[1],
+    sharesOffered: activeFundingRoundDetailsETH[2],
+    sharePrice: activeFundingRoundDetailsETH[3],
+    sharesOutstanding: activeFundingRoundDetailsETH[4],
+    creationTimestamp: activeFundingRoundDetailsETH[5],
+    investorsCount: activeFundingRoundDetailsETH[6],
+  };
+
   await fetch(
     `${
       process.env.NODE_ENV === "development"
@@ -66,14 +79,7 @@ export async function createFundingRound({
       method: "PUT",
       body: JSON.stringify({
         isFinancing: true,
-        activeFundingRoundDetails: {
-          currentAmount: 0,
-          targetAmount: toWei(targetAmount),
-          sharesOffered,
-          sharePrice: toWei(targetAmount) / sharesOffered,
-          creationTimestamp: Date.now(), // is this accurate?
-          investorsCount: 0,
-        },
+        activeFundingRoundDetails,
       }),
     }
   );

@@ -15,17 +15,6 @@ export default function ConnectWallet() {
     }
   }, []);
 
-  const handleAccounts = (accounts) => {
-    if (accounts.length === 0) {
-      setModal({
-        open: true,
-        content: "You do not have accounts?",
-      });
-    } else {
-      setAccount(accounts[0]);
-    }
-  };
-
   const handleConnect = (event) => {
     event.preventDefault();
     setLoading(true);
@@ -77,6 +66,17 @@ export default function ConnectWallet() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAccounts = (accounts) => {
+    if (accounts.length === 0) {
+      setModal({
+        open: true,
+        content: "You do not have accounts?",
+      });
+    } else {
+      setAccount(accounts[0]);
     }
   };
 

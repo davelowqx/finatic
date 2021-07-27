@@ -23,12 +23,14 @@ export default function ManagerForm({
 
   const [states, setStates] = React.useState({
     errorMessage: "",
-    loading: false,
+    loadingManageFundingRound: false,
+    loadingWithdraw: false,
+    loadingPayoutDividends: false,
   });
 
-  const handleFundingRound = async (event) => {
+  const handleManageFundingRound = async (event) => {
     event.preventDefault();
-    setStates({ loading: true, errorMessage: "" });
+    setStates({ ...states, loadingManageFundingRound: true, errorMessage: "" });
     if (isFinancing) {
       try {
         await concludeFundingRound({ companyAddress });
@@ -36,7 +38,7 @@ export default function ManagerForm({
         console.log(err);
         setStates({ ...states, errorMessage: err.message });
       } finally {
-        setStates({ ...states, loading: false });
+        setStates({ ...states, loadingManageFundingRound: false });
         toggleRefreshData();
       }
     } else {
@@ -48,9 +50,9 @@ export default function ManagerForm({
         });
       } catch (err) {
         console.log(err);
-        setStates({ loading: false, errorMessage: err.message });
+        setStates({ ...states, errorMessage: err.message });
       } finally {
-        setStates({ ...states, loading: false });
+        setStates({ ...states, loadingManageFundingRound: false });
         setFields({ ...fields, targetAmount: "", sharesOffered: "" });
         toggleRefreshData();
       }
@@ -61,14 +63,14 @@ export default function ManagerForm({
     const withdrawAmount = fields.withdrawAmount;
 
     event.preventDefault();
-    setStates({ loading: true, errorMessage: "" });
+    setStates({ ...states, loadingWithdraw: true, errorMessage: "" });
     try {
       await withdraw({ withdrawAmount, companyAddress, managerAddress });
     } catch (err) {
       console.log(err);
-      setStates({ loading: false, errorMessage: err.message });
+      setStates({ ...states, errorMessage: err.message });
     } finally {
-      setStates({ ...states, loading: false });
+      setStates({ ...states, loadingWithdraw: false });
       setFields({ ...fields, withdrawAmount: "" });
       toggleRefreshData();
     }
@@ -78,14 +80,14 @@ export default function ManagerForm({
     const dividendAmount = fields.dividendAmount;
 
     event.preventDefault();
-    setStates({ loading: true, errorMessage: "" });
+    setStates({ ...states, loadingPayoutDividends: true, errorMessage: "" });
     try {
       await payoutDividends({ dividendAmount, companyAddress });
     } catch (err) {
       console.log(err);
-      setStates({ loading: false, errorMessage: err.message });
+      setStates({ ...states, errorMessage: err.message });
     } finally {
-      setStates({ ...states, loading: false });
+      setStates({ ...states, loadingPayoutDividends: false });
       setFields({ ...fields, dividendAmount: "" });
       toggleRefreshData();
     }
@@ -134,9 +136,13 @@ export default function ManagerForm({
       <Button
         fluid
         color={!isFinancing ? "green" : "red"}
-        loading={states.loading}
-        disabled={states.loading}
-        onClick={handleFundingRound}
+        loading={states.loadingManageFundingRound}
+        disabled={
+          states.loadingManageFundingRound ||
+          states.loadingPayoutDividends ||
+          states.loadingWithdraw
+        }
+        onClick={handleManageFundingRound}
         content={isFinancing ? "CLOSE ROUND" : "RAISE FUNDS"}
       />
       <br />
@@ -170,8 +176,12 @@ export default function ManagerForm({
           <Button
             fluid
             primary
-            loading={states.loading}
-            disabled={states.loading}
+            loading={states.loadingWithdraw}
+            disabled={
+              states.loadingManageFundingRound ||
+              states.loadingPayoutDividends ||
+              states.loadingWithdraw
+            }
             onClick={handleWithdraw}
             content="WITHDRAW"
           />
@@ -204,8 +214,12 @@ export default function ManagerForm({
           <Button
             fluid
             color="red"
-            loading={states.loading}
-            disabled={states.loading}
+            loading={states.loadingPayoutDividends}
+            disabled={
+              states.loadingManageFundingRound ||
+              states.loadingPayoutDividends ||
+              states.loadingWithdraw
+            }
             onClick={handlePayoutDividends}
             content="PAYOUT DIVIDENDS"
           />

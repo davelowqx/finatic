@@ -14,6 +14,7 @@ import { invest } from "./Setters";
 import { daysLeft } from "../components/utils";
 
 export default function InvestorForm({
+  account,
   companyAddress,
   currentValuation,
   activeFundingRoundDetails,
@@ -28,8 +29,9 @@ export default function InvestorForm({
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (amount < sharePrice) {
-      //show error
+      return;
     }
+    console.log(`${account}`);
     setStates({ loading: true, errorMessage: "" });
     try {
       await invest({ companyAddress, amount });
