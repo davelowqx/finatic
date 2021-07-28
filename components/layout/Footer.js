@@ -1,6 +1,5 @@
 import React from "react";
 import { List, Image, Header, Icon, Grid, Divider } from "semantic-ui-react";
-import Link from "next/link";
 
 export default function Layout(props) {
   return (
@@ -21,8 +20,30 @@ export default function Layout(props) {
             </div>
             <br />
             <div style={{ marginTop: "1em" }}>
-              Allowing anyone to invest in early-stage companies
+              Invest in startups on the Ethereum Network
             </div>
+          </Grid.Column>
+          <Grid.Column width={3}>
+            <div>
+              <Header as="h3">General</Header>
+            </div>
+            <br />
+            <List animated divided verticalAlign="middle">
+              <List.Item>
+                <List.Content>
+                  <List.Header as="a" href="/about#howitworks">
+                    How It Works
+                  </List.Header>
+                </List.Content>
+              </List.Item>
+              <List.Item>
+                <List.Content>
+                  <List.Header as="a" href="/about#contactus">
+                    Contact Us
+                  </List.Header>
+                </List.Content>
+              </List.Item>
+            </List>
           </Grid.Column>
           <Grid.Column width={3}>
             <div>
@@ -34,13 +55,6 @@ export default function Layout(props) {
                 <List.Content>
                   <List.Header as="a" href="/about#whyinvest">
                     Why Invest
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about#howitworks">
-                    How it works
                   </List.Header>
                 </List.Content>
               </List.Item>
@@ -68,13 +82,6 @@ export default function Layout(props) {
               </List.Item>
               <List.Item>
                 <List.Content>
-                  <List.Header as="a" href="/about#learn">
-                    Learn
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
                   <List.Header as="a" href="/about#instruments">
                     Instruments
                   </List.Header>
@@ -84,41 +91,13 @@ export default function Layout(props) {
           </Grid.Column>
           <Grid.Column width={3}>
             <div>
-              <Header as="h3">TwoFinGeeks</Header>
-            </div>
-            <br />
-            <List animated divided verticalAlign="middle">
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about#about">
-                    About
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about#community">
-                    Community
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Content>
-                  <List.Header as="a" href="/about#contactus">
-                    Contact Us
-                  </List.Header>
-                </List.Content>
-              </List.Item>
-            </List>
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <div>
-              <Header as="h3">Follow</Header>
+              <Header as="h3">Links</Header>
             </div>
             <br />
             <div style={{ marginTop: "1em" }}>
-              <Icon name="facebook" />
-              <Icon name="instagram" />
+              <a href="https:github.com/davelowqx/fundsme">
+                <Icon name="github" />
+              </a>
             </div>
           </Grid.Column>
         </Grid.Row>
@@ -127,12 +106,14 @@ export default function Layout(props) {
             <Divider section />
             <div className="centercontainer2" style={{ marginBottom: "-1em" }}>
               <Icon
-                style={{ marginTop: "1em", marginBottom: "1em" }}
+                style={{ margin: "1em 0.5em" }}
                 size="big"
                 name="money bill alternate outline"
               />
               <Header as="h2" style={{ marginBottom: "1em" }}>
-                <a href="/about">Refer a startup, get $1,000</a>
+                <a href="/about">
+                  Refer a startup and stand a chance to receive 1 ETH
+                </a>
               </Header>
             </div>
           </Grid.Column>

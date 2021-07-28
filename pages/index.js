@@ -43,7 +43,7 @@ export default function LandingPage() {
           >
             <Header
               as="h1"
-              content="Invest in startups, on the Ethereum Network"
+              content="Invest in startups on the Ethereum Network"
               style={{
                 fontSize: "4em",
                 fontWeight: "normal",
@@ -53,7 +53,7 @@ export default function LandingPage() {
             />
             <Header
               as="h2"
-              content="Hold ERC-20 tokenized shares of companies building the future"
+              content="Hold ERC-20 tokenized shares of companies building the future."
               style={{
                 fontSize: "1.7em",
                 fontWeight: "normal",

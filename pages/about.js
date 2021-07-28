@@ -16,7 +16,7 @@ export default function About() {
     <div>
       <br />
       <br />
-      <div className="cardborder" id="whyinvest">
+      <div className="cardborder">
         <br />
         <br />
         <Grid centered>
@@ -29,33 +29,34 @@ export default function About() {
                   wealthiest people, with regulators commonly citing the high
                   risks of investing in early stage companies. This is
                   controversial, as life changing wealth can be created by
-                  getting in early. This spurred us to create fundSME, where
-                  anyone with an ethereum wallet can back projects they want to.
+                  investing early. This spurred us to create fundSME, where
+                  anyone with an ethereum wallet can back projects they believe
+                  in.
                 </p>
               </div>
               <br />
               <Divider id="howitworks" />
               <Header as="h3">How fundSME platform works</Header>
               <div>
-                When a startup lists on fundSME, a smart contract is created on
-                the <span>Ethereum Network</span>, storing immutable details
-                about the company such as the company's name and symbol, the
-                manager's Ethereum address and the current shares outstanding.
-                The creation of the smart contract will incur some gas fees,
-                preventing misuse of the platform. Thereafter, the manager will
-                be able to create funding rounds with target amounts to raise
-                and additional shares to be offered. Investors are able to
-                invest in these funding rounds, where the minimum investment
+                When a founder lists his company on fundSME, a smart contract is
+                created on the <span>Ethereum Network</span>, storing immutable
+                details about the company such as the company's name and symbol,
+                the manager's Ethereum address and the current shares
+                outstanding. The creation of the smart contract will incur some
+                gas fees, preventing misuse of the platform. Thereafter, the
+                manager will be able to create funding rounds with a target
+                amount and additional shares to be offered. Investors are able
+                to invest in these funding rounds, where the minimum investment
                 will be equal to the price of one share. After 60 days, the
-                manager will conclude the funding round. If the funding goals
+                manager shall conclude the funding round. If the funding goals
                 are met, tokenized shares of the company will be issued to the
                 investors. These shares are ERC-20 tokens which can be easily
                 added to a MetaMask wallet. However, if the funding round failed
                 to meet its target, all investors will be fully refunded.
               </div>
               <br />
-              <Divider id="whyus" />
-              <Header as="h3">Why choose fundSME?</Header>
+              <Divider id="whyinvest" />
+              <Header as="h3">Why invest on fundSME?</Header>
               <div>
                 <p>
                   Most other equity financing platforms depend on a central
@@ -122,31 +123,13 @@ export default function About() {
                 <br />
               </div>
               <Divider id="whyraise" />
-              <Header as="h3">
-                As a company, why should I raise my money with fundSME?
-              </Header>
+              <Header as="h3">Why raise capital with fundSME?</Header>
               <div>
                 <p>
-                  fundSME provides companies an end-to-end solution of governing
-                  your equity through the disbursement of shares on the
-                  platform. Additionally, owners who issue shares of their
-                  company receive the cash directly from the investors through
-                  the smart contract, making it a safe form of equity investing.
-                </p>
-                <br />
-              </div>
-              <Divider id="learn" />
-              <Header as="h3">
-                How can I learn more about equity financing?
-              </Header>
-              <div>
-                <p>
-                  We suggest watcing YouTube videos on the subject matter and
-                  visiting websites such as{" "}
-                  <a href="https://www.investopedia.com/terms/e/equityfinancing.asp">
-                    Investopedia
-                  </a>
-                  .
+                  By listing your company on fundSME, you can benefit from
+                  having a diversified broad base of retail investors, without
+                  the constant pressure of institutional money who are primarily
+                  concerned with short term profits.
                 </p>
                 <br />
               </div>
@@ -156,32 +139,16 @@ export default function About() {
               </Header>
               <div>
                 <p>
-                  Currently we only offers equity financing. In the future, we
-                  look forward to providing debt financing and convertable
-                  notes.
-                </p>
-                <br />
-              </div>
-              <Divider id="about" />
-              <Header as="h3">
-                What is fundSME and who are the TwoFinGeeks?
-              </Header>
-              <div>
-                <p>
-                  fundSME is a decentralised platform built on the ethereum
-                  network, linking businesses seeking equity financing with
-                  everyday investors. fundSME creates a seamless investment
-                  process through the use of smart contracts to automate the
-                  equity financing process securely on the blockchain. Please
-                  refer to our package.json on our{" "}
-                  <a href="https:github.com/davelowqx/fundsme">github</a> to see
-                  what is our techstack.
+                  Currently, fundSME only offers equity financing. We are
+                  exploring the possibility of incorporating other structures
+                  such as debt and convertable notes.
                 </p>
                 <br />
               </div>
               <Divider id="contactus" />
               <Header as="h3">How do we contact the TwoFinGeeks team?</Header>
-              <div></div>
+              <div>We prefer to stay anonymous, thanks.</div>
+              <br />
             </Grid.Column>
           </Grid.Row>
         </Grid>
