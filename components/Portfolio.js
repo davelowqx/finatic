@@ -14,7 +14,6 @@ export default function ProfileTransactions({ profileAddress }) {
     )
       .then((res) => res.json())
       .then((deets) => {
-        console.log(deets);
         setinvestmentDetails(deets);
       });
   }, [profileAddress]);
@@ -31,9 +30,10 @@ export default function ProfileTransactions({ profileAddress }) {
               href={`/companies/${companyAddress}`}
             >
               <Card.Content textAlign={"center"}>
-                <Card.Header>{name}</Card.Header>
-                <div>{symbol}</div>
-                <div>{numberOfShares}</div>
+                <Card.Header>{`${name} (${symbol})`}</Card.Header>
+                <div>{`${numberOfShares} share${
+                  numberOfShares === 1 ? "" : "s"
+                }`}</div>
               </Card.Content>
             </Card>
           );

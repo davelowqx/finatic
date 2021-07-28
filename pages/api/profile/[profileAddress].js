@@ -16,19 +16,23 @@ export default async (req, res) => {
       const investmentPromises = companyAddresses.map(
         async (companyAddress) => {
           const company = Company(companyAddress);
-          const numberOfShares = await company.methods
-            .balanceOf(profileAddress)
-            .call();
+          const numberOfShares = parseInt(
+            await company.methods.balanceOf(profileAddress).call()
+          );
           const companySummary = await db
             .collection("companies")
             .doc(companyAddress)
             .get()
             .then((doc) => {
-              const { name, symbol } = doc.data();
-              return {
-                name,
-                symbol,
-              };
+              if (doc.exists) {
+                const { name, symbol } = doc.data();
+                return {
+                  name,
+                  symbol,
+                };
+              } else {
+                return { name: "", symbol: "" };
+              }
             });
 
           return {

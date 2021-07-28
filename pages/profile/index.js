@@ -1,11 +1,10 @@
 import React from "react";
 import { Header, Grid } from "semantic-ui-react";
-import { AccountContext } from "../components/context/AccountContext";
-import { truncateAddress } from "../components/utils";
-import Portfolio from "../components/Portfolio";
-import Link from "next/link";
+import { AccountContext } from "../../components/context/AccountContext";
+import { truncateAddress } from "../../components/utils";
+import Portfolio from "../../components/Portfolio";
 
-export default function profile() {
+export default function Profile() {
   const [account, setAccount] = React.useContext(AccountContext);
 
   return (

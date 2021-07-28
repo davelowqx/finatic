@@ -22,7 +22,19 @@ export default async (req, res) => {
         .collection("companies")
         .doc(companyAddress)
         .get()
-        .then((doc) => doc.data());
+        .then((doc) => {
+          if (doc.exists) {
+            return doc.data();
+          } else {
+            return {
+              name: "",
+              symbol: "",
+              description: "",
+              imageUrl: "",
+              isFinancing: false,
+            };
+          }
+        });
 
       const companyDetails = {
         name,
@@ -40,7 +52,7 @@ export default async (req, res) => {
       };
 
       let activeFundingRoundDetailsConverted = {};
-      if (Object.keys(activeFundingRoundDetails).length) {
+      if (isFinancing) {
         const {
           currentAmount,
           targetAmount,

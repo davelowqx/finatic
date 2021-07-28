@@ -30,7 +30,7 @@ export default function About() {
                   risks of investing in early stage companies. This is
                   controversial, as life changing wealth can be created by
                   investing early. This spurred us to create fundSME, where
-                  anyone with an ethereum wallet can back projects they believe
+                  anyone with an Ethereum wallet can back projects they believe
                   in.
                 </p>
               </div>
@@ -43,9 +43,9 @@ export default function About() {
                 details about the company such as the company's name, symbol,
                 the manager's Ethereum address and the current shares
                 outstanding. These shares will be to deposited in the manager's
-                address, allowing him to distribute them to the initial
-                shareholders. The creation of the smart contract will incur some
-                gas fees, preventing misuse of the platform.
+                address, allowing him to distribute them to the existing
+                shareholders. Additionally, the creation of the smart contract
+                will incur some gas fees, preventing misuse of the platform.
                 <br />
                 <br />
                 Thereafter, the manager will be able raise capital by creating
@@ -55,9 +55,18 @@ export default function About() {
                 share. After 60 days, the manager shall conclude the funding
                 round. If the funding goals are met, tokenized shares of the
                 company will be issued to the investors. These shares are ERC-20
-                tokens which can be easily added to a MetaMask wallet. However,
-                if the funding round fails to meet its target, all investors
-                will be fully refunded.
+                tokens which can be easily added to a MetaMask wallet. The
+                manager will then be able to use the proceeds of the funding
+                round for business operations. However, if the funding round
+                fails to meet its target, all investors will be fully refunded.
+                Additionally, the manager is able to payout dividends to all
+                shareholders.
+                <br />
+                <br />
+                All participants are able to freely view the holdings of other
+                ethereum addresses to aid their decision making. For example, an
+                investor may check if the founder owns a majority stake of his
+                own company.
               </div>
               <br />
               <Divider id="whyinvest" />
@@ -65,14 +74,15 @@ export default function About() {
               <div>
                 <p>
                   Most other equity financing platforms depend on a central
-                  authority for trust. As history has shown time and again,
-                  having a single point of failure can prove fatal, especially
-                  when dealing with large pools of capital. On the other hand,
-                  fundSME is one of the many Decentralised Finance projects
-                  leveraging on the well-established Ethereum Network. The rules
-                  governing every action on this platform are etched in{" "}
-                  <a href="https:github.com/davelowqx/fundsme">code</a> and
-                  stored immutably on the Ethereum Network as smart contracts.
+                  authority for trust and lack transparency. As history has
+                  shown time and again, depending on a single entity for trust
+                  is never reliable, especially when there is conflict of
+                  interest and large amounts of capital are at stake. On the
+                  other hand, fundSME is one of the many Decentralised Finance
+                  projects leveraging on the well-established Ethereum Network.
+                  The rules governing every action on this platform are etched
+                  in <a href="https:github.com/davelowqx/fundsme">code</a> and
+                  stored immutably on smart contracts in the Ethereum Network.
                 </p>
                 <br />
               </div>

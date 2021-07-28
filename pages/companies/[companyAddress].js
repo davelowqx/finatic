@@ -39,6 +39,7 @@ export default function Company({ companyAddress }) {
     description: "",
     companyAddress,
   });
+  const [error, setError] = React.useState(false);
   const [refreshData, setRefreshData] = React.useState(false);
   const toggleRefreshData = () => {
     setRefreshData(!refreshData);
@@ -52,8 +53,11 @@ export default function Company({ companyAddress }) {
           : "https://fundsme.vercel.app"
       }/api/companies/${companyAddress}`
     ).then((res) => res.json());
-    console.log(companyDetails);
-    setCompanyDetails({ ...companyDetails });
+    if (!companyDetails.error) {
+      setCompanyDetails({ ...companyDetails });
+    } else {
+      setError(true);
+    }
   };
 
   React.useEffect(() => {
@@ -62,24 +66,34 @@ export default function Company({ companyAddress }) {
 
   return (
     <Grid>
-      <Grid.Row>
-        <Grid.Column computer={10} mobile={16}>
-          <br />
-          <MainInfo
-            companyDetails={companyDetails}
-            toggleRefreshData={toggleRefreshData}
-          />
-        </Grid.Column>
-        <Grid.Column computer={6} mobile={16}>
-          <Grid.Row>
+      {!error && (
+        <Grid.Row>
+          <Grid.Column computer={10} mobile={16}>
             <br />
-            <CompanySidePanel
+            <MainInfo
               companyDetails={companyDetails}
               toggleRefreshData={toggleRefreshData}
             />
-          </Grid.Row>
-        </Grid.Column>
-      </Grid.Row>
+          </Grid.Column>
+          <Grid.Column computer={6} mobile={16}>
+            <Grid.Row>
+              <br />
+              <CompanySidePanel
+                companyDetails={companyDetails}
+                toggleRefreshData={toggleRefreshData}
+              />
+            </Grid.Row>
+          </Grid.Column>
+        </Grid.Row>
+      )}
+      {error && (
+        <Grid.Row>
+          <Grid.Column computer={10} mobile={16}>
+            <br />
+            <Header as="h1">Nothing to see here...</Header>
+          </Grid.Column>
+        </Grid.Row>
+      )}
     </Grid>
   );
 }
@@ -105,6 +119,7 @@ const Details = ({ companyDetails }) => {
       {
         key: 1,
         header: truncateAddress(managerAddress),
+        href: `/profile/${managerAddress}`,
         meta: "Address of Manager",
       },
       {
@@ -166,6 +181,7 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
         body: JSON.stringify(data),
       }
     );
+    toggleRefreshData();
   };
 
   const handleEdit = async () => {
@@ -183,17 +199,15 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
             (err) => {
               popup(err.message);
             },
-            () => {
+            async () => {
               uploadTask.snapshot.ref.getDownloadURL().then((imageUrl) => {
                 putData({ imageUrl });
-                toggleRefreshData();
               });
             }
           );
         }
         if (fields.description !== description) {
           putData({ description: fields.description });
-          toggleRefreshData();
         }
       } catch (err) {
         popup(err.message);
@@ -226,7 +240,14 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
           !editView && (
             <Popup
               content="Edit Company Details"
-              trigger={<Button toggle icon="edit" onClick={handleEdit} />}
+              trigger={
+                <Button
+                  toggle
+                  icon="edit"
+                  loading={loading}
+                  onClick={handleEdit}
+                />
+              }
             />
           )}
         {account &&

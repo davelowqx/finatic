@@ -67,10 +67,17 @@ export default function CompanyNew() {
     }
     */
     try {
-      companyProducer.once("ListCompany", async (err, res) => {
-        if (!err) {
-          const companyAddress = res.returnValues.companyAddress;
-          // upload image to db
+      const accounts = await web3.eth.getAccounts();
+
+      await companyProducer.methods
+        .listCompany(fields.name, fields.symbol, fields.sharesOutstanding)
+        .send({
+          from: accounts[0],
+        })
+        .on("receipt", (receipt) => {
+          const companyAddress =
+            receipt.events.ListCompany.returnValues.companyAddress;
+          console.log(companyAddress);
           try {
             const uploadTask = storage
               .ref()
@@ -90,22 +97,12 @@ export default function CompanyNew() {
                 });
               }
             );
-          } catch (e) {
-            popup(e.message);
+          } catch (err) {
+            popup(err.message);
           }
-        } else {
-          popup(err);
-        }
-      });
-
-      const accounts = await web3.eth.getAccounts();
-
-      await companyProducer.methods
-        .listCompany(fields.name, fields.symbol, fields.sharesOutstanding)
-        .send({
-          from: accounts[0],
         });
     } catch (err) {
+      popup(err.message);
     } finally {
       setLoading(false);
     }

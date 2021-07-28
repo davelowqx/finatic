@@ -19,33 +19,39 @@ export default async (req, res) => {
           .doc(companyAddress)
           .get()
           .then((doc) => {
-            const {
-              name,
-              symbol,
-              description,
-              imageUrl,
-              isFinancing,
-              activeFundingRoundDetails,
-            } = doc.data();
-            const { currentAmount, targetAmount, creationTimestamp } =
-              activeFundingRoundDetails;
-            return {
-              name,
-              symbol,
-              description,
-              imageUrl,
-              isFinancing,
-              companyAddress,
-              activeFundingRoundDetails: {
-                currentAmount: !!currentAmount ? fromWei(currentAmount) : 0,
-                targetAmount: !!targetAmount ? fromWei(targetAmount) : 0,
-                creationTimestamp,
-              },
-              progress: Math.round((100 * currentAmount) / targetAmount),
-            };
+            if (doc.exists) {
+              const {
+                name,
+                symbol,
+                description,
+                imageUrl,
+                isFinancing,
+                activeFundingRoundDetails,
+              } = doc.data();
+              const { currentAmount, targetAmount, creationTimestamp } =
+                activeFundingRoundDetails;
+              return {
+                name,
+                symbol,
+                description,
+                imageUrl,
+                isFinancing,
+                companyAddress,
+                activeFundingRoundDetails: {
+                  currentAmount: !!currentAmount ? fromWei(currentAmount) : 0,
+                  targetAmount: !!targetAmount ? fromWei(targetAmount) : 0,
+                  creationTimestamp,
+                },
+                progress: Math.round((100 * currentAmount) / targetAmount),
+              };
+            } else {
+              return {};
+            }
           });
       });
-      const companySummaries = await Promise.all(promises);
+      const companySummaries = (await Promise.all(promises)).filter(
+        (obj) => Object.keys(obj) !== 0
+      );
       res.status(200).json(companySummaries);
     } catch (e) {
       res.status(400).json({ error: e.message });
