@@ -40,19 +40,24 @@ export default function About() {
               <div>
                 When a founder lists his company on fundSME, a smart contract is
                 created on the <span>Ethereum Network</span>, storing immutable
-                details about the company such as the company's name and symbol,
+                details about the company such as the company's name, symbol,
                 the manager's Ethereum address and the current shares
-                outstanding. The creation of the smart contract will incur some
-                gas fees, preventing misuse of the platform. Thereafter, the
-                manager will be able to create funding rounds with a target
-                amount and additional shares to be offered. Investors are able
-                to invest in these funding rounds, where the minimum investment
-                will be equal to the price of one share. After 60 days, the
-                manager shall conclude the funding round. If the funding goals
-                are met, tokenized shares of the company will be issued to the
-                investors. These shares are ERC-20 tokens which can be easily
-                added to a MetaMask wallet. However, if the funding round failed
-                to meet its target, all investors will be fully refunded.
+                outstanding. These shares will be to deposited in the manager's
+                address, allowing him to distribute them to the initial
+                shareholders. The creation of the smart contract will incur some
+                gas fees, preventing misuse of the platform.
+                <br />
+                <br />
+                Thereafter, the manager will be able raise capital by creating
+                funding rounds with a target amount and additional shares to be
+                offered. Investors are able to invest in these funding rounds,
+                where the minimum investment will be equal to the price of one
+                share. After 60 days, the manager shall conclude the funding
+                round. If the funding goals are met, tokenized shares of the
+                company will be issued to the investors. These shares are ERC-20
+                tokens which can be easily added to a MetaMask wallet. However,
+                if the funding round fails to meet its target, all investors
+                will be fully refunded.
               </div>
               <br />
               <Divider id="whyinvest" />
