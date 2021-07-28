@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Popup,
-  Input,
   TextArea,
   Form,
   Button,
@@ -11,12 +10,10 @@ import {
   Grid,
 } from "semantic-ui-react";
 import CompanySidePanel from "../../components/CompanySidePanel";
-import { truncateAddress } from "../../components/utils";
+import { truncateAddress, timeConverter } from "../../components/utils";
 import { AccountContext } from "../../components/context/AccountContext";
-import { timeConverter } from "../../components/utils";
 import { ModalContext } from "../../components/context/ModalContext";
 import { storage } from "../../firebase";
-import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   return { props: { companyAddress: context.params.companyAddress } };
