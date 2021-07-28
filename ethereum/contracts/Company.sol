@@ -184,7 +184,7 @@ contract Company is IERC20 {
         for (uint256 i = 0; i < _shareholders.length; i++) {
             address shareholder = _shareholders[i];
             if (shareholder != address(this) && _balances[shareholder] > 0) { 
-                payable(shareholder).transfer(amount * (_balances[shareholder] / _sharesOutstanding));
+                payable(shareholder).transfer(amount * _balances[shareholder] / _sharesOutstanding);
             }
         }
     } 

@@ -116,6 +116,7 @@ export async function withdraw({ withdrawAmount, companyAddress }) {
 
 export async function payoutDividends({ dividendAmount, companyAddress }) {
   const company = Company(companyAddress);
+  console.log(dividendAmount, companyAddress);
   await company.methods.payoutDividends(toWei(dividendAmount)).send({
     from: await getActiveAccount(),
   });
