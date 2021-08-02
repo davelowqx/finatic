@@ -1,22 +1,12 @@
 import React from "react";
-import {
-  Image,
-  Header,
-  Input,
-  TextArea,
-  Form,
-  Button,
-  Checkbox,
-  Message,
-  Grid,
-  Popup,
-} from "semantic-ui-react";
+import { Image, Header, TextArea, Form, Button, Grid } from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { companyProducer } from "../../ethereum/contracts";
 import web3 from "../../ethereum/web3";
 import { storage } from "../../firebase";
-import { listCompany } from "../../components/Setters";
 import { ModalContext } from "../../components/context/ModalContext";
+import { AccountContext } from "../../components/context/AccountContext";
+// import { listCompany } from "../../components/Setters";
 
 export default function CompanyNew() {
   const [fields, setFields] = React.useState({
@@ -29,6 +19,7 @@ export default function CompanyNew() {
   const [image, setImage] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const popup = React.useContext(ModalContext);
+  const [account, _] = React.useContext(AccountContext);
 
   const putData = (imageUrl, companyAddress) => {
     fetch(
@@ -54,7 +45,10 @@ export default function CompanyNew() {
   const router = useRouter();
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    if (!account) {
+      popup("Please connect wallet first");
+      return;
+    }
     setLoading(true);
     /*
     try {
@@ -85,7 +79,9 @@ export default function CompanyNew() {
               .put(image);
             uploadTask.on(
               "state_changed",
-              (snapshot) => {},
+              (snapshot) => {
+                console.log(snapshot);
+              },
               (err) => {
                 popup(err.message);
                 putData("https://via/placeholder.com/450.png", companyAddress);
@@ -110,7 +106,6 @@ export default function CompanyNew() {
 
   return (
     <>
-      <br />
       <div className="login-container cardborder">
         <Grid centered>
           <Grid.Row>

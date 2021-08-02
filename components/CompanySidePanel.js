@@ -86,7 +86,9 @@ function FundingHistory({ fundingRoundSummaries }) {
                   <Feed.Content
                     className="companies-funding-history-details"
                     date={`Date: ${timeConverter(creationTimestamp)}`}
-                    summary={`Valuation: ${sharesOutstanding * sharePrice} ETH`}
+                    summary={`Valuation: ${
+                      Math.round(sharesOutstanding * sharePrice * 100) / 100
+                    } ETH`}
                     content={`Share Price: ${sharePrice}`}
                   />
                 </Feed.Event>

@@ -30,7 +30,7 @@ export default function LandingPage() {
     <Grid centered>
       <Grid.Row
         style={{
-          marginBottom: "5em",
+          marginBottom: "4em",
         }}
       >
         <Grid.Column width={9}>
@@ -48,7 +48,7 @@ export default function LandingPage() {
                 fontSize: "4em",
                 fontWeight: "normal",
                 marginTop: "1.5em",
-                marginBottom: "1em",
+                marginBottom: ".5em",
               }}
             />
             <Header
@@ -58,7 +58,7 @@ export default function LandingPage() {
                 fontSize: "1.7em",
                 fontWeight: "normal",
                 marginTop: "1.5em",
-                marginBottom: "1em",
+                marginBottom: ".5em",
               }}
             />
             <Button
@@ -85,12 +85,12 @@ export default function LandingPage() {
       <Grid.Row>
         <Grid.Column width={10}>
           <Header
-            as="h1"
+            as="h3"
+            floated="left"
             content="Invest Now"
             style={{
-              fontSize: "3em",
+              fontSize: "2.5em",
               fontWeight: "bold",
-              marginTop: "10px",
             }}
           />
         </Grid.Column>
@@ -124,10 +124,11 @@ export default function LandingPage() {
       <Grid.Row>
         <Grid.Column width={10}>
           <Header
-            as="h1"
+            as="h3"
             content="Funded"
+            floated="left"
             style={{
-              fontSize: "3em",
+              fontSize: "2.5em",
               fontWeight: "bold",
             }}
           />

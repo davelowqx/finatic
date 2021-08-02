@@ -5,7 +5,7 @@ import ConnectWallet from "./ConnectWallet";
 
 export default function Header() {
   return (
-    <Menu fluid borderless>
+    <Menu fluid borderless className="cardborder">
       <Menu.Item className="header container12" href="/">
         <Image src="/static/logo.svg" avatar />
         <div className="logo">fundSME</div>

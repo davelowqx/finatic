@@ -19,12 +19,16 @@ export default function Profile({ profileAddress }) {
         <Grid centered>
           <Grid.Row>
             <Grid.Column width={14}>
-              <Header as="h3">Viewing Holdings of {profileAddress}</Header>
+              <Header as="h3">
+                Viewing Holdings of{" "}
+                <span style={{ textDecoration: "underline" }}>
+                  {profileAddress}
+                </span>
+              </Header>
             </Grid.Column>
           </Grid.Row>
           <Grid.Row>
             <Grid.Column width={14}>
-              <br />
               <Portfolio profileAddress={profileAddress} />
             </Grid.Column>
           </Grid.Row>

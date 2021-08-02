@@ -7,8 +7,8 @@ export default function Layout(props) {
       <br />
       <Divider section />
       <Grid centered>
-        <Grid.Row divided>
-          <Grid.Column width={3}>
+        <Grid.Row>
+          <Grid.Column width={4}>
             <Image
               className="footer-logo-image"
               circular
@@ -28,7 +28,7 @@ export default function Layout(props) {
               <Header as="h3">General</Header>
             </div>
             <br />
-            <List animated divided verticalAlign="middle">
+            <List verticalAlign="middle">
               <List.Item>
                 <List.Content>
                   <List.Header as="a" href="/about#howitworks">
@@ -50,7 +50,7 @@ export default function Layout(props) {
               <Header as="h3">For Investors</Header>
             </div>
             <br />
-            <List animated divided verticalAlign="middle">
+            <List verticalAlign="middle">
               <List.Item>
                 <List.Content>
                   <List.Header as="a" href="/about#whyinvest">
@@ -72,7 +72,7 @@ export default function Layout(props) {
               <Header as="h3">For Companies</Header>
             </div>
             <br />
-            <List animated divided verticalAlign="middle">
+            <List verticalAlign="middle">
               <List.Item>
                 <List.Content>
                   <List.Header as="a" href="/about#whyraise">
@@ -96,25 +96,8 @@ export default function Layout(props) {
             <br />
             <div style={{ marginTop: "1em" }}>
               <a href="https:github.com/davelowqx/fundsme">
-                <Icon name="github" />
+                <Icon name="github" size="large" />
               </a>
-            </div>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <Divider section />
-            <div className="centercontainer2" style={{ marginBottom: "-1em" }}>
-              <Icon
-                style={{ margin: "1em 0.5em" }}
-                size="big"
-                name="money bill alternate outline"
-              />
-              <Header as="h2" style={{ marginBottom: "1em" }}>
-                <a href="/about">
-                  Refer a startup and stand a chance to receive 1 ETH
-                </a>
-              </Header>
             </div>
           </Grid.Column>
         </Grid.Row>

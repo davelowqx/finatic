@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Header, Button, Card, Item } from "semantic-ui-react";
+import { Image, Header, Button, Card, Icon } from "semantic-ui-react";
 import { createFundingRound } from "./Setters";
 import { daysLeft } from "../components/utils";
 
@@ -30,16 +30,15 @@ export default function CompanyCards({
             const days = daysLeft(activeFundingRoundDetails.creationTimestamp);
             return (
               <Card
-                className="company-card"
+                className="cardborder"
                 key={companyAddress}
                 href={`/companies/${companyAddress}`}
                 fluid
                 color={isFinancing ? "green" : "red"}
               >
-                <Card.Content header={name} textAlign="center" />
-                <Card.Content>
-                  <img src={imageUrl} className="companycard-image" />
-                  {isFinancing && (
+                <Image src={imageUrl} wrapped ui />
+                {isFinancing && (
+                  <div>
                     <Button
                       size="mini"
                       color="green"
@@ -47,28 +46,25 @@ export default function CompanyCards({
                     >
                       {days} Days Left
                     </Button>
-                  )}
-                </Card.Content>
+                  </div>
+                )}
                 <Card.Content>
+                  <Card.Header>{name}</Card.Header>
                   <Card.Description style={{ color: "black" }}>
                     {`${description.substring(0, 120)}...`}
                   </Card.Description>
+                  <Card.Meta></Card.Meta>
                 </Card.Content>
-                <Card.Content>
+                <Card.Content extra>
                   {isFinancing && (
-                    <Card.Meta>
-                      <Header>
-                        {activeFundingRoundDetails.currentAmount} {" of "}
-                        {activeFundingRoundDetails.targetAmount} ETH raised
-                      </Header>
-                      {progress}% funded
-                    </Card.Meta>
+                    <>
+                      <Icon name="target"></Icon>
+                      <b>
+                        {activeFundingRoundDetails.targetAmount} ETH{" "}
+                      </b> | {progress}% funded
+                    </>
                   )}
-                  {!isFinancing && (
-                    <Card.Meta>
-                      <Header>Funded</Header>
-                    </Card.Meta>
-                  )}
+                  {!isFinancing && <Header>Funded</Header>}
                 </Card.Content>
               </Card>
             );

@@ -69,10 +69,11 @@ export default function InvestorForm({
   return (
     <div className="companies-container cardborder">
       <h2>Investor Actions</h2>
+      <Divider />
+      <br />
       <Grid>
         <Grid.Row>
           <Grid.Column>
-            <br />
             <Progress percent={percent} progress indicating />
             <div className="container100">
               <div className="container-investorform-1">
@@ -112,8 +113,12 @@ export default function InvestorForm({
             <br />
             <Form onSubmit={handleSubmit}>
               <Form.Field>
-                <label style={{ fontSize: "1.28571429rem" }}>Invest</label>
-                <span>min {sharePrice} ETH</span>
+                <label>
+                  Invest{" "}
+                  <span style={{ fontWeight: "normal" }}>
+                    min {sharePrice} ETH
+                  </span>
+                </label>
                 <Input
                   type="number"
                   step={sharePrice}
@@ -124,12 +129,17 @@ export default function InvestorForm({
                   labelPosition="right"
                 />
               </Form.Field>
-              <br />
-              <Button fluid primary disabled={loading} loading={loading}>
-                INVEST
-              </Button>
-              <br />
             </Form>
+            <br />
+            <Button
+              fluid
+              primary
+              disabled={loading}
+              loading={loading}
+              onClick={handleSubmit}
+            >
+              INVEST
+            </Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>

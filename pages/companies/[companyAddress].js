@@ -220,9 +220,9 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
 
   return (
     <div className="companies-container cardborder">
-      <Button.Group floated="right" size="mini" style={{ marginLeft: "10px" }}>
+      <Button.Group floated="right">
         <Popup
-          content={"Copy Smart Contract Address"}
+          content="Copy Smart Contract Address"
           trigger={
             <Button
               icon="copy"
@@ -251,18 +251,23 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
           managerAddress &&
           account.toUpperCase() === managerAddress.toUpperCase() &&
           editView && (
-            <Button
-              toggle
-              loading={loading}
-              icon="save"
-              active
-              onClick={handleEdit}
-            ></Button>
+            <Popup
+              content="Save"
+              trigger={
+                <Button
+                  toggle
+                  loading={loading}
+                  icon="save"
+                  active
+                  onClick={handleEdit}
+                ></Button>
+              }
+            />
           )}
       </Button.Group>
-      <div style={{ fontSize: "1.25rem" }}>
-        <b>{`${name} (${symbol})`}</b>
-      </div>
+      <Header as="h2" floated="left">{`${name} (${symbol})`}</Header>
+      <br />
+      <br />
       <Image className="companies-image" bordered centered src={imageUrl} />
       {/* <div>
         <div style={{ float: "left" }} className="companies-pre-description">
@@ -310,9 +315,7 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
         </Form>
       )}
       <Header as="h3">Company Details:</Header>
-      <div className="companies-details">
-        <Details companyDetails={companyDetails} />
-      </div>
+      <Details companyDetails={companyDetails} />
       {/* <Header as="h3">Downloads:</Header> */}
       {/* <Downloads companyAddress={companyAddress} editView={editView} /> */}
     </div>

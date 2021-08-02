@@ -110,6 +110,7 @@ export default function ManagerForm({
   return (
     <div className="companies-container cardborder">
       <h2>Manager Actions</h2>
+      <Divider />
       {!isFinancing && (
         <Form>
           <Form.Field>

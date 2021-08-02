@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "semantic-ui-react";
+import { Table } from "semantic-ui-react";
 
 export default function ProfileTransactions({ profileAddress }) {
   const [investmentDetails, setinvestmentDetails] = React.useState([]);
@@ -19,25 +19,30 @@ export default function ProfileTransactions({ profileAddress }) {
   }, [profileAddress]);
 
   return (
-    <Card.Group>
-      {investmentDetails
-        .filter(({ numberOfShares }) => numberOfShares > 0)
-        .map(({ companyAddress, name, symbol, numberOfShares }) => {
-          return (
-            <Card
-              className="portfolio-card"
-              key={companyAddress}
-              href={`/companies/${companyAddress}`}
-            >
-              <Card.Content textAlign={"center"}>
-                <Card.Header>{`${name} (${symbol})`}</Card.Header>
-                <div>{`${numberOfShares} share${
-                  numberOfShares === 1 ? "" : "s"
-                }`}</div>
-              </Card.Content>
-            </Card>
-          );
-        })}
-    </Card.Group>
+    <Table celled selectable>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell>Symbol</Table.HeaderCell>
+          <Table.HeaderCell>Name</Table.HeaderCell>
+          <Table.HeaderCell>Shares</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        {investmentDetails
+          .filter(({ numberOfShares }) => numberOfShares > 0)
+          .map(({ companyAddress, name, symbol, numberOfShares }) => {
+            return (
+              <Table.Row key={companyAddress}>
+                <Table.Cell>
+                  <a href={`/${companyAddress}`}>{name}</a>
+                </Table.Cell>
+                <Table.Cell>{symbol}</Table.Cell>
+                <Table.Cell>{numberOfShares}</Table.Cell>
+              </Table.Row>
+            );
+          })}
+      </Table.Body>
+    </Table>
   );
 }
