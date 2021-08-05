@@ -35,7 +35,7 @@ export default function ProfileTransactions({ profileAddress }) {
             return (
               <Table.Row key={companyAddress}>
                 <Table.Cell>
-                  <a href={`/${companyAddress}`}>{name}</a>
+                  <a href={`/companies/${companyAddress}`}>{name}</a>
                 </Table.Cell>
                 <Table.Cell>{symbol}</Table.Cell>
                 <Table.Cell>{numberOfShares}</Table.Cell>
