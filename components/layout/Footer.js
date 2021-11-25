@@ -16,7 +16,7 @@ export default function Layout(props) {
               src="/static/logo.svg"
             />
             <div>
-              <Header as="h3">fundSME</Header>
+              <Header as="h3">finatic</Header>
             </div>
             <br />
             <div style={{ marginTop: "1em" }}>
@@ -95,7 +95,7 @@ export default function Layout(props) {
             </div>
             <br />
             <div style={{ marginTop: "1em" }}>
-              <a href="https:github.com/davelowqx/fundsme">
+              <a href="https:github.com/davelowqx/finatic">
                 <Icon name="github" size="large" />
               </a>
             </div>
@@ -105,7 +105,7 @@ export default function Layout(props) {
           <Grid.Column width={16}>
             <Divider section />
             <div className="footer-text">
-              fundSME is not regulated by any governmental body.
+              finatic is not regulated by any governmental body.
             </div>
             <br />
           </Grid.Column>

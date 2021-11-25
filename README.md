@@ -1,10 +1,10 @@
-# FundSME
+# Finatic
 
 A web application for equity financing, guaranteed by smart contracts on the ethereum network.
 
 # Production
 
-1. go to `fundsme.vercel.app`
+1. go to `finatic.vercel.app`
 2. ensure `metamask` is installed.
 3. initialise `metmask` with secret recovery phrase `oyster exercise random pledge thrive food mail hover knee cry sure eternal`
 4. use the first 5 accounts created

@@ -31,7 +31,7 @@ export async function invest({ companyAddress, amount }) {
     `${
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
-        : "https://fundsme.vercel.app"
+        : "https://finatic.vercel.app"
     }/api/companies/${companyAddress}`,
     {
       headers: { "Content-Type": "application/json" },
@@ -72,7 +72,7 @@ export async function createFundingRound({
     `${
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
-        : "https://fundsme.vercel.app"
+        : "https://finatic.vercel.app"
     }/api/companies/${companyAddress}`,
     {
       headers: { "Content-Type": "application/json" },
@@ -94,7 +94,7 @@ export async function concludeFundingRound({ companyAddress }) {
     `${
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
-        : "https://fundsme.vercel.app"
+        : "https://finatic.vercel.app"
     }/api/companies/${companyAddress}`,
     {
       headers: { "Content-Type": "application/json" },

@@ -8,7 +8,7 @@ export default function Header() {
     <Menu fluid borderless className="cardborder">
       <Menu.Item className="header container12" href="/">
         <Image src="/static/logo.svg" avatar />
-        <div className="logo">fundSME</div>
+        <div className="logo">finatic</div>
       </Menu.Item>
       <Menu.Item href="/explore">Explore</Menu.Item>
       <Menu.Item className="container13" style={{ flex: "1" }}>

@@ -10,7 +10,7 @@ export default function Explore() {
       `${
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
-          : "https://fundsme.vercel.app"
+          : "https://finatic.vercel.app"
       }/api/companies`
     )
       .then((res) => res.json())

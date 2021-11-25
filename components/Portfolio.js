@@ -9,7 +9,7 @@ export default function ProfileTransactions({ profileAddress }) {
       `${
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
-          : "https://fundsme.vercel.app"
+          : "https://finatic.vercel.app"
       }/api/profile/${profileAddress}`
     )
       .then((res) => res.json())

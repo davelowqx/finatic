@@ -29,16 +29,16 @@ export default function About() {
                   wealthiest people, with regulators commonly citing the high
                   risks of investing in early stage companies. This is
                   controversial, as life changing wealth can be created by
-                  investing early. This spurred us to create fundSME, where
+                  investing early. This spurred us to create finatic, where
                   anyone with an Ethereum wallet can back projects they believe
                   in.
                 </p>
               </div>
               <br />
               <Divider id="howitworks" />
-              <Header as="h3">How fundSME platform works</Header>
+              <Header as="h3">How finatic platform works</Header>
               <div>
-                When a founder lists his company on fundSME, a smart contract is
+                When a founder lists his company on finatic, a smart contract is
                 created on the <span>Ethereum Network</span>, storing immutable
                 details about the company such as the company's name, symbol,
                 the manager's Ethereum address and the current shares
@@ -70,7 +70,7 @@ export default function About() {
               </div>
               <br />
               <Divider id="whyinvest" />
-              <Header as="h3">Why invest on fundSME?</Header>
+              <Header as="h3">Why invest on finatic?</Header>
               <div>
                 <p>
                   Most other equity financing platforms depend on a central
@@ -78,10 +78,10 @@ export default function About() {
                   shown time and again, depending on a single entity for trust
                   is never reliable, especially when there is conflict of
                   interest and large amounts of capital are at stake. On the
-                  other hand, fundSME is one of the many Decentralised Finance
+                  other hand, finatic is one of the many Decentralised Finance
                   projects leveraging on the well-established Ethereum Network.
                   The rules governing every action on this platform are etched
-                  in <a href="https:github.com/davelowqx/fundsme">code</a> and
+                  in <a href="https:github.com/davelowqx/finatic">code</a> and
                   stored immutably on smart contracts in the Ethereum Network.
                 </p>
                 <br />
@@ -91,7 +91,7 @@ export default function About() {
               <div>
                 <p>
                   Every investor should be aware that investing in companies on
-                  fundSME's platform involves a high degree of risk, regardless
+                  finatic's platform involves a high degree of risk, regardless
                   of any assurance provided by the company.
                   <br />
                   <br />
@@ -138,10 +138,10 @@ export default function About() {
                 <br />
               </div>
               <Divider id="whyraise" />
-              <Header as="h3">Why raise capital with fundSME?</Header>
+              <Header as="h3">Why raise capital with finatic?</Header>
               <div>
                 <p>
-                  By listing your company on fundSME, you can benefit from
+                  By listing your company on finatic, you can benefit from
                   having a diversified broad base of retail investors, without
                   the constant pressure of institutional money who are primarily
                   concerned with short term profits.
@@ -150,11 +150,11 @@ export default function About() {
               </div>
               <Divider id="instruments" />
               <Header as="h3">
-                What are the investment instruments available on fundSME?
+                What are the investment instruments available on finatic?
               </Header>
               <div>
                 <p>
-                  Currently, fundSME only offers equity financing. We are
+                  Currently, finatic only offers equity financing. We are
                   exploring the possibility of incorporating other structures
                   such as debt and convertable notes.
                 </p>

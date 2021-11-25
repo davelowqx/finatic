@@ -47,7 +47,7 @@ export default function Company({ companyAddress }) {
       `${
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
-          : "https://fundsme.vercel.app"
+          : "https://finatic.vercel.app"
       }/api/companies/${companyAddress}`
     ).then((res) => res.json());
     if (!companyDetails.error) {
@@ -170,7 +170,7 @@ const MainInfo = ({ companyDetails, toggleRefreshData }) => {
       `${
         process.env.NODE_ENV === "development"
           ? "http://localhost:3000"
-          : "https://fundsme.vercel.app"
+          : "https://finatic.vercel.app"
       }/api/companies/${companyAddress}`,
       {
         headers: { "Content-Type": "application/json" },
