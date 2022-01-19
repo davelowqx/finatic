@@ -55,12 +55,9 @@ export default function ConnectWallet() {
     <>
       <Menu.Item
         onClick={!!account ? () => {} : handleConnect}
-        href={!!account ? "/profile" : ""}
         disabled={loading}
       >
-        <b style={{ color: "blue" }}>
-          {!account ? "CONNECT WALLET" : truncateAddress(account)}
-        </b>
+        <b>{!account ? "CONNECT WALLET" : truncateAddress(account)}</b>
       </Menu.Item>
     </>
   );

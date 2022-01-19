@@ -1,14 +1,14 @@
 import web3 from "./web3";
 import contracts from "./build/contracts.json";
-import data from "./companyProducerAddress.json";
+import data from "./CampaignProducerAddress.json";
 
-const companyProducer = new web3.eth.Contract(
-  contracts.CompanyProducer.abi,
-  data.companyProducerAddress
+const CampaignProducer = new web3.eth.Contract(
+  contracts.CampaignProducer.abi,
+  data.CampaignProducerAddress
 );
 
-const Company = (companyAddress) => {
-  return new web3.eth.Contract(contracts.Company.abi, companyAddress);
+const Campaign = (CampaignAddress) => {
+  return new web3.eth.Contract(contracts.Campaign.abi, CampaignAddress);
 };
 
-export { companyProducer, Company };
+export { CampaignProducer, Campaign };

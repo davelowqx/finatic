@@ -6,7 +6,13 @@ const truncateAddress = (str) => {
   }
 };
 
-const fromWei = (val) => Web3.utils.fromWei(val.toString(), "ether");
+const fromWei = (str) => {
+  try {
+    return Web3.utils.fromWei(`${str}`, "ether");
+  } catch (err) {
+    return NaN;
+  }
+};
 
 function timeConverter(UNIX_timestamp) {
   var convertedTimestamp = new Date(UNIX_timestamp * 1000);
@@ -27,11 +33,7 @@ function timeConverter(UNIX_timestamp) {
   var year = convertedTimestamp.getFullYear();
   var month = months[convertedTimestamp.getMonth()];
   var date = convertedTimestamp.getDate();
-  var hour = convertedTimestamp.getHours();
-  var min = convertedTimestamp.getMinutes();
-  var sec = convertedTimestamp.getSeconds();
   var time = date + " " + month + " " + year;
-  // date + " " + month + " " + year + " " + hour + ":" + min + ":" + sec;
   return time;
 }
 

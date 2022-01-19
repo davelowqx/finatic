@@ -3,57 +3,15 @@
   vertical-align: middle;
 }
 
-.container11 {
-  display: block;
-  align-items: center;
-  text-align: center;
-}
-
-.container12 {
-}
-
-.container13 {
-}
-
-.container14 {
-  padding: 4%;
-}
-
 .container12 div.logo {
   display: block;
   margin: auto;
-}
-
-.container20 {
-  width: 20%;
-}
-
-.container25 {
-  display: block;
-  width: 50%;
-  height: 50%;
-  float: left;
 }
 
 .container33 {
   display: block;
   width: 33.33%;
   float: left;
-  text-align: center;
-  border-style: outset;
-  padding: 5px;
-}
-
-.container50 {
-  width: 50%;
-  height: 100%;
-  float: left;
-}
-
-.container50-2 {
-  width: 50%;
-  float: left;
-  display: block;
   text-align: center;
   border-style: outset;
   padding: 5px;
@@ -86,45 +44,6 @@
   padding: 5px;
 }
 
-.centercontainer {
-  margin: auto;
-}
-
-.centeredtext {
-  display: flex;
-  height: 100%;
-  align-items: center; /* vertical */
-  justify-content: center; /* horizontal */
-}
-
-.search-bar {
-  display: block;
-  flex: 1;
-}
-
-.search-bar .input {
-  width: 100%;
-  flex: 1;
-}
-
-@media (max-width: 991px) {
-  .search-bar {
-    display: none;
-  }
-}
-
-@media (max-width: 540px) {
-  .container13 {
-    display: none !important;
-  }
-}
-
-.mainpage-container {
-  display: block;
-  margin: auto;
-  height: 100%;
-}
-
 @media (max-width: 600px) {
   .mainpage-image {
     position: absolute;
@@ -143,34 +62,10 @@
   margin: auto;
 }
 
-@media (max-width: 991px) {
-  .search-bar {
-    display: none;
-  }
-}
-
-.eq-card {
-  height: 100%;
-  width: 100%;
-}
-
 .cardborder {
   border: 1px solid rgba(34, 36, 38, 0.15) !important;
   border-radius: 3px;
   box-shadow: none !important;
-}
-
-.centercontainer2 {
-  display: flex;
-  align-items: center; /* vertical */
-  justify-content: center; /* horizontal */
-}
-
-.footer-logo-image {
-  display: block;
-  float: left;
-  margin-right: 15px;
-  top: -6%;
 }
 
 .footer-text {
@@ -180,30 +75,12 @@
   text-align: justify;
 }
 
-.button-uppercase {
-  text-transform: uppercase;
-}
-
-.login-buttons {
-  display: inline-block;
-  width: 40%;
-  margin-left: 5%;
-  margin-right: 5%;
-}
-
 .login-container {
   width: 70%;
   margin: auto;
   margin-top: 4%;
   margin-bottom: 4%;
   padding: 5%;
-}
-
-.signup-buttons {
-  display: inline-block;
-  width: 40%;
-  margin-left: 5%;
-  margin-right: 5%;
 }
 
 .companies-container {
@@ -287,24 +164,3 @@
 .fundinground {
   padding: 3%;
 }
-
-.companycard-button {
-  position: absolute;
-  right: 5%;
-  top: 5%;
-}
-/* -webkit-text-size-adjust: 100%;
-    line-height: 1.4285em;
-    color: rgba(0,0,0,.87);
-    box-sizing: inherit;
-    display: flex;
-    margin: 1rem 0;
-    font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
-    background: #fff;
-    font-weight: 400;
-    border: 1px solid rgba(34,36,38,.15);
-    box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
-    border-radius: .28571429rem;
-    min-height: 2.85714286em;
-    font-size: 1rem;
-    width: 100%!important; */

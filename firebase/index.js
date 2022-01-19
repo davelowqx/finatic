@@ -6,10 +6,8 @@ import "firebase/storage";
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 const firebaseConfig = {
   apiKey: `${process.env.FIREBASE_API_KEY}`,
-  authDomain: `${projectId}.firebaseapp.com`,
   projectId,
   storageBucket: `${projectId}.appspot.com`,
-  appId: process.env.FIREBASE_APP_ID,
 };
 
 // console.log(firebaseConfig);

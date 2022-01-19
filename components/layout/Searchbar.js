@@ -47,11 +47,11 @@ export default function Searchbar() {
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {
             console.log(doc.data());
-            const { name, companyAddress } = doc.data();
+            const { name, CampaignAddress } = doc.data();
             state.results.push({
-              key: companyAddress,
+              key: CampaignAddress,
               title: name,
-              description: companyAddress,
+              description: CampaignAddress,
             });
           });
         })
@@ -78,18 +78,17 @@ export default function Searchbar() {
 
   return (
     <Search
-      className="search-bar"
       loading={state.loading}
       onResultSelect={(event, data) => {
         state.value = "";
-        router.push(`/companies/${data.result.key}`);
+        router.push(`/${data.result.key}`);
       }}
       onSearchChange={handleSearchChange}
       results={state.results}
       value={state.value}
       fluid
       placeholder="Search"
-      style={{ marginLeft: "1em", marginRight: "1em" }}
+      style={{ margin: "0 1em" }}
     ></Search>
   );
 }
