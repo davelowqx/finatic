@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Icon, Header, Button, Grid } from "semantic-ui-react";
+import { Image, Icon, Header, Button, Grid, Divider } from "semantic-ui-react";
 import CampaignCards from "../components/CampaignCards";
 
 export default function LandingPage() {
@@ -37,28 +37,7 @@ export default function LandingPage() {
       </div>
 
       <br />
-      <br />
-
-      <Grid centered>
-        <Grid.Row>
-          <Button.Group size="mini">
-            <Button
-              toggle
-              content="Financing"
-              active={viewFinancing}
-              onClick={() => setViewFinancing(true)}
-            ></Button>
-            <Button
-              toggle
-              content="Funded"
-              active={!viewFinancing}
-              onClick={() => setViewFinancing(false)}
-            ></Button>
-          </Button.Group>
-        </Grid.Row>
-      </Grid>
-
-      <br />
+      <Divider />
       <br />
 
       <CampaignCards

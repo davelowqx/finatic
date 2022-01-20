@@ -197,8 +197,10 @@ const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
         </div>
       </div>
       <div>{timeConverter(listingTimestamp)}</div>
-      <Image className="campaign-image" bordered centered src={imageUrl} />
-
+      <br />
+      <div className="square">
+        <img src={imageUrl} />
+      </div>
       <br />
       {!editView && <div>{description}</div>}
       {editView && (

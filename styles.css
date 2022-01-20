@@ -37,12 +37,37 @@ h4 {
   display: block;
 }
 
+.relative {
+  position: relative;
+}
+
+.absolute {
+  position: absolute;
+}
+
 .grow {
   flex-grow: 1;
 }
 
-.campaign-image {
-  margin-top: 5%;
-  background-size: "cover";
-  height: 300px;
+.square {
+  position: relative;
+  padding-bottom: 100%;
+  height: 0;
+}
+
+.square > img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.searchbar {
+  flex: 1;
+  margin: 0 1rem;
+}
+
+.searchbar .input {
+  flex: 1;
+  width: 100%;
 }

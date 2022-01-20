@@ -87,8 +87,8 @@ export default function Searchbar() {
       results={state.results}
       value={state.value}
       fluid
+      className="searchbar"
       placeholder="Search"
-      style={{ margin: "0 1em" }}
     ></Search>
   );
 }

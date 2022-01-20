@@ -3,7 +3,7 @@ import { Image, Header, Button, Card, Icon } from "semantic-ui-react";
 import { daysLeft } from "./utils";
 import { fromWei } from "./utils";
 
-export default function CampaignCards({ campaignSummaries, viewFinancing }) {
+export default function CampaignCards({ campaignSummaries }) {
   return (
     <Card.Group itemsPerRow={3}>
       {campaignSummaries
@@ -23,6 +23,7 @@ export default function CampaignCards({ campaignSummaries, viewFinancing }) {
               status: 0,
               balance: 0,
             });
+
             React.useEffect(async () => {
               try {
                 const { status, balance } = await fetch(
@@ -36,62 +37,57 @@ export default function CampaignCards({ campaignSummaries, viewFinancing }) {
                 setError(true);
               }
             }, []);
-            if (
-              (viewFinancing && !fields.status) ||
-              (!viewFinancing && !!fields.status)
-            ) {
-              return (
-                <Card
-                  className="cardborder"
-                  key={campaignAddress}
-                  href={`/${campaignAddress}`}
-                  fluid
-                  color={fields.status ? "green" : "red"}
-                >
-                  <Image src={imageUrl} wrapped ui />
-                  {!fields.status && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        right: "5%",
-                        top: "5%",
-                      }}
-                    >
-                      <Button size="mini" color="green">
-                        {daysLeft(listingTimestamp)} Days Left
-                      </Button>
+            return (
+              <Card
+                className="cardborder"
+                key={campaignAddress}
+                href={`/${campaignAddress}`}
+                fluid
+                color={fields.status ? "green" : "red"}
+              >
+                <div className="square">
+                  <img src={imageUrl} />
+                </div>
+                {!fields.status && (
+                  <div
+                    className="absolute"
+                    style={{
+                      right: "5%",
+                      top: "5%",
+                    }}
+                  >
+                    <Button size="mini" color="green">
+                      {daysLeft(listingTimestamp)} Days Left
+                    </Button>
+                  </div>
+                )}
+                <Card.Content>
+                  <Card.Header>{name}</Card.Header>
+                  <Card.Description>
+                    <div style={{ height: "4.2855rem", overflow: "hidden" }}>
+                      {description.substring(0, 120)}
                     </div>
+                  </Card.Description>
+                </Card.Content>
+                <Card.Content extra>
+                  {error && <div>Oops, something went wrong</div>}
+                  {!error && loading && <div>loading</div>}
+                  {!error && !loading && !fields.status && (
+                    <>
+                      <Icon name="target" />
+                      <b>{`${fromWei(targetAmount)} ETH `}</b>
+                      {`| ${parseInt(
+                        (100 * parseInt(fields.balance)) /
+                          parseInt(targetAmount)
+                      )}% funded`}
+                    </>
                   )}
-                  <Card.Content>
-                    <Card.Header>{name}</Card.Header>
-                    <Card.Description>
-                      {`${
-                        description.length > 120
-                          ? description.substring(0, 120) + "..."
-                          : description
-                      }`}
-                    </Card.Description>
-                  </Card.Content>
-                  <Card.Content extra>
-                    {error && <div>Oops, something went wrong</div>}
-                    {!error && loading && <div>loading</div>}
-                    {!error && !loading && !fields.status && (
-                      <>
-                        <Icon name="target" />
-                        <b>{`${fromWei(targetAmount)} ETH `}</b>
-                        {`| ${parseInt(
-                          (100 * parseInt(fields.balance)) /
-                            parseInt(targetAmount)
-                        )}% funded`}
-                      </>
-                    )}
-                    {!error && !loading && !!fields.status && (
-                      <Header>Funded</Header>
-                    )}
-                  </Card.Content>
-                </Card>
-              );
-            }
+                  {!error && !loading && !!fields.status && (
+                    <Header>Funded</Header>
+                  )}
+                </Card.Content>
+              </Card>
+            );
           }
         )}
     </Card.Group>
