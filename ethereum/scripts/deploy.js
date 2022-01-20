@@ -33,7 +33,6 @@ const { CampaignProducer } = JSON.parse(
   const campaignProducerAddress = campaignProducer.options.address;
   console.log("deployed at", campaignProducerAddress);
 
-  // write to db instead?????????????
   fs.writeFileSync(
     path.resolve(__dirname, "../campaignProducerAddress.json"),
     JSON.stringify({
