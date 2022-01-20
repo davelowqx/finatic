@@ -1,6 +1,5 @@
 import { Campaign } from "../../../ethereum/contracts";
 import { db } from "../../../firebase";
-import { fromWei } from "../../../components/utils";
 
 export default async (req, res) => {
   const campaignAddress = req.query.campaignAddress;
@@ -12,7 +11,6 @@ export default async (req, res) => {
         .getCampaignDetails()
         .call();
 
-      console.log(campaignDetails);
       const {
         name,
         symbol,
@@ -42,27 +40,28 @@ export default async (req, res) => {
         listingTimestamp,
         managerAddress,
         targetAmount,
-        isFinancing: campaignDetails[0],
         sharesOutstanding: parseInt(campaignDetails[2]),
-        balance: campaignDetails[5],
+        balance: parseInt(campaignDetails[5]),
         status: parseInt(campaignDetails[7]),
       };
 
-      console.log(result);
+      console.log("GET /campaigns/[campaignAddress] => ", result);
       return res.status(200).json(result);
-    } catch (e) {
+    } catch (err) {
+      console.error(err.message);
       return res.status(400).json({ error: e.message });
     }
   } else if (req.method === "PUT") {
     try {
-      console.log("PUT request", req.body);
+      console.log("PUT /campaigns/[campaignAddress] => ", req.body);
       await db
         .collection("companies")
         .doc(campaignAddress)
         .set(req.body, { merge: true });
       return res.status(200).json(data);
-    } catch (e) {
-      return res.status(400).json({ error: e.message });
+    } catch (err) {
+      console.error(err.message);
+      return res.status(400).json({ error: err.message });
     }
   }
 };

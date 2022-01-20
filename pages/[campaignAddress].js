@@ -31,10 +31,10 @@ export default function Campaign() {
     campaignAddress: "",
   });
   const [error, setError] = React.useState(false);
-  const [refreshData, setRefreshData] = React.useState(false);
+  const [refreshData, setRefreshData] = React.useState({});
 
   const toggleRefreshData = () => {
-    setRefreshData(!refreshData);
+    setRefreshData({});
   };
 
   const fetchCampaignDetails = async (campaignAddress) => {
@@ -109,46 +109,6 @@ export default function Campaign() {
   );
 }
 
-const Details = ({
-  campaignAddress,
-  sharesOutstanding,
-  balance,
-  managerAddress,
-  listingTimestamp,
-}) => {
-  return (
-    <Card.Group
-      items={[
-        {
-          key: 0,
-          header: truncateAddress(campaignAddress),
-          meta: "Address of Smart Contract",
-        },
-        {
-          key: 1,
-          header: truncateAddress(managerAddress),
-          meta: "Address of Manager",
-        },
-        {
-          key: 2,
-          header: sharesOutstanding,
-          meta: "Shares Outstanding",
-        },
-        {
-          key: 3,
-          header: fromWei(balance) + " ETH",
-          meta: "Campaign Balance",
-        },
-        {
-          key: 4,
-          header: timeConverter(new Date(listingTimestamp)),
-          meta: "Date Listed",
-        },
-      ]}
-    />
-  );
-};
-
 const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
   const {
     name,
@@ -157,6 +117,7 @@ const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
     campaignAddress,
     managerAddress,
     imageUrl,
+    listingTimestamp,
   } = campaignDetails;
 
   const popup = React.useContext(ModalContext);
@@ -215,58 +176,35 @@ const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
   };
 
   return (
-    <div className="companies-container cardborder">
-      <Button.Group floated="right">
-        <Popup
-          content="Copy Smart Contract Address"
-          trigger={
-            <Button
-              icon="copy"
-              floated="right"
-              onClick={() => navigator.clipboard.writeText(campaignAddress)}
-            />
-          }
-        />
-        {account &&
-          managerAddress &&
-          account.toUpperCase() === managerAddress.toUpperCase() &&
-          !editView && (
-            <Popup
-              content="Edit Campaign Details"
-              trigger={
-                <Button
-                  toggle
-                  icon="edit"
-                  loading={loading}
-                  onClick={handleEdit}
-                />
-              }
-            />
-          )}
-        {account &&
-          managerAddress &&
-          account.toUpperCase() === managerAddress.toUpperCase() &&
-          editView && (
-            <Popup
-              content="Save"
-              trigger={
-                <Button
-                  toggle
-                  loading={loading}
-                  icon="save"
-                  active
-                  onClick={handleEdit}
-                ></Button>
-              }
-            />
-          )}
-      </Button.Group>
-      <Header as="h2" floated="left">{`${name} (${symbol})`}</Header>
-      <br />
-      <br />
-      <Image className="companies-image" bordered centered src={imageUrl} />
+    <div className="container cardborder">
+      <div className="flex">
+        <Header as="h3">{`${name} $${symbol}`}</Header>
+        <div className="grow">
+          {account &&
+            managerAddress &&
+            account.toUpperCase() === managerAddress.toUpperCase() && (
+              <Popup
+                content={`${editView ? "Save" : "Edit Campaign Detials"}`}
+                trigger={
+                  <Button
+                    toggle
+                    loading={loading}
+                    icon={`${editView ? "save" : "edit"}`}
+                    active
+                    size="mini"
+                    floated="right"
+                    onClick={handleEdit}
+                  />
+                }
+              />
+            )}
+        </div>
+      </div>
+      <div>{timeConverter(listingTimestamp)}</div>
+      <Image className="campaign-image" bordered centered src={imageUrl} />
 
-      {!editView && <div className="companies-description">{description}</div>}
+      <br />
+      {!editView && <div>{description}</div>}
       {editView && (
         <Form>
           <div>Replace Image</div>
@@ -285,14 +223,75 @@ const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
             }}
           />
           <TextArea
-            className="companies-description-edit"
             value={fields.description}
             onChange={(event) => setFields({ description: event.target.value })}
           />
         </Form>
       )}
       <br />
-      <Details {...campaignDetails} />
+
+      <div className="flex my-1">
+        <div>
+          <b>Campaign Address</b>
+          <a
+            href={`https://etherscan.io/address/${campaignDetails.campaignAddress}`}
+            className="block"
+          >
+            {campaignAddress}
+          </a>
+        </div>
+        <div className="grow">
+          <Popup
+            content="Copy Smart Contract Address"
+            trigger={
+              <Button
+                icon="copy"
+                floated="right"
+                size="mini"
+                onClick={() => navigator.clipboard.writeText(campaignAddress)}
+              />
+            }
+          />
+        </div>
+      </div>
+      <div>
+        <div className="flex my-1">
+          <div>
+            <b>Manager Address</b>
+            <a
+              href={`https://etherscan.io/address/${campaignDetails.managerAddress}`}
+              className="block"
+            >
+              {campaignDetails.managerAddress}
+            </a>
+          </div>
+          <div className="grow">
+            <Popup
+              content="Copy Manager Address"
+              trigger={
+                <Button
+                  icon="copy"
+                  floated="right"
+                  size="mini"
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      campaignDetails.managerAddress
+                    )
+                  }
+                />
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <div className="my-1">
+        <b>Campaign Balance</b>
+        <div>{fromWei(campaignDetails.balance)} ETH</div>
+      </div>
+      <div className="my-1">
+        <b>Shares Outstanding</b>
+        <div>{campaignDetails.sharesOutstanding}</div>
+      </div>
     </div>
   );
 };

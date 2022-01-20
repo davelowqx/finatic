@@ -1,6 +1,6 @@
 import React from "react";
 import { Divider, Form, Input, Button } from "semantic-ui-react";
-import { concludeCampaign, withdraw } from "./Setters";
+import { concludeCampaign, withdraw } from "../ethereum/functions";
 import { ModalContext } from "./context/ModalContext";
 
 export default function ManagerForm({
@@ -59,7 +59,7 @@ export default function ManagerForm({
   };
 
   return (
-    <div className="companies-container cardborder">
+    <div className="container cardborder">
       <h3>Manage</h3>
       <br />
       {!status ? (
@@ -69,7 +69,7 @@ export default function ManagerForm({
           loading={loading}
           disabled={loading}
           onClick={handleConcludeCampaign}
-          content={"CLOSE ROUND"}
+          content={"CONCLUDE CAMPAIGN"}
         />
       ) : (
         <>

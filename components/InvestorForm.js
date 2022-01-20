@@ -7,7 +7,7 @@ import {
   Grid,
   Divider,
 } from "semantic-ui-react";
-import { invest } from "./Setters";
+import { invest } from "../ethereum/functions";
 import { fromWei, daysLeft } from "../components/utils";
 import { ModalContext } from "./context/ModalContext";
 
@@ -17,7 +17,6 @@ export default function InvestorForm({
   balance,
   targetAmount,
   listingTimestamp,
-  investorsCount,
   toggleRefreshData,
 }) {
   const popup = React.useContext(ModalContext);
@@ -52,52 +51,53 @@ export default function InvestorForm({
   const days = daysLeft(listingTimestamp);
 
   return (
-    <div className="companies-container cardborder">
-      <h3>Invest</h3>
+    <div className="container cardborder">
+      <div className="flex">
+        <h3 className="grow">Invest</h3>
+        <div className="text-grey">
+          {days} {"Day" + (days === 1 ? "" : "s")} Left
+        </div>
+      </div>
+      <Progress
+        percent={percent}
+        progress
+        indicating
+        style={{ margin: "1rem 0" }}
+      />
+      <div className="flex">
+        <div>
+          <b>{fromWei(balance)} ETH</b>
+        </div>
+        &nbsp;|&nbsp;
+        <div className="text-grey">{fromWei(targetAmount)} ETH goal</div>
+      </div>
       <br />
-      <Grid>
-        <Grid.Row>
-          <Grid.Column>
-            <Progress percent={percent} progress indicating />
-            <div>
-              <h3>{fromWei(balance)} ETH</h3> of {fromWei(targetAmount)} ETH
-              goal
-            </div>
-            <div>
-              <b>{investorsCount}</b>{" "}
-              {"Investor" + (investorsCount === 1 ? "" : "s")}
-            </div>
-            <b>{days}</b> {"Day" + (days === 1 ? "" : "s")} Left
-            <br />
-            <Divider clearing />
-            <br />
-            <Form onSubmit={handleSubmit}>
-              <Form.Field>
-                <label>Invest</label>
-                <Input
-                  type="number"
-                  step={1}
-                  value={amount}
-                  min={0}
-                  onChange={(event) => setAmount(event.target.value)}
-                  label="ETH"
-                  labelPosition="right"
-                />
-              </Form.Field>
-            </Form>
-            <br />
-            <Button
-              fluid
-              primary
-              disabled={loading}
-              loading={loading}
-              onClick={handleSubmit}
-            >
-              INVEST
-            </Button>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <Divider clearing />
+      <br />
+      <Form onSubmit={handleSubmit}>
+        <Form.Field>
+          <label>Invest</label>
+          <Input
+            type="number"
+            step={1}
+            value={amount}
+            min={0}
+            onChange={(event) => setAmount(event.target.value)}
+            label="ETH"
+            labelPosition="right"
+          />
+        </Form.Field>
+      </Form>
+      <br />
+      <Button
+        fluid
+        primary
+        disabled={loading}
+        loading={loading}
+        onClick={handleSubmit}
+      >
+        INVEST
+      </Button>
     </div>
   );
 }

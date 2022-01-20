@@ -20,27 +20,42 @@ export default async (req, res) => {
           });
           return results;
         });
-      console.log(campaignSummaries);
+      console.log("GET /campaigns => ", campaignSummaries);
       return res.status(200).json(campaignSummaries);
     } catch (err) {
+      console.error(err.message);
       return res.status(400).json({ error: err.message });
     }
   } else if (req.method === "POST") {
     try {
-      const { campaignAddress, name, symbol, description, imageUrl } = req.body;
-
-      await db.collection("companies").doc(campaignAddress).set({
+      const {
         campaignAddress,
         name,
         symbol,
         description,
         imageUrl,
-        isFinancing: true,
+        managerAddress,
+        listingTimestamp,
+        targetAmount,
+      } = req.body;
+
+      console.log("POST /campaigns => ", req.body);
+
+      await db.collection("campaigns").doc(campaignAddress).set({
+        name,
+        symbol,
+        description,
+        imageUrl,
+        managerAddress,
+        listingTimestamp,
+        targetAmount,
       });
-      return res.status(200).json({ message: "yay" });
+      return res.status(200).json({});
     } catch (err) {
+      console.error(err.message);
       return res.status(400).json({ error: err.message });
     }
   } else {
+    return res.status(405).json({});
   }
 };

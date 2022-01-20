@@ -41,8 +41,8 @@ export default function Searchbar() {
 
       state.results = [];
       await db
-        .collection("companies")
-        // .where("name", "==", data.value)
+        .collection("campaigns")
+        .where("name", "==", data.value)
         .get()
         .then((querySnapshot) => {
           querySnapshot.forEach((doc) => {

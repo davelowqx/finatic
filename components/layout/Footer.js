@@ -9,7 +9,7 @@ export default function Layout(props) {
         <Grid centered>
           <Grid.Row>
             <Grid.Column width={13}>
-              <div className="footer-text">
+              <div style={{ color: "gray" }}>
                 finatic is not a regulated entity.
               </div>
               <br />

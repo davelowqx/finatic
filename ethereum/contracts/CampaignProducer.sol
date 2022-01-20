@@ -6,7 +6,7 @@ import "./Campaign.sol";
 contract CampaignProducer {
     address[] public CampaignAddresses;
 
-    event ListCampaign(address indexed CampaignAddress);
+    event ListCampaign(address indexed campaignAddress);
 
     function listCampaign(string calldata name, string calldata symbol, uint256 sharesOutstanding) public {
         Campaign c = new Campaign(name, symbol, sharesOutstanding, msg.sender);

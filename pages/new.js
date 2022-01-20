@@ -1,12 +1,20 @@
 import React from "react";
-import { Image, Header, TextArea, Form, Button, Grid } from "semantic-ui-react";
+import {
+  Container,
+  Image,
+  Header,
+  TextArea,
+  Form,
+  Button,
+  Grid,
+} from "semantic-ui-react";
 import { useRouter } from "next/router";
 import { CampaignProducer } from "../ethereum/contracts";
 import web3 from "../ethereum/web3";
+import Web3 from "web3";
 import { storage } from "../firebase";
 import { ModalContext } from "../components/context/ModalContext";
 import { AccountContext } from "../components/context/AccountContext";
-// import { listCampaign } from "../../components/Setters";
 
 export default function CampaignNew() {
   const [fields, setFields] = React.useState({
@@ -22,20 +30,6 @@ export default function CampaignNew() {
   const popup = React.useContext(ModalContext);
   const [account, _] = React.useContext(AccountContext);
 
-  const putData = (imageUrl, campaignAddress) => {
-    fetch(`/api/companies/new`, {
-      headers: { "Content-Type": "application/json" },
-      method: "POST",
-      body: JSON.stringify({
-        ...fields,
-        imageUrl,
-        campaignAddress,
-      }),
-    }).then(() => {
-      router.push(campaignAddress);
-    });
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!account) {
@@ -43,52 +37,68 @@ export default function CampaignNew() {
       return;
     }
     setLoading(true);
-    /*
-    try {
-      await listCampaign({ ...fields, image });
-    } catch (err) {
-      console.log(err);
-      setStates({ errorMessage: err, ...states });
-    } finally {
-      setStates({ errorMessage: "", loading: false });
-    }
-    */
+
     try {
       const accounts = await web3.eth.getAccounts();
+      const managerAddress = accounts[0];
 
       await CampaignProducer.methods
-        .listCampaign(fields.name, fields.symbol, fields.targetAmount)
+        .listCampaign(
+          fields.name,
+          fields.symbol,
+          Web3.utils.toWei(fields.targetAmount, "ether")
+        )
         .send({
-          from: accounts[0],
+          from: managerAddress,
         })
         .on("receipt", (receipt) => {
-          const CampaignAddress =
-            receipt.events.ListCampaign.returnValues.CampaignAddress;
-          console.log(CampaignAddress);
-          try {
-            const uploadTask = storage
-              .ref()
-              .child(`images/${CampaignAddress}`)
-              .put(image);
-            uploadTask.on(
-              "state_changed",
-              (snapshot) => {
-                console.log(snapshot);
-              },
-              (err) => {
-                popup(err.message);
-                putData("https://via/placeholder.com/450.png", CampaignAddress);
-              },
-              () => {
-                // success
-                uploadTask.snapshot.ref.getDownloadURL().then((imageUrl) => {
-                  putData(imageUrl, CampaignAddress);
-                });
-              }
-            );
-          } catch (err) {
-            popup(err.message);
-          }
+          const campaignAddress =
+            receipt.events.ListCampaign.returnValues.campaignAddress;
+          console.log(campaignAddress);
+
+          const uploadTask = storage
+            .ref()
+            .child(`images/${campaignAddress}`)
+            .put(image);
+
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              console.log(snapshot);
+            },
+            async (err) => {
+              await fetch(`/api/campaigns`, {
+                headers: { "Content-Type": "application/json" },
+                method: "POST",
+                body: JSON.stringify({
+                  ...fields,
+                  targetAmount: Web3.utils.toWei(fields.targetAmount, "ether"),
+                  imageUrl: "https://via.placeholder.com/1000.png",
+                  managerAddress,
+                  campaignAddress,
+                  listingTimestamp: parseInt(Date.now() / 1000),
+                }),
+              });
+              router.push(`/${campaignAddress}`);
+            },
+            async () => {
+              // success
+              const imageUrl = await uploadTask.snapshot.ref.getDownloadURL();
+              await fetch(`/api/campaigns`, {
+                headers: { "Content-Type": "application/json" },
+                method: "POST",
+                body: JSON.stringify({
+                  ...fields,
+                  targetAmount: Web3.utils.toWei(fields.targetAmount, "ether"),
+                  imageUrl,
+                  managerAddress,
+                  campaignAddress,
+                  listingTimestamp: parseInt(Date.now() / 1000),
+                }),
+              });
+              router.push(`/${campaignAddress}`);
+            }
+          );
         });
     } catch (err) {
       popup(err.message);
@@ -98,8 +108,10 @@ export default function CampaignNew() {
   };
 
   return (
-    <>
-      <div className="login-container cardborder">
+    <div style={{ maxWidth: "640px", margin: "auto" }}>
+      <br />
+      <div className="cardborder container">
+        <br />
         <Image src="/logo.svg" size="mini" centered />
         <Header as="h2" textAlign="center">
           List your Campaign!
@@ -146,7 +158,7 @@ export default function CampaignNew() {
           <br />
           <Form.Input
             label="Target Amount (ETH)"
-            placeholder="1000"
+            placeholder="0.1"
             type="number"
             value={fields.targetAmount}
             onChange={(event) => {
@@ -155,7 +167,7 @@ export default function CampaignNew() {
                 targetAmount: event.target.value,
               });
             }}
-            error={fields.targetAmount > 1000000000000} //<1T
+            error={!!fields.targetAmount && fields.targetAmount <= 0}
           />
           <br />
           <Form.Input
@@ -186,7 +198,9 @@ export default function CampaignNew() {
             List
           </Button>
         </Form>
+        <br />
+        <br />
       </div>
-    </>
+    </div>
   );
 }

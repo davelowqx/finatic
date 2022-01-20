@@ -1,65 +1,8 @@
-.container10 {
-  overflow: auto;
-  vertical-align: middle;
-}
-
-.container12 div.logo {
-  display: block;
-  margin: auto;
-}
-
-.container33 {
-  display: block;
-  width: 33.33%;
-  float: left;
-  text-align: center;
-  border-style: outset;
-  padding: 5px;
-}
-
-.container100 {
-  width: 100%;
-  overflow: auto;
-  display: block;
-}
-
-.container-investorform-1 {
-  width: 40%;
-  float: left;
-  display: block;
-  text-align: center;
-  border-style: outset;
-  padding-left: 5px;
-  padding-right: 5px;
-  padding-top: 30px;
-  padding-bottom: 30px;
-}
-
-.container-investorform-2 {
-  width: 60%;
-  float: left;
-  display: block;
-  text-align: center;
-  border-style: outset;
-  padding: 5px;
-}
-
-@media (max-width: 600px) {
-  .mainpage-image {
-    position: absolute;
-    top: 57%;
-    transform: translateY(-50%);
-    min-width: 100px;
-  }
-}
-
-.mainpage-image {
-  position: absolute;
-  top: 57%;
-  transform: translateY(-50%);
-  min-width: 100px;
-  width: 70%;
-  margin: auto;
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 !important;
 }
 
 .cardborder {
@@ -68,99 +11,38 @@
   box-shadow: none !important;
 }
 
-.footer-text {
-  color: grey;
-  font-size: 1rem;
+.my-1 {
   margin-bottom: 1rem;
-  text-align: justify;
+  margin-top: 1rem;
 }
 
-.login-container {
-  width: 70%;
-  margin: auto;
-  margin-top: 4%;
-  margin-bottom: 4%;
-  padding: 5%;
+.text-grey {
+  color: grey;
 }
 
-.companies-container {
-  padding: 5%;
+.container {
+  padding: 2rem;
 }
 
-.companies-image {
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.grid {
+  display: grid;
+}
+
+.block {
+  display: block;
+}
+
+.grow {
+  flex-grow: 1;
+}
+
+.campaign-image {
   margin-top: 5%;
   background-size: "cover";
-  max-height: 350px;
-  max-width: 700px;
-}
-
-.companies-pre-description {
-  display: inline-block;
-}
-
-.companies-description {
-  text-align: justify;
-}
-
-.companies-description-edit {
-  height: 15em;
-}
-
-.companies-downloads-edit-header {
-  display: inline-block;
-  width: 30%;
-}
-
-.companies-downloads-edit-input {
-  display: inline-block;
-  width: 65%;
-  margin-bottom: 2em;
-}
-
-.companies-download-container {
-  margin: auto;
-  width: 100%;
-}
-
-.companies-details .ui .card {
-  height: 100%;
-}
-
-.fundinground {
-  margin-top: 20px;
-}
-
-.companies-funding-history-event {
-  display: flex;
-  height: auto;
-  overflow: auto;
-}
-
-.companies-funding-history-logo {
-  display: block;
-  width: 70px;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 5px;
-}
-
-.companies-funding-history-details {
-  display: block;
-  width: auto;
-  font-size: large;
-  font-weight: 700;
-  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
-  line-height: 1.5em;
-  margin-left: 25px;
-}
-
-.companies-manager-button {
-  display: inline-block;
-  width: 40%;
-  margin-left: 5%;
-  margin-right: 5%;
-}
-
-.fundinground {
-  padding: 3%;
+  height: 300px;
 }

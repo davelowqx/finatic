@@ -6,17 +6,20 @@ import Footer from "./Footer";
 
 export default function Layout({ children }) {
   return (
-    <Container>
-      <br />
+    <>
       <Head>
         <link
           rel="stylesheet"
           href="//cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"
         />
       </Head>
-      <NavBar />
-      {children}
-      <Footer />
-    </Container>
+      <div style={{ maxWidth: "1024px", margin: "auto" }}>
+        <div className="container">
+          <NavBar />
+          {children}
+          <Footer />
+        </div>
+      </div>
+    </>
   );
 }

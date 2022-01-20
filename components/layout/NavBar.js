@@ -6,9 +6,9 @@ import ConnectWallet from "./ConnectWallet";
 export default function Header() {
   return (
     <Menu fluid borderless className="cardborder">
-      <Menu.Item className="header container12" href="/">
+      <Menu.Item className="header" href="/">
         <Image src="/logo.svg" avatar />
-        <div className="logo">finatic</div>
+        <div>finatic</div>
       </Menu.Item>
       <Menu.Item style={{ flex: "1" }}>
         <Searchbar />

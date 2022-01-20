@@ -1,7 +1,6 @@
-import { Campaign } from "../ethereum/contracts";
-import web3 from "../ethereum/web3";
-
-const toWei = (str) => web3.utils.toWei(str, "ether");
+import { Campaign } from "./contracts";
+import web3 from "./web3";
+import { toWei } from "../components/utils";
 
 const getActiveAccount = async () => (await web3.eth.getAccounts())[0];
 

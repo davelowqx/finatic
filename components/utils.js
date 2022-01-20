@@ -14,27 +14,21 @@ const fromWei = (str) => {
   }
 };
 
-function timeConverter(UNIX_timestamp) {
-  var convertedTimestamp = new Date(UNIX_timestamp * 1000);
-  var months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  var year = convertedTimestamp.getFullYear();
-  var month = months[convertedTimestamp.getMonth()];
-  var date = convertedTimestamp.getDate();
-  var time = date + " " + month + " " + year;
-  return time;
+const toWei = (str) => {
+  try {
+    return Web3.utils.toWei(`${str}`, "ether");
+  } catch (err) {
+    return NaN;
+  }
+};
+
+function timeConverter(timestamp) {
+  var date = new Date(timestamp * 1000);
+  return date.toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
 }
 
 function daysLeft(UNIX_timestamp) {
@@ -44,4 +38,4 @@ function daysLeft(UNIX_timestamp) {
   );
 }
 
-export { daysLeft, timeConverter, truncateAddress, fromWei };
+export { daysLeft, timeConverter, truncateAddress, fromWei, toWei };

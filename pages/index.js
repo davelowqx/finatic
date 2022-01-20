@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Header, Button, Grid } from "semantic-ui-react";
+import { Image, Icon, Header, Button, Grid } from "semantic-ui-react";
 import CampaignCards from "../components/CampaignCards";
 
 export default function LandingPage() {
@@ -17,25 +17,29 @@ export default function LandingPage() {
 
   return (
     <>
-      <Grid centered>
-        <Grid.Row>
-          <Grid.Column width={13}>
-            <br />
-            <Header as="h1" content="Back campaigns on the Ethereum Network" />
-            <Header
-              as="h3"
-              content="Hold ERC-20 tokens of projects building the future."
-            />
-            <Button primary href="/about">
-              HOW IT WORKS
-            </Button>
-            <br />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <Image className="mainpage-image" src="/ethereum.png" />
-          </Grid.Column>
-        </Grid.Row>
+      <br />
+      <br />
+      <div className="flex">
+        <div className="grow">
+          <Header as="h1" content="Back campaigns on the Ethereum Network" />
+          <br />
+          <Header
+            as="h3"
+            content="Hold ERC-20 tokens of projects building the future."
+          />
+          <br />
+          <Button primary href="/about">
+            HOW IT WORKS
+            <Icon name="arrow right" />
+          </Button>
+        </div>
+        <Image src="/ethereum.png" style={{ width: "100px", margin: "2rem" }} />
+      </div>
 
+      <br />
+      <br />
+
+      <Grid centered>
         <Grid.Row>
           <Button.Group size="mini">
             <Button
@@ -52,20 +56,18 @@ export default function LandingPage() {
             ></Button>
           </Button.Group>
         </Grid.Row>
-
-        <Grid.Row>
-          <Header as="h5" color="grey" textAlign="center">
-            {len} {len === 1 ? "Campaign" : "Campaigns"}{" "}
-            {viewFinancing ? "Financing" : "Funded"}
-          </Header>
-        </Grid.Row>
-        <Grid.Row>
-          <CampaignCards
-            campaignSummaries={campaignSummaries}
-            viewFinancing={viewFinancing}
-          />
-        </Grid.Row>
       </Grid>
+
+      <br />
+      <br />
+
+      <CampaignCards
+        campaignSummaries={campaignSummaries}
+        viewFinancing={viewFinancing}
+      />
+
+      <br />
+      <br />
     </>
   );
 }
