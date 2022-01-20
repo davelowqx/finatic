@@ -72,7 +72,7 @@ export default function CampaignCards({ campaignSummaries }) {
                 <Card.Content extra>
                   {error && <div>Oops, something went wrong</div>}
                   {!error && loading && <div>loading</div>}
-                  {!error && !loading && !fields.status && (
+                  {!error && !loading && fields.status === 0 && (
                     <>
                       <Icon name="target" />
                       <b>{`${fromWei(targetAmount)} ETH `}</b>
@@ -82,9 +82,8 @@ export default function CampaignCards({ campaignSummaries }) {
                       )}% funded`}
                     </>
                   )}
-                  {!error && !loading && !!fields.status && (
-                    <Header>Funded</Header>
-                  )}
+                  {!error && !loading && fields.status === 1 && <b>Funded</b>}
+                  {!error && !loading && fields.status === 2 && <b>Expired</b>}
                 </Card.Content>
               </Card>
             );

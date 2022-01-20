@@ -5,7 +5,8 @@
   "scripts": {
     "deploydev": "SET NODE_ENV=development&& node ./ethereum/scripts/deploy.js && next dev",
     "dev": "next dev",
-    "build": "set NODE_ENV=production&& node ./ethereum/scripts/deploy.js && next build",
+    "deploybuild": "set NODE_ENV=production&& node ./ethereum/scripts/deploy.js && next build",
+    "build": "next build",
     "start": "next start"
   },
   "author": "",
