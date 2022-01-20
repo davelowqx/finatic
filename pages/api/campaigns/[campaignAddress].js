@@ -55,14 +55,14 @@ export default async (req, res) => {
     try {
       console.log("PUT /campaigns/[campaignAddress] => ", req.body);
       const { imageUrl, description } = req.body;
-      if (!imageUrl || !description) {
-        throw new Error("Unauthorized");
-      }
       await db
         .collection("companies")
         .doc(campaignAddress)
-        .set({ imageUrl, description }, { merge: true });
-      return res.status(200).json(data);
+        .set(
+          { ...(imageUrl && imageUrl), ...(description && description) },
+          { merge: true }
+        );
+      return res.status(200).json({});
     } catch (err) {
       console.error(err.message);
       return res.status(400).json({ error: err.message });
