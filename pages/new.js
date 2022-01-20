@@ -102,7 +102,6 @@ export default function CampaignNew() {
         });
     } catch (err) {
       popup(err.message);
-    } finally {
       setLoading(false);
     }
   };
@@ -119,7 +118,7 @@ export default function CampaignNew() {
         <Form>
           <Form.Input
             label="Name"
-            placeholder="Apple Inc"
+            placeholder="Avocado Toast"
             value={fields.name}
             onChange={(event) =>
               setFields({
@@ -132,7 +131,7 @@ export default function CampaignNew() {
           <br />
           <Form.Input
             label="Symbol"
-            placeholder="AAPL"
+            placeholder="AT"
             value={fields.symbol}
             onChange={(event) =>
               setFields({
@@ -146,7 +145,7 @@ export default function CampaignNew() {
           <Form.Field
             control={TextArea}
             label="Desciption"
-            placeholder="Be as specific as you want!!"
+            placeholder="Planning to buy avocado toast for everyone."
             value={fields.description}
             onChange={(event) =>
               setFields({

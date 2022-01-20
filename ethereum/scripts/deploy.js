@@ -26,20 +26,18 @@ const { CampaignProducer } = JSON.parse(
   console.log(accounts);
   const gas = { gas: 6721975, gasPrice: "20000000000" }; //default ganache-cli params
 
-  const CampaignProducerContract = await new web3.eth.Contract(
-    CampaignProducer.abi
-  )
+  const campaignProducer = await new web3.eth.Contract(CampaignProducer.abi)
     .deploy({ data: CampaignProducer.evm.bytecode.object })
     .send({ from: accounts[0], ...gas });
 
-  const CampaignProducerAddress = CampaignProducerContract.options.address;
-  console.log("deployed at", CampaignProducerAddress);
+  const campaignProducerAddress = campaignProducer.options.address;
+  console.log("deployed at", campaignProducerAddress);
 
   // write to db instead?????????????
   fs.writeFileSync(
-    path.resolve(__dirname, "../CampaignProducerAddress.json"),
+    path.resolve(__dirname, "../campaignProducerAddress.json"),
     JSON.stringify({
-      CampaignProducerAddress,
+      campaignProducerAddress,
     })
   );
 

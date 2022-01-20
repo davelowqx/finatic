@@ -54,10 +54,14 @@ export default async (req, res) => {
   } else if (req.method === "PUT") {
     try {
       console.log("PUT /campaigns/[campaignAddress] => ", req.body);
+      const { imageUrl, description } = req.body;
+      if (!imageUrl || !description) {
+        throw new Error("Unauthorized");
+      }
       await db
         .collection("companies")
         .doc(campaignAddress)
-        .set(req.body, { merge: true });
+        .set({ imageUrl, description }, { merge: true });
       return res.status(200).json(data);
     } catch (err) {
       console.error(err.message);

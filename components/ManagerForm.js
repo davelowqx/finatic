@@ -62,7 +62,7 @@ export default function ManagerForm({
     <div className="container cardborder">
       <h3>Manage</h3>
       <br />
-      {!status ? (
+      {status == 0 && (
         <Button
           fluid
           color="red"
@@ -71,7 +71,8 @@ export default function ManagerForm({
           onClick={handleConcludeCampaign}
           content={"CONCLUDE CAMPAIGN"}
         />
-      ) : (
+      )}
+      {status == 1 && (
         <>
           <Form>
             <Form.Field>
@@ -104,6 +105,9 @@ export default function ManagerForm({
             content="WITHDRAW"
           />
         </>
+      )}
+      {status == 2 && (
+        <Button fluid color="red" disabled content={"CAMPAIGN FAILED"} />
       )}
     </div>
   );

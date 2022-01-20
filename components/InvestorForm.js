@@ -17,6 +17,7 @@ export default function InvestorForm({
   balance,
   targetAmount,
   listingTimestamp,
+  status,
   toggleRefreshData,
 }) {
   const popup = React.useContext(ModalContext);
@@ -54,9 +55,11 @@ export default function InvestorForm({
     <div className="container cardborder">
       <div className="flex">
         <h3 className="grow">Invest</h3>
-        <div className="text-grey">
-          {days} {"Day" + (days === 1 ? "" : "s")} Left
-        </div>
+        {!status && (
+          <div className="text-grey">
+            {days} {"Day" + (days === 1 ? "" : "s")} Left
+          </div>
+        )}
       </div>
       <Progress
         percent={percent}
@@ -92,11 +95,15 @@ export default function InvestorForm({
       <Button
         fluid
         primary
-        disabled={loading}
+        disabled={loading || status}
         loading={loading}
         onClick={handleSubmit}
       >
-        INVEST
+        {status === 0
+          ? "INVEST"
+          : status === 1
+          ? "CAMPAIGN CONCLUDED"
+          : "CAMPAIGN FAILED"}
       </Button>
     </div>
   );

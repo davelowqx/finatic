@@ -71,16 +71,12 @@ export default function Campaign() {
             <Grid.Row>
               <br />
               <div>
-                {!campaignDetails.status && (
-                  <>
-                    <InvestorForm
-                      account={account}
-                      {...campaignDetails}
-                      toggleRefreshData={toggleRefreshData}
-                    />
-                    <br />
-                  </>
-                )}
+                <InvestorForm
+                  account={account}
+                  {...campaignDetails}
+                  toggleRefreshData={toggleRefreshData}
+                />
+                <br />
                 {account &&
                   account.toUpperCase() ===
                     campaignDetails.managerAddress.toUpperCase() && (
@@ -290,7 +286,9 @@ const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
       </div>
       <div className="my-1">
         <b>Shares Outstanding</b>
-        <div>{campaignDetails.sharesOutstanding}</div>
+        <div>
+          {parseInt(campaignDetails.sharesOutstanding).toLocaleString()}
+        </div>
       </div>
     </div>
   );

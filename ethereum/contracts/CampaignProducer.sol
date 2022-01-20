@@ -8,8 +8,8 @@ contract CampaignProducer {
 
     event ListCampaign(address indexed campaignAddress);
 
-    function listCampaign(string calldata name, string calldata symbol, uint256 sharesOutstanding) public {
-        Campaign c = new Campaign(name, symbol, sharesOutstanding, msg.sender);
+    function listCampaign(string calldata name, string calldata symbol, uint256 targetAmount) public {
+        Campaign c = new Campaign(name, symbol, targetAmount, msg.sender);
         CampaignAddresses.push(address(c));
         emit ListCampaign(address(c));
     }
