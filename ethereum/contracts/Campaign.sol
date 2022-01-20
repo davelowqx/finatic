@@ -7,7 +7,7 @@ contract Campaign {
 
     string public name;
     string public symbol;
-    uint256 public decimals = 18;
+    uint256 public decimals = 0;
 
     uint256 public totalSupply; 
     mapping(address => uint256) private _balances;
