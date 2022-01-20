@@ -10,7 +10,7 @@ import {
   Card,
   Grid,
 } from "semantic-ui-react";
-import { truncateAddress, timeConverter } from "../components/utils";
+import { timeConverter } from "../components/utils";
 import { AccountContext } from "../components/context/AccountContext";
 import { ModalContext } from "../components/context/ModalContext";
 import { storage } from "../firebase";
