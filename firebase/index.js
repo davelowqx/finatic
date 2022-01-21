@@ -1,11 +1,11 @@
 import firebase from "firebase/app";
 import "firebase/firestore";
-import "firebase/auth";
 import "firebase/storage";
 
 const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 const firebaseConfig = {
   apiKey: `${process.env.FIREBASE_API_KEY}`,
+  projectId,
   storageBucket: `${projectId}.appspot.com`,
 };
 
