@@ -1,6 +1,7 @@
 // import App from 'next/app'
 import Layout from "../components/layout";
 import "../styles.css";
+import "semantic-ui-css/semantic.min.css";
 import Head from "next/head";
 import { AccountContextProvider } from "../components/context/AccountContext";
 import { ModalContextProvider } from "../components/context/ModalContext";
@@ -28,11 +29,6 @@ export default function MyApp({ Component, pageProps }) {
           <link rel="shortcut icon" href="/favicon.ico" />
 
           <link rel="canonical" href={APP_URL} />
-
-          <link
-            rel="stylesheet"
-            href="//cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css"
-          />
 
           <meta name="twitter:card" content="summary" />
           <meta name="twitter:title" content={APP_NAME} />
