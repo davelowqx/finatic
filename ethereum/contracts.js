@@ -1,10 +1,9 @@
 import web3 from "./web3";
 import contracts from "./build/contracts.json";
-import data from "./campaignProducerAddress.json";
 
 const CampaignProducer = new web3.eth.Contract(
   contracts.CampaignProducer.abi,
-  data.campaignProducerAddress
+  process.env.NEXT_PUBLIC_CAMPAIGN_PRODUCER_ADDRESS
 );
 
 const Campaign = (campaignAddress) => {

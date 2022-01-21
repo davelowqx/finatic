@@ -2,8 +2,6 @@ const fs = require("fs");
 const path = require("path");
 const Web3 = require("web3");
 const HDWalletProvider = require("@truffle/hdwallet-provider");
-require("firebase/firestore");
-require("dotenv").config();
 
 const provider = new HDWalletProvider({
   mnemonic:
@@ -12,7 +10,7 @@ const provider = new HDWalletProvider({
     process.env.NODE_ENV === "development"
       ? "ws://localhost:8545"
       : "https://rinkeby.infura.io/v3/795a9e8cca664f128bcdae95c3d9f59a",
-  numberOfAddresses: 5,
+  numberOfAddresses: 1,
 });
 
 const web3 = new Web3(provider);
@@ -23,7 +21,7 @@ const { CampaignProducer } = JSON.parse(
 
 (async () => {
   const accounts = await web3.eth.getAccounts();
-  console.log(accounts);
+  console.log("> deploying from:", accounts[0]);
   const gas = { gas: 6721975, gasPrice: "20000000000" }; //default ganache-cli params
 
   const campaignProducer = await new web3.eth.Contract(CampaignProducer.abi)
@@ -31,17 +29,8 @@ const { CampaignProducer } = JSON.parse(
     .send({ from: accounts[0], ...gas });
 
   const campaignProducerAddress = campaignProducer.options.address;
-  console.log("deployed at", campaignProducerAddress);
-
-  fs.writeFileSync(
-    path.resolve(__dirname, "../campaignProducerAddress.json"),
-    JSON.stringify({
-      campaignProducerAddress,
-    })
-  );
+  console.log("> successfully deployed at:", campaignProducerAddress);
 
   provider.engine.stop();
-
-  console.log("complete, next dev");
   process.exit();
 })();

@@ -3,32 +3,32 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "deploydev": "SET NODE_ENV=development&& node ./ethereum/scripts/deploy.js && next dev",
+    "dev_deploy": "SET NODE_ENV=development&& node ./ethereum/scripts/deploy.js",
+    "prod_deploy": "node ./ethereum/scripts/deploy.js",
+    "compile": "node ./ethereum/scripts/compile.js",
     "dev": "next dev",
-    "deploybuild": "set NODE_ENV=production&& node ./ethereum/scripts/deploy.js && next build",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "mocha ./ethereum/scripts/test.js",
+    "dev_blockchain": "ganache-cli -m \"oyster exercise random pledge thrive food mail hover knee cry sure eternal\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.14.3",
-    "@truffle/hdwallet-provider": "1.x",
-    "dotenv": "^10.0.0",
     "firebase": "^8.8.0",
-    "firebase-admin": "^9.9.0",
-    "ganache-cli": "^6.12.2",
     "next": "^10.2.3",
-    "pify": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.0.3",
-    "solc": "^0.8.4",
     "web3": "^1.3.5"
   },
   "description": "",
   "devDependencies": {
-    "mocha": "^8.4.0"
+    "@truffle/hdwallet-provider": "1.x",
+    "mocha": "^8.4.0",
+    "ganache-cli": "^6.12.2",
+    "solc": "^0.8.4",
+    "pify": "^5.0.0"
   }
 }
