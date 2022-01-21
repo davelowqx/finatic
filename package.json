@@ -1,8 +1,6 @@
 {
   "name": "finatic",
-  "description": "",
-  "version": "1.0.0",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "dev_deploy": "SET NODE_ENV=development&& node ./ethereum/scripts/deploy.js",
     "prod_deploy": "node ./ethereum/scripts/deploy.js",
@@ -13,8 +11,6 @@
     "test": "mocha ./ethereum/scripts/test.js",
     "dev_blockchain": "ganache-cli -m \"oyster exercise random pledge thrive food mail hover knee cry sure eternal\""
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "firebase": "^8.8.0",
     "next": "^10.2.3",
@@ -24,10 +20,11 @@
     "web3": "^1.3.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.0",
     "@truffle/hdwallet-provider": "1.x",
-    "mocha": "^8.4.0",
     "ganache-cli": "^6.12.2",
-    "solc": "^0.8.4",
-    "pify": "^5.0.0"
+    "mocha": "^8.4.0",
+    "pify": "^5.0.0",
+    "solc": "^0.8.4"
   }
 }
