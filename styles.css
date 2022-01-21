@@ -16,6 +16,10 @@ h4 {
   margin-top: 1rem;
 }
 
+.h-remaining {
+  height: calc(100vh - 18rem);
+}
+
 .text-grey {
   color: grey;
 }
@@ -27,6 +31,14 @@ h4 {
 .flex {
   display: flex;
   align-items: center;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.justify-center {
+  justify-content: center;
 }
 
 .grid {

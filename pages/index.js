@@ -1,19 +1,30 @@
 import React from "react";
-import { Image, Icon, Header, Button, Grid, Divider } from "semantic-ui-react";
+import {
+  Image,
+  Icon,
+  Header,
+  Button,
+  Loader,
+  Divider,
+  Segment,
+} from "semantic-ui-react";
 import CampaignCards from "../components/CampaignCards";
 
 export default function LandingPage() {
-  const [campaignSummaries, setCampaignSummaries] = React.useState([]);
-  React.useEffect(() => {
-    fetch("/api/campaigns")
-      .then((res) => res.json())
-      .then(setCampaignSummaries);
+  const [loading, setLoading] = React.useState(true);
+  const [campaigns, setCampaigns] = React.useState([]);
+  React.useEffect(async () => {
+    setLoading(true);
+    try {
+      await fetch("/api/campaigns")
+        .then((res) => res.json())
+        .then(setCampaigns);
+    } catch (err) {
+      console.error(err.message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
-
-  const [viewFinancing, setViewFinancing] = React.useState(true);
-  const len = campaignSummaries.filter(
-    ({ status }) => !!status === viewFinancing
-  ).length;
 
   return (
     <>
@@ -40,12 +51,14 @@ export default function LandingPage() {
       <Divider />
       <br />
 
-      <CampaignCards
-        campaignSummaries={campaignSummaries}
-        viewFinancing={viewFinancing}
-      />
+      <div className="relative">
+        {loading ? (
+          <Loader active={loading} />
+        ) : (
+          <CampaignCards campaigns={campaigns} />
+        )}
+      </div>
 
-      <br />
       <br />
     </>
   );

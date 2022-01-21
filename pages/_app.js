@@ -20,7 +20,7 @@ export default function MyApp({ Component, pageProps }) {
             content="width=device-width,initial-scale=1,user-scalable=no,viewport-fit=cover"
           />
 
-          <title>{`${APP_NAME} | ${APP_DESCRIPTION}`}</title>
+          <title>{`${APP_DESCRIPTION} | ${APP_NAME}`}</title>
           <meta name="description" content={APP_DESCRIPTION} />
 
           <meta name="application-name" content={APP_NAME} />

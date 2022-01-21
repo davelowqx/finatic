@@ -9,6 +9,7 @@ import {
   Header,
   Card,
   Grid,
+  Loader,
 } from "semantic-ui-react";
 import { timeConverter } from "../components/utils";
 import { AccountContext } from "../components/context/AccountContext";
@@ -31,6 +32,7 @@ export default function Campaign() {
     campaignAddress: "",
   });
   const [error, setError] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [refreshData, setRefreshData] = React.useState({});
 
   const toggleRefreshData = () => {
@@ -39,6 +41,7 @@ export default function Campaign() {
 
   const fetchCampaignDetails = async (campaignAddress) => {
     try {
+      setLoading(true);
       const campaignDetails = await fetch(
         `/api/campaigns/${campaignAddress}`
       ).then((res) => res.json());
@@ -46,6 +49,8 @@ export default function Campaign() {
     } catch (err) {
       console.error(err.message);
       setError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,51 +62,59 @@ export default function Campaign() {
   }, [router.query, refreshData]); // refresh data when changes made
 
   return (
-    <Grid>
-      {!error && (
-        <Grid.Row>
-          <Grid.Column computer={10} mobile={16}>
-            <br />
-            <MainInfo
-              campaignDetails={campaignDetails}
-              toggleRefreshData={toggleRefreshData}
-            />
-          </Grid.Column>
-          <Grid.Column computer={6} mobile={16}>
-            <Grid.Row>
+    <>
+      {loading && (
+        <div className="h-remaining relative">
+          <Loader active={loading} />
+        </div>
+      )}
+      {!loading && error && (
+        <div className="h-remaining relative flex flex-col justify-center">
+          <div className="">
+            <Header as="h1" textAlign="center">
+              Nothing to see here...
+            </Header>
+          </div>
+        </div>
+      )}
+      {!loading && !error && (
+        <Grid>
+          <Grid.Row>
+            <Grid.Column computer={10} mobile={16}>
               <br />
-              <div>
-                <InvestorForm
-                  account={account}
-                  {...campaignDetails}
-                  toggleRefreshData={toggleRefreshData}
-                />
+              <MainInfo
+                campaignDetails={campaignDetails}
+                toggleRefreshData={toggleRefreshData}
+              />
+            </Grid.Column>
+            <Grid.Column computer={6} mobile={16}>
+              <Grid.Row>
                 <br />
-                {account &&
-                  account.toUpperCase() ===
-                    campaignDetails.managerAddress.toUpperCase() && (
-                    <>
-                      <ManagerForm
-                        {...campaignDetails}
-                        toggleRefreshData={toggleRefreshData}
-                      />
-                      <br />
-                    </>
-                  )}
-              </div>
-            </Grid.Row>
-          </Grid.Column>
-        </Grid.Row>
+                <div>
+                  <InvestorForm
+                    account={account}
+                    {...campaignDetails}
+                    toggleRefreshData={toggleRefreshData}
+                  />
+                  <br />
+                  {account &&
+                    account.toUpperCase() ===
+                      campaignDetails.managerAddress.toUpperCase() && (
+                      <>
+                        <ManagerForm
+                          {...campaignDetails}
+                          toggleRefreshData={toggleRefreshData}
+                        />
+                        <br />
+                      </>
+                    )}
+                </div>
+              </Grid.Row>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
       )}
-      {error && (
-        <Grid.Row>
-          <Grid.Column computer={10} mobile={16}>
-            <br />
-            <Header as="h1">Nothing to see here...</Header>
-          </Grid.Column>
-        </Grid.Row>
-      )}
-    </Grid>
+    </>
   );
 }
 

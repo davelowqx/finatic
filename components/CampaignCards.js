@@ -3,10 +3,10 @@ import { Image, Header, Button, Card, Icon } from "semantic-ui-react";
 import { daysLeft } from "./utils";
 import { fromWei } from "./utils";
 
-export default function CampaignCards({ campaignSummaries }) {
+export default function CampaignCards({ campaigns }) {
   return (
     <Card.Group itemsPerRow={3}>
-      {campaignSummaries
+      {campaigns
         .reverse()
         .map(
           ({
