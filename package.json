@@ -1,5 +1,6 @@
 {
-  "name": "kickstart",
+  "name": "finatic",
+  "description": "",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -15,7 +16,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/core": "^7.14.3",
     "firebase": "^8.8.0",
     "next": "^10.2.3",
     "react": "^17.0.2",
@@ -23,7 +23,6 @@
     "semantic-ui-react": "^2.0.3",
     "web3": "^1.3.5"
   },
-  "description": "",
   "devDependencies": {
     "@truffle/hdwallet-provider": "1.x",
     "mocha": "^8.4.0",
