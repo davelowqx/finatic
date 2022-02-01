@@ -73,17 +73,27 @@ export default function CampaignCards({ campaigns }) {
                   {error && <div>Oops, something went wrong</div>}
                   {!error && loading && <div>loading</div>}
                   {!error && !loading && fields.status === 0 && (
-                    <>
+                    <div>
                       <Icon name="target" />
                       <b>{`${fromWei(targetAmount)} ETH `}</b>
                       {`| ${parseInt(
                         (100 * parseInt(fields.balance)) /
                           parseInt(targetAmount)
                       )}% funded`}
-                    </>
+                    </div>
                   )}
-                  {!error && !loading && fields.status === 1 && <b>Funded</b>}
-                  {!error && !loading && fields.status === 2 && <b>Expired</b>}
+                  {!error && !loading && fields.status === 1 && (
+                    <div>
+                      <Icon name="check circle" />
+                      <b>Funded</b>
+                    </div>
+                  )}
+                  {!error && !loading && fields.status === 2 && (
+                    <div>
+                      <Icon name="close" />
+                      <b>Expired</b>
+                    </div>
+                  )}
                 </Card.Content>
               </Card>
             );
