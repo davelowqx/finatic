@@ -193,7 +193,6 @@ export default function CampaignNew() {
             primary
             onClick={handleSubmit}
           >
-            {" "}
             List
           </Button>
         </Form>

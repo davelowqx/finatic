@@ -1,20 +1,8 @@
 import React from "react";
 import { fromWei } from "../components/utils";
-import {
-  Popup,
-  TextArea,
-  Form,
-  Button,
-  Image,
-  Header,
-  Card,
-  Grid,
-  Loader,
-} from "semantic-ui-react";
+import { Popup, Button, Header, Grid, Loader } from "semantic-ui-react";
 import { timeConverter } from "../components/utils";
 import { AccountContext } from "../components/context/AccountContext";
-import { ModalContext } from "../components/context/ModalContext";
-import { storage } from "../firebase";
 import { useRouter } from "next/router";
 import InvestorForm from "../components/InvestorForm";
 import ManagerForm from "../components/ManagerForm";
@@ -118,7 +106,7 @@ export default function Campaign() {
   );
 }
 
-const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
+const MainInfo = ({ campaignDetails }) => {
   const {
     name,
     symbol,
@@ -129,85 +117,10 @@ const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
     listingTimestamp,
   } = campaignDetails;
 
-  const popup = React.useContext(ModalContext);
-  const [account, _] = React.useContext(AccountContext);
-  const [editView, setEditView] = React.useState(false);
-  const [image, setImage] = React.useState(null);
-  const [fields, setFields] = React.useState({
-    description: "",
-  });
-  const [loading, setLoading] = React.useState(false);
-
-  const putData = async (data) => {
-    await fetch(`/api/companies/${campaignAddress}`, {
-      headers: { "Content-Type": "application/json" },
-      method: "PUT",
-      body: JSON.stringify(data),
-    });
-    toggleRefreshData();
-  };
-
-  const handleEdit = async () => {
-    if (editView) {
-      setLoading(true);
-      try {
-        if (image !== null) {
-          const uploadTask = storage
-            .ref()
-            .child(`images/${campaignAddress}`)
-            .put(image);
-          uploadTask.on(
-            "state_changed",
-            (snapshot) => {},
-            (err) => {
-              popup(err.message);
-            },
-            async () => {
-              uploadTask.snapshot.ref.getDownloadURL().then((imageUrl) => {
-                putData({ imageUrl });
-              });
-            }
-          );
-        }
-        if (fields.description !== description) {
-          putData({ description: fields.description });
-        }
-      } catch (err) {
-        popup(err.message);
-      } finally {
-        setLoading(false);
-        setImage(null);
-      }
-    } else {
-      setFields({ description });
-    }
-    setEditView(!editView);
-  };
-
   return (
     <div className="container cardborder">
       <div className="flex">
         <Header as="h3">{`${name} $${symbol}`}</Header>
-        <div className="grow">
-          {account &&
-            managerAddress &&
-            account.toUpperCase() === managerAddress.toUpperCase() && (
-              <Popup
-                content={`${editView ? "Save" : "Edit Campaign Detials"}`}
-                trigger={
-                  <Button
-                    toggle
-                    loading={loading}
-                    icon={`${editView ? "save" : "edit"}`}
-                    active
-                    size="mini"
-                    floated="right"
-                    onClick={handleEdit}
-                  />
-                }
-              />
-            )}
-        </div>
       </div>
       <div>{timeConverter(listingTimestamp)}</div>
       <br />
@@ -215,30 +128,7 @@ const MainInfo = ({ campaignDetails, toggleRefreshData }) => {
         <img src={imageUrl} />
       </div>
       <br />
-      {!editView && <div>{description}</div>}
-      {editView && (
-        <Form>
-          <div>Replace Image</div>
-          <Form.Input
-            type="file"
-            accept="image/*"
-            onChange={(event) => {
-              if (event.target.files[0]) {
-                const file = event.target.files[0];
-                if (file.size < 1000000) {
-                  setImage(file);
-                } else {
-                  popup("Sorry, file size must be under 1MB");
-                }
-              }
-            }}
-          />
-          <TextArea
-            value={fields.description}
-            onChange={(event) => setFields({ description: event.target.value })}
-          />
-        </Form>
-      )}
+      <div>{description}</div>
       <br />
 
       <div className="flex my-1">
