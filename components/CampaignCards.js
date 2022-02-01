@@ -91,7 +91,7 @@ export default function CampaignCards({ campaigns }) {
                   {!error && !loading && fields.status === 2 && (
                     <div>
                       <Icon name="close" />
-                      <b>Expired</b>
+                      <b>Failed</b>
                     </div>
                   )}
                 </Card.Content>
